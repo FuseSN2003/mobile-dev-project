@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --env-file=.env src/index.ts",
     "build": "tsc src/index.ts --outDir dist",
     "start": "NODE_ENV=production node dist/index.js"
   },
@@ -14,13 +14,14 @@
   "dependencies": {
     "@elysiajs/node": "^1.2.5",
     "@elysiajs/swagger": "^1.2.0",
+    "bcrypt": "^5.1.1",
     "drizzle-orm": "^0.39.3",
     "elysia": "^1.2.12",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.2",
     "@types/node": "^22.13.4",
+    "@types/bcrypt": "^5.0.2",
     "drizzle-kit": "^0.30.4",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"

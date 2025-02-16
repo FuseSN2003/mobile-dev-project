@@ -1,9 +1,11 @@
 import { db } from "@/libs/db";
 import { userTable } from "@/libs/db/schema";
+import node from "@elysiajs/node";
+import { hash } from "bcrypt";
 import { eq, or } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
-export const authRoute = new Elysia({ prefix: "/auth" }).post(
+export const authRoute = new Elysia({ prefix: "/auth", adapter: node() }).post(
   "/register",
   async ({ body, set }) => {
     const { username, email, password, confirmPassword } = body;
@@ -31,7 +33,7 @@ export const authRoute = new Elysia({ prefix: "/auth" }).post(
       };
     }
 
-    const hashedPassword = await Bun.password.hash(password, "bcrypt");
+    const hashedPassword = await hash(password, 10);
 
     await db.insert(userTable).values({
       username,
@@ -47,7 +49,7 @@ export const authRoute = new Elysia({ prefix: "/auth" }).post(
   {
     body: t.Object({
       username: t.String(),
-      email: t.String(),
+      email: t.String({ format: "email" }),
       password: t.String(),
       confirmPassword: t.String(),
     }),

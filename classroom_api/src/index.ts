@@ -1,12 +1,14 @@
 import { Elysia } from "elysia";
 import { node } from "@elysiajs/node";
 import swagger from "@elysiajs/swagger";
+import { authRoute } from "./routes/auth";
 
 const app = new Elysia({ adapter: node() })
   .get("/", () => "Hello Elysia")
   .use(swagger({ provider: "swagger-ui" }))
-  .listen(3000);
+  .use(authRoute)
+  .listen(3000, ({ hostname, port }) => {
+    console.log(`🦊 Elysia is running at ${hostname}:${port}`);
+  });
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+export default app;
