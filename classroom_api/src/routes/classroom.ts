@@ -112,4 +112,46 @@ export const classroomRoute = new Elysia({
       status: "success",
       classrooms,
     };
-  });
+  })
+  .post(
+    "/join",
+    async ({ user, set, body }) => {
+      if (!user) {
+        set.status = 401;
+        return {
+          status: "error",
+          message: "Unauthorized",
+        };
+      }
+
+      const { code } = body;
+
+      const [classroom] = await db
+        .select({ id: classroomTable.id })
+        .from(classroomTable)
+        .where(eq(classroomTable.code, code));
+      
+      if (!classroom) {
+        set.status = 400;
+        return {
+          status: "error",
+          message: "Invalid classroom code",
+        };
+      }
+
+      await db.insert(studyTable).values({
+        userId: user.id,
+        classroomId: classroom.id,
+      });
+
+      return {
+        status: "success",
+        message: "Joined classroom successfully",
+      };
+    },
+    {
+      body: t.Object({
+        code: t.String(),
+      }),
+    }
+  );
