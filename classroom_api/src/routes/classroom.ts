@@ -1,5 +1,10 @@
 import { db } from "@/libs/db";
-import { classroomTable, teachTable, userTable } from "@/libs/db/schema";
+import {
+  classroomTable,
+  studyTable,
+  teachTable,
+  userTable,
+} from "@/libs/db/schema";
 import { middleware } from "@/middleware";
 import node from "@elysiajs/node";
 import { eq } from "drizzle-orm";
@@ -56,4 +61,55 @@ export const classroomRoute = new Elysia({
       };
     },
     { body: t.Object({ name: t.String(), description: t.String() }) }
-  );
+  )
+  .get("/my-class", async ({ user }) => {
+    if (!user) {
+      return {
+        status: "error",
+        message: "Unauthorized",
+      };
+    }
+
+    const classrooms = await db
+      .select({
+        id: classroomTable.id,
+        name: classroomTable.name,
+        description: classroomTable.description,
+        teacher: userTable.username,
+      })
+      .from(classroomTable)
+      .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))
+      .leftJoin(userTable, eq(teachTable.userId, userTable.id))
+      .where(eq(teachTable.userId, user.id));
+
+    return {
+      status: "success",
+      classrooms,
+    };
+  })
+  .get("/my-classroom", async ({ user }) => {
+    if (!user) {
+      return {
+        status: "error",
+        message: "Unauthorized",
+      };
+    }
+
+    const classrooms = await db
+      .select({
+        id: classroomTable.id,
+        name: classroomTable.name,
+        description: classroomTable.description,
+        teacher: userTable.username,
+      })
+      .from(classroomTable)
+      .leftJoin(studyTable, eq(studyTable.classroomId, classroomTable.id))
+      .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))
+      .leftJoin(userTable, eq(teachTable.userId, userTable.id))
+      .where(eq(studyTable.userId, user.id));
+
+    return {
+      status: "success",
+      classrooms,
+    };
+  });
