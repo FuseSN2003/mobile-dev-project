@@ -130,7 +130,7 @@ export const classroomRoute = new Elysia({
         .select({ id: classroomTable.id })
         .from(classroomTable)
         .where(eq(classroomTable.code, code));
-      
+
       if (!classroom) {
         set.status = 400;
         return {
@@ -139,14 +139,22 @@ export const classroomRoute = new Elysia({
         };
       }
 
-      await db.insert(studyTable).values({
-        userId: user.id,
-        classroomId: classroom.id,
-      });
+      const [result] = await db
+        .insert(studyTable)
+        .values({
+          userId: user.id,
+          classroomId: classroom.id,
+        })
+        .returning({ id: studyTable.classroomId })
+        .onConflictDoUpdate({
+          target: [studyTable.userId, studyTable.classroomId],
+          set: { classroomId: studyTable.classroomId },
+        });
 
       return {
         status: "success",
         message: "Joined classroom successfully",
+        classroomId: result.id,
       };
     },
     {
@@ -154,4 +162,4 @@ export const classroomRoute = new Elysia({
         code: t.String(),
       }),
     }
-  );
+  )
