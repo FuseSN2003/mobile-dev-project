@@ -1,12 +1,10 @@
 import { db } from "@/libs/db";
 import { userTable } from "@/libs/db/schema";
-import node from "@elysiajs/node";
-import { compare, hash } from "bcrypt";
 import { eq, or } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 import { jwt } from "@elysiajs/jwt";
 
-export const authRoute = new Elysia({ prefix: "/auth", adapter: node() })
+export const authRoute = new Elysia({ prefix: "/auth" })
   .use(
     jwt({
       name: "jwt",
@@ -41,7 +39,7 @@ export const authRoute = new Elysia({ prefix: "/auth", adapter: node() })
         };
       }
 
-      const hashedPassword = await hash(password, 10);
+      const hashedPassword = await Bun.password.hash(password, "bcrypt");
 
       await db.insert(userTable).values({
         username,
@@ -83,7 +81,10 @@ export const authRoute = new Elysia({ prefix: "/auth", adapter: node() })
         };
       }
 
-      const isPasswordValid = await compare(password, user.password);
+      const isPasswordValid = await Bun.password.verify(
+        password,
+        user.password
+      );
 
       if (!isPasswordValid) {
         set.status = 400;

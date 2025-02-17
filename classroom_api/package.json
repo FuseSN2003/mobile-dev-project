@@ -1,31 +1,26 @@
 {
   "name": "classroom_api",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "1.0.50",
   "scripts": {
-    "dev": "tsx watch --env-file=.env src/index.ts",
-    "build": "tsc src/index.ts --outDir dist",
-    "start": "NODE_ENV=production node dist/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts",
+    "db:push": "bun drizzle-kit push",
+    "db:pull": "bun drizzle-kit pull",
+    "db:generate": "bun drizzle-kit generate",
+    "db:migrate": "bun drizzle-kit migrate",
+    "db:studio": "bun drizzle-kit studio"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "@elysiajs/cors": "^1.2.0",
     "@elysiajs/jwt": "^1.2.0",
-    "@elysiajs/node": "^1.2.5",
     "@elysiajs/swagger": "^1.2.0",
-    "bcrypt": "^5.1.1",
     "drizzle-orm": "^0.39.3",
-    "elysia": "^1.2.12",
+    "elysia": "latest",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/node": "^22.13.4",
-    "drizzle-kit": "^0.30.4",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.3"
-  }
+    "bun-types": "latest",
+    "drizzle-kit": "^0.30.4"
+  },
+  "module": "src/index.js"
 }

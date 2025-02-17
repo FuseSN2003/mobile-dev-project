@@ -1,18 +1,17 @@
-import { Elysia } from "elysia";
-import { node } from "@elysiajs/node";
-import swagger from "@elysiajs/swagger";
-import { authRoute } from "./routes/auth";
 import cors from "@elysiajs/cors";
+import { Elysia } from "elysia";
+import { authRoute } from "./routes/auth";
 import { classroomRoute } from "./routes/classroom";
+import swagger from "@elysiajs/swagger";
 
-const app = new Elysia({ adapter: node() })
-  .get("/", () => "Hello Elysia")
-  .use(swagger({ provider: "swagger-ui" }))
+const app = new Elysia()
   .use(cors())
+  .use(swagger({ provider: "swagger-ui" }))
+  .get("/", () => "Hello Elysia")
   .use(authRoute)
   .use(classroomRoute)
-  .listen(3000, ({ hostname, port }) => {
-    console.log(`🦊 Elysia is running at ${hostname}:${port}`);
-  });
+  .listen(3000);
 
-export default app;
+console.log(
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+);

@@ -6,13 +6,11 @@ import {
   userTable,
 } from "@/libs/db/schema";
 import { middleware } from "@/middleware";
-import node from "@elysiajs/node";
 import { eq } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomRoute = new Elysia({
   prefix: "/classroom",
-  adapter: node(),
 })
   .use(middleware)
   .post(
@@ -162,4 +160,4 @@ export const classroomRoute = new Elysia({
         code: t.String(),
       }),
     }
-  )
+  );

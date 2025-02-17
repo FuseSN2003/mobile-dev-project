@@ -1,11 +1,10 @@
 import jwt from "@elysiajs/jwt";
-import node from "@elysiajs/node";
 import Elysia from "elysia";
 import { db } from "./libs/db";
 import { eq } from "drizzle-orm";
 import { userTable } from "./libs/db/schema";
 
-export const middleware = new Elysia({ adapter: node() })
+export const middleware = new Elysia()
   .use(
     jwt({
       name: "jwt",
