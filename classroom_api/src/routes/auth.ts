@@ -4,8 +4,15 @@ import node from "@elysiajs/node";
 import { compare, hash } from "bcrypt";
 import { eq, or } from "drizzle-orm";
 import Elysia, { t } from "elysia";
+import { jwt } from "@elysiajs/jwt";
 
 export const authRoute = new Elysia({ prefix: "/auth", adapter: node() })
+  .use(
+    jwt({
+      name: "jwt",
+      secret: process.env.JWT_SECRET!,
+    })
+  )
   .post(
     "/register",
     async ({ body, set }) => {
@@ -58,7 +65,7 @@ export const authRoute = new Elysia({ prefix: "/auth", adapter: node() })
   )
   .post(
     "/login",
-    async ({ body, set }) => {
+    async ({ body, set, jwt }) => {
       const { username, password } = body;
 
       const [user] = await db
@@ -86,9 +93,16 @@ export const authRoute = new Elysia({ prefix: "/auth", adapter: node() })
         };
       }
 
+      const token = await jwt.sign({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      });
+
       return {
         status: "success",
         message: "User logged in successfully",
+        token,
       };
     },
     {
