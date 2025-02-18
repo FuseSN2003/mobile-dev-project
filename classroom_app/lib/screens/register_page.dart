@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -10,9 +9,10 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  @override
-  bool visible_password = true;
+  bool visiblePassword = true;
   bool isCheck = false;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -91,23 +91,21 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Container(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.greenAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 12,
-                          ),
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.greenAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        child: Text(
-                          'Register',
-                          style: TextStyle(color: Colors.black, fontSize: 16),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 12,
                         ),
+                      ),
+                      child: Text(
+                        'Register',
+                        style: TextStyle(color: Colors.black, fontSize: 16),
                       ),
                     ),
                   ),
@@ -177,7 +175,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           TextField(
-            obscureText: label == "Password" ? visible_password : false,
+            obscureText: label == "Password" ? visiblePassword : false,
             decoration: InputDecoration(
               hintText: label,
               hintStyle: GoogleFonts.inder(color: Colors.white54, fontSize: 12),
@@ -192,11 +190,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       ? IconButton(
                         onPressed: () {
                           setState(() {
-                            visible_password = !visible_password;
+                            visiblePassword = !visiblePassword;
                           });
                         },
                         icon: Icon(
-                          visible_password
+                          visiblePassword
                               ? Icons.visibility_off
                               : Icons.visibility,
                         ),
@@ -204,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       )
                       : null,
             ),
-            // visible_password
+            // visiblePassword
             //     ? Icon(Icons.visibility_off, color: Colors.white70)
             style: TextStyle(color: Colors.white),
           ),

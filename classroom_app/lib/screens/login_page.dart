@@ -3,17 +3,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool visible_password = true;
+  bool visiblePassword = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -183,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           TextField(
-            obscureText: label == "Password" ? visible_password : false,
+            obscureText: label == "Password" ? visiblePassword : false,
             decoration: InputDecoration(
               hintText: label,
               hintStyle: GoogleFonts.inder(color: Colors.white54, fontSize: 12),
@@ -198,11 +200,11 @@ class _LoginPageState extends State<LoginPage> {
                       ? IconButton(
                         onPressed: () {
                           setState(() {
-                            visible_password = !visible_password;
+                            visiblePassword = !visiblePassword;
                           });
                         },
                         icon: Icon(
-                          visible_password
+                          visiblePassword
                               ? Icons.visibility_off
                               : Icons.visibility,
                         ),
@@ -210,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                       )
                       : null,
             ),
-            // visible_password
+            // visiblePassword
             //     ? Icon(Icons.visibility_off, color: Colors.white70)
             style: TextStyle(color: Colors.white),
           ),
