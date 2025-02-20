@@ -13,6 +13,10 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   bool visible_password = true;
   bool isCheck = false;
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmpasswordController = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -53,10 +57,14 @@ class _RegisterPageState extends State<RegisterPage> {
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
-                  _buildTextField(context, 'Username'),
-                  _buildTextField(context, 'Email'),
-                  _buildTextField(context, 'Password'),
-                  _buildTextField(context, 'Confirm-Password'),
+                  _buildTextField(context, 'Username', usernameController),
+                  _buildTextField(context, 'Email', emailController),
+                  _buildTextField(context, 'Password', passwordController),
+                  _buildTextField(
+                    context,
+                    'Confirm-Password',
+                    confirmpasswordController,
+                  ),
                   SizedBox(height: 10),
                   Row(
                     children: [
@@ -160,7 +168,11 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildTextField(BuildContext context, String label) {
+  Widget _buildTextField(
+    BuildContext context,
+    String label,
+    TextEditingController controller,
+  ) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: Column(
@@ -177,6 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           TextField(
+            controller: controller,
             obscureText: label == "Password" ? visible_password : false,
             decoration: InputDecoration(
               hintText: label,
