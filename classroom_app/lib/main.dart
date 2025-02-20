@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import './screens/login_page.dart';
 import './theme/colors.dart';
-import './screens/login_page.dart';
 import './screens/register_page.dart';
 import './screens/main_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'blocs/classroom/classroom_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [BlocProvider(create: (context) => ClassroomBloc())],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +26,6 @@ class MyApp extends StatelessWidget {
       home: LoginPage(),
       debugShowCheckedModeBanner: false,
       initialRoute: '/Login',
-
       routes: {
         '/Login': (context) => LoginPage(),
         '/Register': (context) => RegisterPage(),

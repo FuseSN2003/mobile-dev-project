@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           padding: EdgeInsets.symmetric(
                             horizontal: 50,
-                            vertical: 12,
+                            vertical: 5,
                           ),
                         ),
                         child: TextButton(
