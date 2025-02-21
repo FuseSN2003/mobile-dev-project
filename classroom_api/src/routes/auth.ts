@@ -110,4 +110,38 @@ export const authRoute = new Elysia({ prefix: "/auth" })
         password: t.String(),
       }),
     }
-  );
+  ).get("/me", async ({ jwt, headers, set }) => {
+    const token = headers["authorization"]?.split(" ")[1];
+
+    const jwtPayload = await jwt.verify(token);
+
+    if (!jwtPayload) {
+      set.status = 401;
+      return {
+        message: "Invalid token",
+      };
+    }
+
+    const userId = jwtPayload.id as string;
+    
+    const [user] = await db
+      .select({
+        id: userTable.id,
+        username: userTable.username,
+        email: userTable.email,
+      })
+      .from(userTable)
+      .where(eq(userTable.id, userId));
+
+    if(!user) {
+      set.status = 401;
+      return {
+        message: "Invalid token",
+      };
+    }
+
+    return {
+      status: "success",
+      user,
+    };
+  });
