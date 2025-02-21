@@ -15,7 +15,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  bool _isClassed = true;
+  String _isClassed = "Classed";
   @override
   void initState() {
     // print("This is MainPage");
@@ -64,7 +64,7 @@ class _MainPageState extends State<MainPage> {
                         child: TextButton(
                           onPressed: () {
                             setState(() {
-                              _isClassed = !_isClassed;
+                              _isClassed = "Classed";
                             });
                           },
                           child: Text(
@@ -72,7 +72,7 @@ class _MainPageState extends State<MainPage> {
                             style: TextStyle(
                               fontSize: 16,
                               color:
-                                  _isClassed
+                                  _isClassed == "Classed"
                                       ? Theme.of(context).colorScheme.onPrimary
                                       : Colors.white54,
                               fontFamily: "Inder",
@@ -84,7 +84,7 @@ class _MainPageState extends State<MainPage> {
                         child: TextButton(
                           onPressed: () {
                             setState(() {
-                              _isClassed = !_isClassed;
+                              _isClassed = "Created Classed";
                             });
                           },
                           child: Text(
@@ -92,7 +92,7 @@ class _MainPageState extends State<MainPage> {
                             style: TextStyle(
                               fontSize: 16,
                               color:
-                                  !_isClassed
+                                  _isClassed == "Created Classed"
                                       ? Theme.of(context).colorScheme.onPrimary
                                       : Colors.white54,
                               fontFamily: "Inder",
@@ -130,7 +130,9 @@ class _MainPageState extends State<MainPage> {
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: ListTile(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pushNamed(context, "/classroom");
+                                  },
                                   title: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,

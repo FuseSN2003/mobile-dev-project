@@ -10,6 +10,7 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: Size.fromHeight(80),
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(

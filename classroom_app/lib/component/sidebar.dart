@@ -69,20 +69,17 @@ class Sidebar extends StatelessWidget {
                         },
                       ),
                       MyListtile(
-                        icon: Icons.shopping_cart,
-                        text: "Cart",
+                        icon: Icons.work,
+                        text: "สิ่งที่ต้องทำ",
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.pushNamed(context, '/cartpage');
+                          Navigator.pushNamed(context, '/assignment');
                         },
                       ),
                       MyListtile(
-                        icon: Icons.shopping_cart,
-                        text: "Cart",
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context, '/cartpage');
-                        },
+                        icon: Icons.settings,
+                        text: "การตั้งค่า",
+                        onTap: () {},
                       ),
                     ],
                   ),
