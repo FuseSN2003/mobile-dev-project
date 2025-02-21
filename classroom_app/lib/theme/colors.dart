@@ -8,5 +8,6 @@ ThemeData darkMode = ThemeData(
     inversePrimary: Colors.black,
     onPrimary: Colors.white,
     error: Colors.red,
+    onSecondary: Color(0xFF151414),
   ),
 );

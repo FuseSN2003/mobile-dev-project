@@ -5,6 +5,7 @@ import '../component/createclassbar.dart';
 import '../blocs/classroom/classroom_bloc.dart';
 import '../blocs/classroom/classroom_state.dart';
 import '../blocs/classroom/classroom_event.dart';
+import '../component/sidebar.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -17,7 +18,7 @@ class _MainPageState extends State<MainPage> {
   bool _isClassed = true;
   @override
   void initState() {
-    print("This is MainPage");
+    // print("This is MainPage");
     super.initState();
     debugPrint("Dispatching FetchStudent_Classrooms event...");
     BlocProvider.of<ClassroomBloc>(context).add(FetchStudent_Classrooms());
@@ -26,8 +27,9 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Sidebar(),
       appBar: NavBar(),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -42,7 +44,9 @@ class _MainPageState extends State<MainPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/assignment');
+                      },
                       child: Text(
                         "Assignment",
                         style: TextStyle(
@@ -116,9 +120,12 @@ class _MainPageState extends State<MainPage> {
                               return Container(
                                 margin: EdgeInsets.only(top: 10),
                                 decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+
                                   border: Border.all(
-                                    width: 2,
-                                    color: Colors.white54,
+                                    // width: 2,
+                                    // color: Colors.white54,
                                   ),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
@@ -154,6 +161,22 @@ class _MainPageState extends State<MainPage> {
                                         textAlign: TextAlign.right,
                                       ),
                                     ],
+                                  ),
+                                  subtitle: Container(
+                                    margin: EdgeInsets.only(top: 10),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.menu_book,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                          size: 24,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

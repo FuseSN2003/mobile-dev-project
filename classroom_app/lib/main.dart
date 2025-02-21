@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import './screens/login_page.dart';
 import './screens/main_page.dart';
 import './screens/register_page.dart';
+import './screens/assignment_page.dart';
 import './theme/colors.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'blocs/classroom/classroom_bloc.dart';
 
 void main() {
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => MainPage(),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
+        '/assignment': (context) => AssignmentPage(),
       },
     );
   }

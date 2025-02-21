@@ -71,7 +71,10 @@ flutter:
         - asset: assets/fonts/Itim-Regular.ttf 
     - family: KaushanScript 
       fonts:
-        - asset: assets/fonts/KaushanScript-Regular.ttf 
+        - asset: assets/fonts/KaushanScript-Regular.ttf
+    - family: Kanit
+      fonts:
+        - asset: assets/fonts/Kanit/Kanit-Light.ttf
     # - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

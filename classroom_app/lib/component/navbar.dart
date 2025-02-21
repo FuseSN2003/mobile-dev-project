@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import '../component/sidebar.dart';
 
 class NavBar extends StatelessWidget implements PreferredSizeWidget {
+  // final GlobalKey<ScaffoldState> scaffoldKey;
+  NavBar({Key? key, this.backButton = false}) : super(key: key);
+  final bool backButton;
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
@@ -16,18 +20,27 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         child: AppBar(
           backgroundColor:
-              Theme.of(context).colorScheme.background, // Dark background
+              Theme.of(context).colorScheme.surface, // Dark background
           elevation: 0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Colors.white,
-              size: 24,
-            ), // Hamburger menu
-            onPressed: () {
-              // Handle menu tap
-            },
-          ),
+          leading:
+              !backButton
+                  ? IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                      size: 32,
+                    ), // Hamburger menu
+                    onPressed: () {
+                      debugPrint("Click on burger");
+                      print("Click");
+                      Scaffold.of(context).openDrawer();
+                      ; // Open Sidebar Drawer
+                    },
+                  )
+                  : IconButton(
+                    icon: Icon(Icons.arrow_back, color: Colors.white, size: 32),
+                    onPressed: () => Navigator.pop(context), // Default: Go back
+                  ),
           title: Text(
             'Your Classes',
             style: TextStyle(
