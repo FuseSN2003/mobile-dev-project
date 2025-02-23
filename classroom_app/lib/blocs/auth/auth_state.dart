@@ -1,18 +1,25 @@
-// login_register_state.dart
-abstract class LoginRegisterState {}
+part of 'auth_bloc.dart';
 
-class LoginRegisterInitial extends LoginRegisterState {}
+@immutable
+sealed class AuthState {}
 
-class LoginRegisterLoading extends LoginRegisterState {}
+class AuthInitial extends AuthState {}
 
-class LoginRegisterSuccess extends LoginRegisterState {
-  final String message;
+class AuthChecking extends AuthState {}
 
-  LoginRegisterSuccess(this.message);
+class AuthLoading extends AuthState {}
+
+class Authenticated extends AuthState {
+  final String token;
+  final User user;
+
+  Authenticated({required this.token, required this.user});
 }
 
-class LoginRegisterFailure extends LoginRegisterState {
-  final String error;
+class UnAuthenticated extends AuthState {}
 
-  LoginRegisterFailure(this.error);
+class AuthError extends AuthState {
+  final String message;
+
+  AuthError({required this.message});
 }

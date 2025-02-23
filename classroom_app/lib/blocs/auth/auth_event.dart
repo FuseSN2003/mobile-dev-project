@@ -1,16 +1,29 @@
-// login_register_event.dart
-abstract class LoginRegisterEvent {}
+part of 'auth_bloc.dart';
 
-class LoginEvent extends LoginRegisterEvent {
-  final String email;
+@immutable
+sealed class AuthEvent {}
+
+class AppStarted extends AuthEvent {}
+
+class LoggedIn extends AuthEvent {
+  final String username;
   final String password;
 
-  LoginEvent(this.email, this.password);
+  LoggedIn({required this.username, required this.password});
 }
 
-class RegisterEvent extends LoginRegisterEvent {
+class LoggedOut extends AuthEvent {}
+
+class Register extends AuthEvent {
+  final String username;
   final String email;
   final String password;
+  final String confirmPassword;
 
-  RegisterEvent(this.email, this.password);
+  Register({
+    required this.username,
+    required this.email,
+    required this.password,
+    required this.confirmPassword,
+  });
 }
