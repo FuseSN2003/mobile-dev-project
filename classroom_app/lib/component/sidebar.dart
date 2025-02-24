@@ -113,13 +113,11 @@ class Sidebar extends StatelessWidget {
                           itemCount: teachingClassroom.length,
                           itemBuilder: (context, index) {
                             final classroom = teachingClassroom[index];
-                            return Expanded(
-                              child: MyListtile(
-                                icon: Icons.folder,
-                                text: "${classroom["name"]}",
-                                sec: "${classroom["section"]}",
-                                onTap: () {},
-                              ),
+                            return MyListtile(
+                              icon: Icons.folder,
+                              text: "${classroom["name"]}",
+                              sec: "${classroom["section"]}",
+                              onTap: () {},
                             );
                           },
                         ),
@@ -154,13 +152,11 @@ class Sidebar extends StatelessWidget {
                           itemCount: joinClassroom.length,
                           itemBuilder: (context, index) {
                             final classroom = joinClassroom[index];
-                            return Expanded(
-                              child: MyListtile(
-                                icon: Icons.folder,
-                                text: "${classroom["name"]}",
-                                sec: "${classroom["section"]}",
-                                onTap: () {},
-                              ),
+                            return MyListtile(
+                              icon: Icons.folder,
+                              text: "${classroom["name"]}",
+                              sec: "${classroom["section"]}",
+                              onTap: () {},
                             );
                           },
                         ),
