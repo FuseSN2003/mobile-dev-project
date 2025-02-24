@@ -42,13 +42,22 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
                     icon: Icon(Icons.arrow_back, color: Colors.white, size: 32),
                     onPressed: () => Navigator.pop(context), // Default: Go back
                   ),
-          title: Text(
-            'Your Classes',
-            style: TextStyle(
-              fontFamily: 'Cursive', // Custom font if available
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary, // Green text
+          title: TextButton(
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                "/",
+                (Route<dynamic> route) => false,
+              );
+            },
+            child: Text(
+              'Your Classes',
+              style: TextStyle(
+                fontFamily: 'Cursive', // Custom font if available
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary, // Green text
+              ),
             ),
           ),
 
@@ -56,7 +65,7 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
           actions: [
             IconButton(
               icon: Icon(
-                Icons.account_circle,
+                Icons.person,
                 color: Colors.white,
                 size: 32,
               ), // User icon

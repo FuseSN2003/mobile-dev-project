@@ -131,7 +131,10 @@ class _MainPageState extends State<MainPage> {
                                 ),
                                 child: ListTile(
                                   onTap: () {
-                                    Navigator.pushNamed(context, "/classroom");
+                                    Navigator.pushNamed(
+                                      context,
+                                      "/classroom_form",
+                                    );
                                   },
                                   title: Row(
                                     mainAxisAlignment:

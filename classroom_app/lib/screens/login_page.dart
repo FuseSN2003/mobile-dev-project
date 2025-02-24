@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                       alignment: Alignment.centerLeft,
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, "/Register");
+                          Navigator.pushNamed(context, "/register");
                         },
                         child: Text(
                           'Register Here',
