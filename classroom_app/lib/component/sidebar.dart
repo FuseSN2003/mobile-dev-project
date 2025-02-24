@@ -1,8 +1,10 @@
+import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Corrected Sidebar class
 class Sidebar extends StatelessWidget {
-  const Sidebar({Key? key}) : super(key: key);
+  const Sidebar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -111,13 +113,11 @@ class Sidebar extends StatelessWidget {
                           itemCount: teachingClassroom.length,
                           itemBuilder: (context, index) {
                             final classroom = teachingClassroom[index];
-                            return Expanded(
-                              child: MyListtile(
-                                icon: Icons.folder,
-                                text: "${classroom["name"]}",
-                                sec: "${classroom["section"]}",
-                                onTap: () {},
-                              ),
+                            return MyListtile(
+                              icon: Icons.folder,
+                              text: "${classroom["name"]}",
+                              sec: "${classroom["section"]}",
+                              onTap: () {},
                             );
                           },
                         ),
@@ -152,13 +152,11 @@ class Sidebar extends StatelessWidget {
                           itemCount: joinClassroom.length,
                           itemBuilder: (context, index) {
                             final classroom = joinClassroom[index];
-                            return Expanded(
-                              child: MyListtile(
-                                icon: Icons.folder,
-                                text: "${classroom["name"]}",
-                                sec: "${classroom["section"]}",
-                                onTap: () {},
-                              ),
+                            return MyListtile(
+                              icon: Icons.folder,
+                              text: "${classroom["name"]}",
+                              sec: "${classroom["section"]}",
+                              onTap: () {},
                             );
                           },
                         ),
@@ -172,12 +170,7 @@ class Sidebar extends StatelessWidget {
                     icon: Icons.exit_to_app,
                     text: "Logout",
                     onTap: () {
-                      // print("LogoutClicked");
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        "/login",
-                        (route) => false,
-                      );
+                      context.read<AuthBloc>().add(LoggedOut());
                     },
                   ),
                 ),

@@ -13,13 +13,12 @@ export const authRoute = new Elysia({ prefix: "/auth" })
   )
   .post(
     "/register",
-    async ({ body, set }) => {
+    async ({ body, set, jwt }) => {
       const { username, email, password, confirmPassword } = body;
 
       if (password !== confirmPassword) {
         set.status = 400;
         return {
-          status: "error",
           message: "Passwords do not match",
         };
       }
@@ -34,22 +33,30 @@ export const authRoute = new Elysia({ prefix: "/auth" })
       if (existingUser) {
         set.status = 400;
         return {
-          status: "error",
           message: "User already exists",
         };
       }
 
       const hashedPassword = await Bun.password.hash(password, "bcrypt");
 
-      await db.insert(userTable).values({
+      const [result] = await db.insert(userTable).values({
         username,
         email,
         password: hashedPassword,
+      }).returning({
+        id: userTable.id,
+        username: userTable.username,
+        email: userTable.email,
       });
 
+      const token = await jwt.sign({
+        id: result.id,
+      })
+
       return {
-        status: "success",
         message: "User registered successfully",
+        token,
+        user: result,
       };
     },
     {
@@ -76,7 +83,6 @@ export const authRoute = new Elysia({ prefix: "/auth" })
       if (!user) {
         set.status = 400;
         return {
-          status: "error",
           message: "Invalid username or password",
         };
       }
@@ -89,7 +95,6 @@ export const authRoute = new Elysia({ prefix: "/auth" })
       if (!isPasswordValid) {
         set.status = 400;
         return {
-          status: "error",
           message: "Invalid username or password",
         };
       }
@@ -99,8 +104,12 @@ export const authRoute = new Elysia({ prefix: "/auth" })
       });
 
       return {
-        status: "success",
         message: "User logged in successfully",
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
         token,
       };
     },
@@ -141,7 +150,8 @@ export const authRoute = new Elysia({ prefix: "/auth" })
     }
 
     return {
-      status: "success",
+      message: "Authenticated",
+      token,
       user,
     };
   });
