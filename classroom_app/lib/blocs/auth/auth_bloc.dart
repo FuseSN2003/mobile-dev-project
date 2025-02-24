@@ -60,6 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       final jsonData = authFromJSON(res.body);
+      debugPrint(jsonData.token);
 
       if (res.statusCode == 200) {
         await saveToken(jsonData.token!);
@@ -92,7 +93,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final res = await http.post(
         Uri.parse('http://10.0.2.2:3000/auth/register'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json; charset=utf-8'},
         body: jsonEncode({
           'username': username,
           'email': email,
@@ -100,10 +101,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           'confirmPassword': confirmPassword,
         }),
       );
-      debugPrint(res.body);
-
       final jsonData = authFromJSON(res.body);
-
       if (res.statusCode == 200) {
         await saveToken(jsonData.token!);
         return emit(

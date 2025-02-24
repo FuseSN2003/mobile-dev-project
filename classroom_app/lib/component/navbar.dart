@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../component/sidebar.dart';
 
 class NavBar extends StatelessWidget implements PreferredSizeWidget {
-  // final GlobalKey<ScaffoldState> scaffoldKey;
-  NavBar({Key? key, this.backButton = false}) : super(key: key);
+  const NavBar({super.key, this.backButton = false});
   final bool backButton;
+
   @override
   Widget build(BuildContext context) {
     return PreferredSize(

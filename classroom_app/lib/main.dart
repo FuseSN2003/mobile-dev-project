@@ -1,3 +1,4 @@
+import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import './screens/login_page.dart';
@@ -12,7 +13,10 @@ import 'blocs/classroom/classroom_bloc.dart';
 void main() {
   runApp(
     MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => ClassroomBloc())],
+      providers: [
+        BlocProvider(create: (context) => AuthBloc()..add(AppStarted())),
+        BlocProvider(create: (context) => ClassroomBloc()),
+      ],
       child: MyApp(),
     ),
   );
@@ -24,15 +28,51 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Classroom App',
       theme: darkMode,
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => MainPage(),
+        '/': (context) => WithAuth(child: MainPage()),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/assignment': (context) => AssignmentPage(),
         '/classroom': (context) => ClassroomPage(),
+      },
+    );
+  }
+}
+
+class WithAuth extends StatelessWidget {
+  final Widget child;
+
+  const WithAuth({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is UnAuthenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          });
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthChecking) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (state is UnAuthenticated) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else {
+          return child;
+        }
       },
     );
   }

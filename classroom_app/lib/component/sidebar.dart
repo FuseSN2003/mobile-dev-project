@@ -1,8 +1,10 @@
+import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Corrected Sidebar class
 class Sidebar extends StatelessWidget {
-  const Sidebar({Key? key}) : super(key: key);
+  const Sidebar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -172,12 +174,7 @@ class Sidebar extends StatelessWidget {
                     icon: Icons.exit_to_app,
                     text: "Logout",
                     onTap: () {
-                      // print("LogoutClicked");
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        "/login",
-                        (route) => false,
-                      );
+                      context.read<AuthBloc>().add(LoggedOut());
                     },
                   ),
                 ),
