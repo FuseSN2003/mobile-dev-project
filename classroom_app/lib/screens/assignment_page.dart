@@ -42,7 +42,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                   //     fontWeight: FontWeight.w600,
                   //   ),
                   // ),
-                  assignTask(
+                  AssignTask(
                     classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
                     taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
                     time: "5/11/2567 00:00 A.m",
@@ -53,7 +53,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
               Column(
                 children: [
                   // Text("ไม่มีวันครบกำหนด"),
-                  assignTask(
+                  AssignTask(
                     classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
                     taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
                     time: "5/11/2567 00:00 A.m",
