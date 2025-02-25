@@ -13,6 +13,8 @@ import './screens/classroom_addassignment.dart';
 import './theme/colors.dart';
 import 'blocs/classroom/classroom_bloc.dart';
 
+import 'blocs/classroom/classroom_bloc.dart';
+
 void main() {
   runApp(
     MultiBlocProvider(

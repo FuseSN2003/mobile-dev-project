@@ -13,7 +13,7 @@
   "dependencies": {
     "@elysiajs/cors": "^1.2.0",
     "@elysiajs/jwt": "^1.2.0",
-    "@elysiajs/swagger": "^1.2.0",
+    "@elysiajs/swagger": "^1.2.1",
     "drizzle-orm": "^0.39.3",
     "elysia": "latest",
     "postgres": "^3.4.5"
