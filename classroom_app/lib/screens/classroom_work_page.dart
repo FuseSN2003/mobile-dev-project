@@ -32,23 +32,22 @@ class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
                 child: CustomButton(
                   text: "เพิ่มงานใหม่",
                   onPressed: () {
-                    Navigator.pushNamed(context, "/classroom_addassignment");
+                    Navigator.pushNamed(context, "/addassignment");
                   },
                 ),
               ),
-              AssignTask(
+              assignTask(
                 classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
                 taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
                 time: "5/11/2567 00:00 A.m",
                 score: 100,
               ),
-              AssignTask(
+              assignTask(
                 classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
                 taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
                 time: "5/11/2567 00:00 A.m",
                 score: 100,
-                onPress:
-                    () => Navigator.pushNamed(context, "/classroom_assignment"),
+                onPress: () => Navigator.pushNamed(context, "/assignment"),
               ),
             ],
           ),

@@ -1,19 +1,18 @@
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
-import 'package:classroom_app/screens/classroom_assignment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import './screens/login_page.dart';
 import './screens/main_page.dart';
 import './screens/register_page.dart';
-import './screens/assignment_page.dart';
+import './screens/thingtodo_page.dart';
 import './screens/classroom_form_page.dart';
 import './screens/classroom_work_page.dart';
 import './screens/classroom_person_page.dart';
-import './screens/classroom_addassignment.dart';
+import 'screens/addassignment_page.dart';
 import './theme/colors.dart';
 import 'blocs/classroom/classroom_bloc.dart';
-
-import 'blocs/classroom/classroom_bloc.dart';
+import './screens/assignment_page.dart';
+import 'screens/student_assignment_page.dart';
 
 void main() {
   runApp(
@@ -40,12 +39,13 @@ class MyApp extends StatelessWidget {
         '/': (context) => WithAuth(child: MainPage()),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
-        '/assignment': (context) => AssignmentPage(),
+        '/thingtodo': (context) => ThingtodoPage(),
         '/classroom_form': (context) => ClassroomFormPage(),
         '/classroom_work': (context) => ClassroomWorkPage(),
         '/classroom_person': (context) => ClassroomPersonPage(),
-        '/classroom_addassignment': (context) => AddAssignmentPage(),
-        // '/classroom_assignment': (context) => ClassroomAssignment(),
+        '/addassignment': (context) => AddAssignmentPage(),
+        '/assignment': (context) => Assignment(),
+        '/assignment_student': (context) => AssignmentStudent(),
       },
     );
   }
@@ -53,7 +53,6 @@ class MyApp extends StatelessWidget {
 
 class WithAuth extends StatelessWidget {
   final Widget child;
-
   const WithAuth({super.key, required this.child});
 
   @override

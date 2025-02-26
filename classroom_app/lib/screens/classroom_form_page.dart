@@ -33,13 +33,6 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
       due_date: DateTime(2024, 2, 18),
       score: 20,
     ),
-    Work(
-      title: "Testing Phase",
-      description: "Run app tests",
-      created_at: DateTime(2024, 2, 22),
-      due_date: DateTime(2024, 2, 22),
-      score: 20,
-    ),
   ];
 
   List<Post> posts = [
@@ -54,36 +47,6 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
       postDes: "Best homemade pizza!",
       username: "FoodieQueen",
       created_at: DateTime(2024, 2, 17),
-    ),
-    Post(
-      postName: "Sunset Beach",
-      postDes: "Beautiful ocean view",
-      username: "TravelerGuy",
-      created_at: DateTime(2024, 2, 23),
-    ),
-    Post(
-      postName: "Sunset Beach",
-      postDes: "Beautiful ocean view",
-      username: "TravelerGuy",
-      created_at: DateTime(2024, 2, 23),
-    ),
-    Post(
-      postName: "Sunset Beach",
-      postDes: "Beautiful ocean view",
-      username: "TravelerGuy",
-      created_at: DateTime(2024, 2, 23),
-    ),
-    Post(
-      postName: "Sunset Beach",
-      postDes: "Beautiful ocean view",
-      username: "TravelerGuy",
-      created_at: DateTime(2024, 2, 23),
-    ),
-    Post(
-      postName: "Sunset Beach",
-      postDes: "Beautiful ocean view",
-      username: "TravelerGuy",
-      created_at: DateTime(2024, 2, 23),
     ),
     Post(
       postName: "Sunset Beach",
@@ -120,6 +83,7 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("$className", style: TextStyle(color: Colors.white)),
+              SizedBox(height: 10),
               _buildTextFiledPost(context),
               SizedBox(height: 20),
               Container(
@@ -161,11 +125,12 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
             Row(
               children: [
                 Container(
-                  width: 30,
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.green, // Profile icon
-                    child: Icon(size: 14, Icons.person, color: Colors.white),
+                  margin: EdgeInsets.only(top: 10, right: 10),
+                  width: 20,
+                  child: Icon(
+                    size: 28,
+                    Icons.account_circle,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 SizedBox(width: 10),
@@ -179,8 +144,9 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
                       children: [
                         Text(
                           "ชื่อโพสต์",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
+                        SizedBox(height: 5),
                         TextField(
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
@@ -191,7 +157,8 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
                             ),
                             contentPadding: EdgeInsets.all(3),
                             filled: true,
-                            fillColor: Colors.black,
+                            fillColor:
+                                Theme.of(context).colorScheme.onSecondary,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide(color: Colors.grey),
@@ -202,22 +169,7 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
                     ),
                   ),
                 ),
-                // Expanded(
-                //   child: TextField(
-                //     style: TextStyle(color: Colors.white),
-                //     decoration: InputDecoration(
-                //       hintText: "โพสต์ ....",
-                //       hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                //       filled: true,
-                //       fillColor: Colors.black,
-                //       contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                //       border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(8),
-                //         borderSide: BorderSide(color: Colors.grey),
-                //       ),
-                //       label: Text("ชื่อโพสต์"),
-                //     ),
-                //   ),
+
                 // ),
               ],
             ),
@@ -227,20 +179,20 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
               children: [
                 Text(
                   "รายละเอียดโพสต์",
-                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
                 SizedBox(height: 10),
                 TextField(
                   maxLines: 4,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 12),
                   decoration: InputDecoration(
                     hintText: "โพสต์ ....",
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
                     filled: true,
-                    fillColor: Colors.black,
+                    fillColor: Theme.of(context).colorScheme.onSecondary,
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 10,
-                      vertical: 20,
+                      vertical: 10,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -250,53 +202,6 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
                 ),
               ],
             ),
-            // File Type Button
-            // ElevatedButton(
-            //   onPressed: () {},
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: Colors.black, // Dark button
-            //     foregroundColor: Colors.white,
-            //   ),
-            //   child: Text("แบบไฟล์"),
-            // ),
-            // SizedBox(height: 16),
-
-            // // File Upload Buttons
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: ElevatedButton(
-            //         onPressed: () {},
-            //         style: ElevatedButton.styleFrom(
-            //           backgroundColor: Colors.black,
-            //           foregroundColor: Colors.white,
-            //         ),
-            //         child: Text("ไฟล์รูป"),
-            //       ),
-            //     ),
-            //     SizedBox(width: 10),
-            //     Expanded(
-            //       child: ElevatedButton(
-            //         onPressed: () {},
-            //         style: ElevatedButton.styleFrom(
-            //           backgroundColor: Colors.black,
-            //           foregroundColor: Colors.white,
-            //         ),
-            //         child: Text("ไฟล์รูป"),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-
-            // ElevatedButton(
-            //   onPressed: () {},
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: Colors.black,
-            //     foregroundColor: Colors.white,
-            //     minimumSize: Size(double.infinity, 50),
-            //   ),
-            //   child: Text("ไฟล์รูป"),
-            // ),
 
             // Post Button
             SizedBox(height: 10),

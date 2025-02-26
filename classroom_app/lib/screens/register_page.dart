@@ -1,7 +1,9 @@
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
+import 'package:classroom_app/component/login_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../component/textinput.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -74,18 +76,22 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     children: [
-                      _buildTextField(context, 'Username', _usernameController),
-                      _buildTextField(context, 'Email', _emailController),
-                      _buildTextField(
-                        context,
-                        'Password',
-                        _passwordController,
+                      CustomTextField(
+                        label: 'Username',
+                        controller: _usernameController,
+                      ),
+                      CustomTextField(
+                        label: 'Email',
+                        controller: _emailController,
+                      ),
+                      CustomTextField(
+                        label: 'Password',
+                        controller: _passwordController,
                         visibilityNotifier: _passwordVisible,
                       ),
-                      _buildTextField(
-                        context,
-                        'Confirm-Password',
-                        _confirmpasswordController,
+                      CustomTextField(
+                        label: 'Confirm-Password',
+                        controller: _confirmpasswordController,
                         visibilityNotifier: _confirmPasswordVisible,
                       ),
                       SizedBox(height: 10),
@@ -169,38 +175,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       SizedBox(height: 40),
-                      Center(
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Enjoy your ',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                              TextSpan(
-                                text: 'classes',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ), // Change color for "classes"
-                              ),
-                              TextSpan(
-                                text: ' and make every ',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                              TextSpan(
-                                text: 'lesson',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ), // Change color for "lesson"
-                              ),
-                              TextSpan(
-                                text: ' count!',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+
+                      CustomRichText(),
                     ],
                   ),
                 ),
@@ -208,70 +184,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(
-    BuildContext context,
-    String label,
-    TextEditingController controller, {
-    ValueNotifier<bool>? visibilityNotifier,
-  }) {
-    return Container(
-      margin: EdgeInsets.only(top: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 5, bottom: 10),
-            child: Text(
-              "$label :",
-              style: GoogleFonts.inder(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 14,
-              ),
-            ),
-          ),
-          ValueListenableBuilder<bool>(
-            valueListenable: visibilityNotifier ?? ValueNotifier<bool>(false),
-            builder: (context, isVisible, child) {
-              return TextField(
-                obscureText: visibilityNotifier != null ? isVisible : false,
-                controller: controller,
-                decoration: InputDecoration(
-                  hintText: label,
-                  hintStyle: GoogleFonts.inder(
-                    color: Colors.white54,
-                    fontSize: 12,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[800],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide.none,
-                  ),
-                  suffixIcon:
-                      visibilityNotifier != null
-                          ? IconButton(
-                            onPressed: () {
-                              visibilityNotifier.value =
-                                  !visibilityNotifier.value;
-                            },
-                            icon: Icon(
-                              isVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )
-                          : null,
-                ),
-                style: TextStyle(color: Colors.white),
-              );
-            },
-          ),
-        ],
       ),
     );
   }

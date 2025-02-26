@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AssignTask extends StatefulWidget {
-  AssignTask({
+class assignTask extends StatefulWidget {
+  const assignTask({
     super.key,
     required this.classRoomName,
     required this.taskName,
@@ -17,10 +17,10 @@ class AssignTask extends StatefulWidget {
   final VoidCallback? onPress;
 
   @override
-  State<AssignTask> createState() => _AssignTaskState();
+  State<assignTask> createState() => _assignTaskState();
 }
 
-class _AssignTaskState extends State<AssignTask> {
+class _assignTaskState extends State<assignTask> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

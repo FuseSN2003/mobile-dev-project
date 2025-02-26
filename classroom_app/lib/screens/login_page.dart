@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../component/textinput.dart';
+import '../component/login_footer.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -59,8 +61,14 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     children: [
-                      _buildTextField(context, 'Username', _usernameController),
-                      _buildTextField(context, 'Password', _passwordController),
+                      CustomTextField(
+                        label: 'Username',
+                        controller: _usernameController,
+                      ),
+                      CustomTextField(
+                        label: 'Email',
+                        controller: _passwordController,
+                      ),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton(
@@ -152,103 +160,14 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                       SizedBox(height: 35),
-                      Center(
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Enjoy your ',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                              TextSpan(
-                                text: 'classes',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ), // Change color for "classes"
-                              ),
-                              TextSpan(
-                                text: ' and make every ',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                              TextSpan(
-                                text: 'lesson',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ), // Change color for "lesson"
-                              ),
-                              TextSpan(
-                                text: ' count!',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
+                CustomRichText(),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(
-    BuildContext context,
-    String label,
-    TextEditingController controller,
-  ) {
-    return Container(
-      margin: EdgeInsets.only(top: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 5, bottom: 10),
-            child: Text(
-              "$label :",
-              style: GoogleFonts.inder(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 14,
-              ),
-            ),
-          ),
-          TextField(
-            obscureText: label == "Password" ? visiblePassword : false,
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: label,
-              hintStyle: GoogleFonts.inder(color: Colors.white54, fontSize: 12),
-              filled: true,
-              fillColor: Colors.grey[800],
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide.none,
-              ),
-              suffixIcon:
-                  label == "Password"
-                      ? IconButton(
-                        onPressed: () {
-                          setState(() {
-                            visiblePassword = !visiblePassword;
-                          });
-                        },
-                        icon: Icon(
-                          visiblePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                        ),
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      )
-                      : null,
-            ),
-            // visiblePassword
-            //     ? Icon(Icons.visibility_off, color: Colors.white70)
-            style: TextStyle(color: Colors.white),
-          ),
-        ],
       ),
     );
   }

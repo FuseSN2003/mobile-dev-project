@@ -7,9 +7,9 @@ import '../component/navbar.dart';
 class ClassroomAssignment extends StatelessWidget {
   ClassroomAssignment({
     super.key,
-    required this.assignmentName,
-    required this.assignDesc,
-    required this.score,
+    // required this.assignmentName,
+    // required this.assignDesc,
+    // required this.score,
   });
   final List<String> studentNames = [
     "Rati Maneengam",

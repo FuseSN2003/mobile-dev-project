@@ -1,161 +1,178 @@
 import 'package:flutter/material.dart';
-import '../component/navbar.dart';
+import 'package:flutter/widgets.dart';
+import '../component/student_box.dart';
 import '../component/sidebar.dart';
-import '../component/assignment_box.dart';
+import '../component/navbar.dart';
+import '../component/button.dart';
 
-class AssignmentPage extends StatefulWidget {
-  AssignmentPage({super.key});
-
-  @override
-  State<AssignmentPage> createState() => _AssignmentPageState();
-}
-
-class _AssignmentPageState extends State<AssignmentPage> {
-  String selectedTap = "มอบหมายแล้ว";
+class Assignment extends StatelessWidget {
+  Assignment({
+    super.key,
+    // required this.assignmentName,
+    // required this.assignDesc,
+    // required this.score,
+  });
+  final List<String> studentNames = [
+    "Rati Maneengam",
+    "John Doe",
+    "Jane Smith",
+    "Bob White",
+  ];
+  String assignmentName = "งาน “การทดสอบ User 2 ราย “";
+  String assignDesc =
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text";
+  int score = 10;
+  String dueDateString = "26/2/2568 00:00";
+  List<String> imageUrls = [
+    "https://img.salehere.co.th/p/1200x0/2021/06/18/8mx3mv3gk1mp.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdE6iZ0yrsi0mwiy3UUNuTLlRwVD6seXm0nQ&s",
+  ];
+  // DateTime dueDate = parseThaiDate(dueDateString);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Sidebar(),
       appBar: NavBar(backButton: true),
+      drawer: Sidebar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildTapButton("มอบหมายแล้ว"),
-                  _buildTapButton("เลยกำหนด"),
-                  _buildTapButton("เสร็จสิ้น"),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Text(
-                  //   "ไม่มีวันครบกำหนด",
-                  //   style: TextStyle(
-                  //     color: Colors.white,
-                  //     fontSize: 14,
-                  //     fontWeight: FontWeight.w600,
-                  //   ),
-                  // ),
-                  AssignTask(
-                    classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
-                    taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
-                    time: "5/11/2567 00:00 A.m",
-                    score: 100,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: DefaultTextStyle(
+            style: TextStyle(color: Colors.white, fontSize: 14),
+            child: Column(
+              children: [
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(assignmentName),
+                          Text("${score} คะแนน"),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("ส่งวันที่ ${dueDateString}"),
+                          CustomButton(
+                            text: "แก้ไขงาน",
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/addassignment");
+                            },
+                            colors: Colors.white,
+                            backGroundColors:
+                                Theme.of(context).colorScheme.primary,
+                            paddingWidth: 8,
+                            paddingHeight: 10,
+                          ),
+                        ],
+                      ),
+                      Text("รายละเอียดงาน"),
+                      Text("${assignDesc}"),
+                      SizedBox(height: 20),
+                      Container(
+                        height: 150,
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, // 2 images per row
+                                crossAxisSpacing: 8, // Space between columns
+                                mainAxisSpacing: 8, // Space between rows
+                                childAspectRatio:
+                                    1, // Adjust to control image size
+                              ),
+                          itemCount: imageUrls.length,
+                          itemBuilder: (context, index) {
+                            return ClipRRect(
+                              child: Container(
+                                child: Image.network(
+                                  // width: 150,
+                                  // height: 100,
+                                  imageUrls[index],
+                                  fit:
+                                      BoxFit.cover, // Ensures image fits nicely
+                                  loadingBuilder: (
+                                    context,
+                                    child,
+                                    loadingProgress,
+                                  ) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Center(
+                                      child: Icon(
+                                        Icons.error,
+                                        color: Colors.red,
+                                        size: 50,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      // Image.network(
+                      //   "https://www.ieethailand.com/wp-content/uploads/2024/06/swt-2025.jpg",
+                      // ),
+                      // ListView.builder(
+                      //   itemCount: imageUrls.length,
+                      //   itemBuilder: (context, index) {
+                      //     return Padding(
+                      //       padding: const EdgeInsets.all(0),
+                      //       child: ClipRRect(
+                      //         borderRadius: BorderRadius.circular(
+                      //           10,
+                      //         ), // Rounded corners
+                      //         child: Image.network(
+                      //           imageUrls[index],
+                      //           fit: BoxFit.cover,
+                      //           loadingBuilder: (
+                      //             context,
+                      //             child,
+                      //             loadingProgress,
+                      //           ) {
+                      //             if (loadingProgress == null) return child;
+                      //             return Center(
+                      //               child: CircularProgressIndicator(),
+                      //             );
+                      //           },
+                      //           errorBuilder: (context, error, stackTrace) {
+                      //             return Center(
+                      //               child: Icon(
+                      //                 Icons.error,
+                      //                 color: Colors.red,
+                      //                 size: 50,
+                      //               ),
+                      //             );
+                      //           },
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
+                    ],
                   ),
-                ],
-              ),
-              Column(
-                children: [
-                  // Text("ไม่มีวันครบกำหนด"),
-                  AssignTask(
-                    classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
-                    taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
-                    time: "5/11/2567 00:00 A.m",
-                    score: 100,
+                ),
+                Container(
+                  child: StudentBox(
+                    label: "นักเรียน",
+                    itemList: studentNames,
+                    onPress:
+                        () =>
+                            Navigator.pushNamed(context, "/assignment_student"),
                   ),
-                ],
-              ),
-            ],
+                ),
+                Container(),
+              ],
+            ),
           ),
-        ),
-      ),
-    );
-  }
-
-  // Widget _buildTask(
-  //   String classRoomName,
-  //   String taskName,
-  //   String time,
-  //   int score,
-  // ) {
-  //   return Container(
-  //     width: double.infinity, // Makes it take full width
-  //     margin: const EdgeInsets.only(top: 10),
-  //     decoration: BoxDecoration(
-  //       color: Colors.grey[900],
-  //       borderRadius: BorderRadius.circular(12),
-  //     ),
-  //     padding: const EdgeInsets.all(20),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Expanded(
-  //               // ✅ Ensures Row content doesn't overflow
-  //               child: Row(
-  //                 // mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   const Icon(Icons.calendar_today, color: Colors.green),
-  //                   const SizedBox(width: 8),
-  //                   Expanded(
-  //                     // ✅ Expands classRoomName properly
-  //                     child: Text(
-  //                       classRoomName,
-  //                       style: const TextStyle(
-  //                         fontSize: 12,
-  //                         color: Colors.white,
-  //                         fontWeight: FontWeight.bold,
-  //                       ),
-  //                       overflow: TextOverflow.ellipsis,
-  //                       maxLines: 1,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-
-  //             Text(
-  //               time,
-  //               style: const TextStyle(fontSize: 12, color: Colors.white),
-  //             ),
-  //           ],
-  //         ),
-  //         const SizedBox(height: 15),
-  //         Text(
-  //           taskName,
-  //           style: const TextStyle(fontSize: 14, color: Colors.white),
-  //           maxLines: 2,
-  //           overflow: TextOverflow.ellipsis, // Show "..." if it overflows
-  //         ),
-  //         const SizedBox(height: 12),
-  //         Align(
-  //           alignment: Alignment.bottomRight,
-  //           child: Text(
-  //             '$score คะแนน',
-  //             style: const TextStyle(
-  //               fontSize: 12,
-  //               color: Colors.green,
-  //               fontWeight: FontWeight.bold,
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Widget _buildTapButton(String title) {
-    return TextButton(
-      onPressed: () {
-        setState(() {
-          selectedTap = title;
-        });
-      },
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 14,
-          color: Colors.white,
-          fontFamily: "Inder",
-          fontWeight: selectedTap == title ? FontWeight.bold : FontWeight.w100,
         ),
       ),
     );

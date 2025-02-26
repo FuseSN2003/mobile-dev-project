@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 class StudentBox extends StatelessWidget {
   final String label;
   final List<String> itemList;
-  final Function(String)? onItemPress; // Optional callback for item actions
+  // final Function(String)? onItemPress; // Optional callback for item actions
 
+  final VoidCallback? onPress;
   const StudentBox({
     super.key,
     required this.label,
     required this.itemList,
-    this.onItemPress,
+    this.onPress,
   });
 
   @override
@@ -41,13 +42,7 @@ class StudentBox extends StatelessWidget {
             ),
             itemCount: itemList.length,
             itemBuilder: (context, index) {
-              return StudentCard(
-                name: itemList[index],
-                onPress:
-                    onItemPress != null
-                        ? () => onItemPress!(itemList[index])
-                        : null,
-              );
+              return StudentCard(name: itemList[index], onPress: onPress);
             },
           ),
         ],

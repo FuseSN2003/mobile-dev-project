@@ -45,7 +45,7 @@ class _MainPageState extends State<MainPage> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/assignment');
+                        Navigator.pushNamed(context, '/thingtodo');
                       },
                       child: Text(
                         "Assignment",

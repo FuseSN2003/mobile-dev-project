@@ -75,7 +75,7 @@ class Sidebar extends StatelessWidget {
                         text: "สิ่งที่ต้องทำ",
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.pushNamed(context, '/assignment');
+                          Navigator.pushNamed(context, '/thingtodo');
                         },
                       ),
                       MyListtile(
