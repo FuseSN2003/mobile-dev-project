@@ -60,7 +60,7 @@ export const classroomRoute = new Elysia({
     },
     { body: t.Object({ name: t.String(), description: t.String() }) }
   )
-  .get("/my-class", async ({ user }) => {
+  .get("/", async ({ user }) => {
     if (!user) {
       return {
         status: "error",
@@ -68,7 +68,7 @@ export const classroomRoute = new Elysia({
       };
     }
 
-    const classrooms = await db
+    const teachingClass = await db
       .select({
         id: classroomTable.id,
         name: classroomTable.name,
@@ -80,20 +80,7 @@ export const classroomRoute = new Elysia({
       .leftJoin(userTable, eq(teachTable.userId, userTable.id))
       .where(eq(teachTable.userId, user.id));
 
-    return {
-      status: "success",
-      classrooms,
-    };
-  })
-  .get("/my-classroom", async ({ user }) => {
-    if (!user) {
-      return {
-        status: "error",
-        message: "Unauthorized",
-      };
-    }
-
-    const classrooms = await db
+    const studyingClass = await db
       .select({
         id: classroomTable.id,
         name: classroomTable.name,
@@ -107,8 +94,8 @@ export const classroomRoute = new Elysia({
       .where(eq(studyTable.userId, user.id));
 
     return {
-      status: "success",
-      classrooms,
+      teachingClass,
+      studyingClass,
     };
   })
   .post(
