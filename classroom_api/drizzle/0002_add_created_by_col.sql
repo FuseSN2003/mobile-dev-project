@@ -1,0 +1,2 @@
+ALTER TABLE "classroom" ADD COLUMN "created_by" uuid NOT NULL;--> statement-breakpoint
+ALTER TABLE "classroom" ADD CONSTRAINT "classroom_created_by_user_account_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."user_account"("id") ON DELETE no action ON UPDATE no action;

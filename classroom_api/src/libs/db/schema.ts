@@ -24,6 +24,7 @@ export const classroomTable = pgTable("classroom", {
     .$default(() => generateUniqueString()),
   name: text().notNull(),
   description: text().notNull(),
+  createdBy: uuid("created_by").notNull().references(() => userTable.id),
 });
 
 export const teachTable = pgTable(

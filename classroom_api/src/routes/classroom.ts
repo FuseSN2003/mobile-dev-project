@@ -44,6 +44,7 @@ export const classroomRoute = new Elysia({
         .values({
           name,
           description,
+          createdBy: user.id,
         })
         .returning({ id: classroomTable.id });
 
@@ -68,24 +69,24 @@ export const classroomRoute = new Elysia({
       };
     }
 
-    const teachingClass = await db
+    const teachingClassroom = await db
       .select({
         id: classroomTable.id,
         name: classroomTable.name,
         description: classroomTable.description,
-        teacher: userTable.username,
+        teacher: classroomTable.createdBy,
       })
       .from(classroomTable)
       .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))
       .leftJoin(userTable, eq(teachTable.userId, userTable.id))
       .where(eq(teachTable.userId, user.id));
 
-    const studyingClass = await db
+    const studyingClassroom = await db
       .select({
         id: classroomTable.id,
         name: classroomTable.name,
         description: classroomTable.description,
-        teacher: userTable.username,
+        teacher: classroomTable.createdBy,
       })
       .from(classroomTable)
       .leftJoin(studyTable, eq(studyTable.classroomId, classroomTable.id))
@@ -94,8 +95,8 @@ export const classroomRoute = new Elysia({
       .where(eq(studyTable.userId, user.id));
 
     return {
-      teachingClass,
-      studyingClass,
+      teachingClassroom,
+      studyingClassroom,
     };
   })
   .post(
