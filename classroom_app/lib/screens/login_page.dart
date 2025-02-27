@@ -14,9 +14,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool visiblePassword = true;
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  final ValueNotifier<bool> _passwordVisible = ValueNotifier<bool>(true);
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +67,9 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _usernameController,
                       ),
                       CustomTextField(
-                        label: 'Email',
+                        label: 'Password',
                         controller: _passwordController,
+                        visibilityNotifier: _passwordVisible,
                       ),
                       Align(
                         alignment: Alignment.centerLeft,

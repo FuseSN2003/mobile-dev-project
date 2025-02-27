@@ -1,111 +1,41 @@
+import 'package:classroom_app/models/classroom.dart';
+import 'package:classroom_app/utills/jwt_token.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'classroom_event.dart';
-import 'classroom_state.dart';
-import 'classroom_model.dart';
+import 'package:http/http.dart' as http;
 
-// Define Bloc
+part 'classroom_event.dart';
+part 'classroom_state.dart';
+
 class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
-  ClassroomBloc() : super(ClassroomState(classrooms: [])) {
-    on<FetchStudent_Classrooms>((event, emit) async {
-      print("Fetching classrooms...");
+  ClassroomBloc() : super(ClassroomInitial()) {
+    on<FetchClassroomList>(_onFetchClassroomList);
+  }
+
+  _onFetchClassroomList(
+    FetchClassroomList event,
+    Emitter<ClassroomState> emit,
+  ) async {
+    try {
+      emit(ClassroomListLoading());
+
+      final token = await getToken();
+
+      final res = await http.get(
+        Uri.parse('http://10.0.2.2:3000/classroom/'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      final jsonData = classroomResponseFromJson(res.body);
+
       emit(
-        ClassroomState(
-          classrooms: [
-            Classroom(
-              id: "1",
-              name: "Math Class",
-              teacher: "Mr. Smith",
-              capacity: 30,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-            Classroom(
-              id: "2",
-              name: "Science Class",
-              teacher: "Ms. Johnson",
-              capacity: 25,
-              students: [],
-            ),
-          ],
+        ClassroomListLoaded(
+          teachingClassrooms: jsonData.teachingClassrooms,
+          studyingClassrooms: jsonData.studyingClassrooms,
         ),
       );
-      // final classrooms = await api.getClassrooms();
-    });
+    } catch (e) {
+      debugPrint("Error on Fetch Classroom List ${e.toString()}");
+    }
   }
 }

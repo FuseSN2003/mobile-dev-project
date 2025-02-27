@@ -6,7 +6,7 @@ import {
   userTable,
 } from "@/libs/db/schema";
 import { middleware } from "@/middleware";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomRoute = new Elysia({
@@ -69,24 +69,24 @@ export const classroomRoute = new Elysia({
       };
     }
 
-    const teachingClassroom = await db
+    const teachingClassrooms = await db
       .select({
         id: classroomTable.id,
         name: classroomTable.name,
         description: classroomTable.description,
-        teacher: classroomTable.createdBy,
+        createdBy: sql`(SELECT name FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as("createdBy"),
       })
       .from(classroomTable)
       .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))
       .leftJoin(userTable, eq(teachTable.userId, userTable.id))
       .where(eq(teachTable.userId, user.id));
 
-    const studyingClassroom = await db
+    const studyingClassrooms = await db
       .select({
         id: classroomTable.id,
         name: classroomTable.name,
         description: classroomTable.description,
-        teacher: classroomTable.createdBy,
+        createdBy: classroomTable.createdBy,
       })
       .from(classroomTable)
       .leftJoin(studyTable, eq(studyTable.classroomId, classroomTable.id))
@@ -95,8 +95,8 @@ export const classroomRoute = new Elysia({
       .where(eq(studyTable.userId, user.id));
 
     return {
-      teachingClassroom,
-      studyingClassroom,
+      teachingClassrooms,
+      studyingClassrooms,
     };
   })
   .post(

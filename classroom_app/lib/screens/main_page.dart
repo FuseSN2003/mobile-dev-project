@@ -1,10 +1,9 @@
+import 'package:classroom_app/blocs/classroom/classroom_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../component/navbar.dart';
+
 import '../component/createclassbar.dart';
-import '../blocs/classroom/classroom_bloc.dart';
-import '../blocs/classroom/classroom_state.dart';
-import '../blocs/classroom/classroom_event.dart';
+import '../component/navbar.dart';
 import '../component/sidebar.dart';
 
 class MainPage extends StatefulWidget {
@@ -14,14 +13,15 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
+enum ClassType { created, joined }
+
 class _MainPageState extends State<MainPage> {
-  String _isClassed = "Classed";
+  ClassType _classType = ClassType.joined;
+
   @override
   void initState() {
-    // print("This is MainPage");
+    BlocProvider.of<ClassroomBloc>(context).add(FetchClassroomList());
     super.initState();
-    debugPrint("Dispatching FetchStudent_Classrooms event...");
-    BlocProvider.of<ClassroomBloc>(context).add(FetchStudent_Classrooms());
   }
 
   @override
@@ -64,7 +64,7 @@ class _MainPageState extends State<MainPage> {
                         child: TextButton(
                           onPressed: () {
                             setState(() {
-                              _isClassed = "Classed";
+                              _classType = ClassType.joined;
                             });
                           },
                           child: Text(
@@ -72,7 +72,7 @@ class _MainPageState extends State<MainPage> {
                             style: TextStyle(
                               fontSize: 16,
                               color:
-                                  _isClassed == "Classed"
+                                  _classType == ClassType.joined
                                       ? Theme.of(context).colorScheme.onPrimary
                                       : Colors.white54,
                               fontFamily: "Inder",
@@ -84,7 +84,7 @@ class _MainPageState extends State<MainPage> {
                         child: TextButton(
                           onPressed: () {
                             setState(() {
-                              _isClassed = "Created Classed";
+                              _classType = ClassType.created;
                             });
                           },
                           child: Text(
@@ -92,7 +92,7 @@ class _MainPageState extends State<MainPage> {
                             style: TextStyle(
                               fontSize: 16,
                               color:
-                                  _isClassed == "Created Classed"
+                                  _classType == ClassType.created
                                       ? Theme.of(context).colorScheme.onPrimary
                                       : Colors.white54,
                               fontFamily: "Inder",
@@ -103,26 +103,26 @@ class _MainPageState extends State<MainPage> {
                     ],
                   ),
                   BlocBuilder<ClassroomBloc, ClassroomState>(
-                    builder: (context, ClassroomState) {
-                      if (ClassroomState.classrooms.isEmpty) {
-                        return Center(child: CircularProgressIndicator());
-                      } else {
-                        debugPrint("have classroom");
+                    builder: (context, state) {
+                      if (state is ClassroomListLoaded) {
                         return SizedBox(
                           height: MediaQuery.of(context).size.height * 0.6,
                           width: double.infinity,
                           child: ListView.builder(
-                            itemCount: ClassroomState.classrooms.length,
+                            itemCount:
+                                _classType == ClassType.joined
+                                    ? state.studyingClassrooms.length
+                                    : state.teachingClassrooms.length,
                             itemBuilder: (context, index) {
                               final classroom =
-                                  ClassroomState.classrooms[index];
-                              debugPrint("Classroom : ${classroom.name}");
+                                  _classType == ClassType.joined
+                                      ? state.studyingClassrooms[index]
+                                      : state.teachingClassrooms[index];
                               return Container(
                                 margin: EdgeInsets.only(top: 10),
                                 decoration: BoxDecoration(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
-
                                   border: Border.all(
                                     // width: 2,
                                     // color: Colors.white54,
@@ -155,7 +155,7 @@ class _MainPageState extends State<MainPage> {
                                         ),
                                       ),
                                       Text(
-                                        "Teacher : ${classroom.teacher}",
+                                        "Teacher : ${classroom.createdBy}",
                                         style: TextStyle(
                                           color:
                                               Theme.of(
@@ -188,16 +188,18 @@ class _MainPageState extends State<MainPage> {
                             },
                           ),
                         );
+                      } else {
+                        return Center(child: CircularProgressIndicator());
                       }
                     },
                   ),
                 ],
               ),
             ),
-            CreateClassbar(),
           ],
         ),
       ),
+      bottomNavigationBar: CreateClassbar(),
     );
   }
 }

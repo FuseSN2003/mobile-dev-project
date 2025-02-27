@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:classroom_app/models/auth.dart';
 import 'package:classroom_app/models/user.dart';
 import 'package:classroom_app/utills/jwt_token.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,10 +20,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
     emit(AuthChecking());
-    // await Future.delayed(Duration(seconds: 2));
     final token = await getToken();
-    User user = User(id: "1", username: "teset", email: "test@gmail.com");
-    return emit(Authenticated(token: "test", user: user));
+
     if (token == null) {
       return emit(UnAuthenticated());
     }
@@ -42,7 +40,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return emit(UnAuthenticated());
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error on App start ${e.toString()}");
       return emit(UnAuthenticated());
     }
   }
@@ -61,7 +59,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       final jsonData = authFromJSON(res.body);
-      debugPrint(jsonData.token);
 
       if (res.statusCode == 200) {
         await saveToken(jsonData.token!);
@@ -72,7 +69,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return emit(AuthError(message: jsonData.message));
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error on Login ${e.toString()}");
       return emit(AuthError(message: 'An error occurred'));
     }
   }
@@ -112,7 +109,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return emit(AuthError(message: jsonData.message));
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error on Register ${e.toString()}");
       return emit(AuthError(message: 'An error occurred'));
     }
   }

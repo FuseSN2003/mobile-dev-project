@@ -1,11 +1,12 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of 'classroom_bloc.dart';
 
-abstract class ClassroomEvent {}
+@immutable
+sealed class ClassroomEvent {}
 
-class AddClassroom extends ClassroomEvent {}
+class FetchClassroomList extends ClassroomEvent {}
 
-class RemoveClassroom extends ClassroomEvent {}
+class FetchClassroomDetail extends ClassroomEvent {
+  final String classroomId;
 
-class LoadClassrooms extends ClassroomEvent {}
-
-class FetchStudent_Classrooms extends ClassroomEvent {}
+  FetchClassroomDetail({required this.classroomId});
+}

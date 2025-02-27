@@ -1,12 +1,18 @@
-import 'package:equatable/equatable.dart';
-import 'classroom_model.dart'; // Assuming you have this model
+part of 'classroom_bloc.dart';
 
-class ClassroomState extends Equatable {
-  final List<Classroom> classrooms;
-  final String? error;
+@immutable
+sealed class ClassroomState {}
 
-  ClassroomState({required this.classrooms, this.error});
+class ClassroomInitial extends ClassroomState {}
 
-  @override
-  List<Object?> get props => [classrooms, error];
+class ClassroomListLoading extends ClassroomState {}
+
+class ClassroomListLoaded extends ClassroomState {
+  final List<Classroom> teachingClassrooms;
+  final List<Classroom> studyingClassrooms;
+
+  ClassroomListLoaded({
+    required this.teachingClassrooms,
+    required this.studyingClassrooms,
+  });
 }

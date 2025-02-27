@@ -5,20 +5,13 @@ class CreateClassbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(width: 2, color: Colors.white)),
-      ),
-      child: Container(
-        margin: EdgeInsets.all(20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            buildTextButton(context, "สร้างขั้นเรียน"),
-            buildTextButton(context, "เข้าร่วมชั้นเรียน"),
-          ],
-        ),
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          buildTextButton(context, "เข้าร่วมขั้นเรียน"),
+          buildTextButton(context, "สร้างขั้นเรียน"),
+        ],
       ),
     );
   }

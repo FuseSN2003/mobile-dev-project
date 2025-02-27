@@ -1,28 +1,14 @@
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
+import 'package:classroom_app/blocs/classroom/classroom_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// Corrected Sidebar class
 class Sidebar extends StatelessWidget {
   const Sidebar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, String>> teachingClassroom = [
-      {"name": "Science", "section": "sec2"},
-      {"name": "Math", "section": "sec1"},
-      {"name": "English", "section": "sec1"},
-      {"name": "English", "section": "sec2"},
-      {"name": "English", "section": "sec3"},
-    ];
-    List<Map<String, String>> joinClassroom = [
-      {"name": "Physics", "section": "sec1"},
-      {"name": "History", "section": "sec2"},
-      {"name": "Biology", "section": "sec3"},
-      // {"name": "Biology", "section": "sec3"},
-    ];
     return Drawer(
-      // width: 300,
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: SingleChildScrollView(
         child: Column(
@@ -31,18 +17,13 @@ class Sidebar extends StatelessWidget {
           children: [
             Column(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(width: 2, color: Colors.white54),
-                    ),
-                  ),
+                SizedBox(
                   height: 130,
                   width: double.infinity,
-                  child: DrawerHeader(
-                    // decoration: BoxDecoration(color: Colors.grey[300]),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20),
                     child: Align(
-                      alignment: Alignment.topLeft,
+                      alignment: Alignment.centerLeft,
                       child: Text(
                         "Your Classes",
                         style: TextStyle(
@@ -55,10 +36,11 @@ class Sidebar extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(width: 2, color: Colors.white30),
+                      top: BorderSide(width: 2, color: Colors.white30),
                     ),
                   ),
                   child: Column(
@@ -86,86 +68,116 @@ class Sidebar extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  height: (teachingClassroom.length * 100),
-                  padding: EdgeInsets.zero,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(width: 2, color: Colors.white30),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text(
-                          "กำลังสอน",
-                          style: TextStyle(fontSize: 14, color: Colors.white),
-                        ),
-                      ),
-                      // SizedBox(height: 100,),
-                      Expanded(
-                        child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          itemCount: teachingClassroom.length,
-                          itemBuilder: (context, index) {
-                            final classroom = teachingClassroom[index];
-                            return MyListtile(
-                              icon: Icons.folder,
-                              text: "${classroom["name"]}",
-                              sec: "${classroom["section"]}",
-                              onTap: () {},
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                BlocBuilder<ClassroomBloc, ClassroomState>(
+                  builder: (context, state) {
+                    if (state is ClassroomListLoaded) {
+                      final teachingClassrooms = state.teachingClassrooms;
+                      final studyingClassrooms = state.studyingClassrooms;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          teachingClassrooms.isNotEmpty
+                              ? Container(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      width: 2,
+                                      color: Colors.white30,
+                                    ),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
+                                      child: Text(
+                                        "กำลังสอน",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      padding: EdgeInsets.zero,
+                                      itemCount: teachingClassrooms.length,
+                                      itemBuilder: (context, index) {
+                                        final classroom =
+                                            teachingClassrooms[index];
+                                        return MyListtile(
+                                          icon: Icons.folder,
+                                          text: classroom.name,
+                                          sec: classroom.description,
+                                          onTap: () {},
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              )
+                              : Container(),
+                          studyingClassrooms.isNotEmpty
+                              ? Container(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      width: 2,
+                                      color: Colors.white30,
+                                    ),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
+                                      child: Text(
+                                        "ลงทะเบียนเรียน",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      padding: EdgeInsets.zero,
+                                      itemCount: studyingClassrooms.length,
+                                      itemBuilder: (context, index) {
+                                        final classroom =
+                                            studyingClassrooms[index];
+                                        return MyListtile(
+                                          icon: Icons.folder,
+                                          text: classroom.name,
+                                          sec: classroom.description,
+                                          onTap: () {},
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              )
+                              : Container(),
+                        ],
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
                 ),
                 Container(
-                  height: (joinClassroom.length * 100) + 30,
-                  padding: EdgeInsets.zero,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(width: 2, color: Colors.white30),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text(
-                          "ลงทะเบียนเรียน",
-                          style: TextStyle(fontSize: 14, color: Colors.white),
-                        ),
-                      ),
-                      // SizedBox(height: 100,),
-                      Expanded(
-                        child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          itemCount: joinClassroom.length,
-                          itemBuilder: (context, index) {
-                            final classroom = joinClassroom[index];
-                            return MyListtile(
-                              icon: Icons.folder,
-                              text: "${classroom["name"]}",
-                              sec: "${classroom["section"]}",
-                              onTap: () {},
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 40, bottom: 20),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: MyListtile(
                     icon: Icons.exit_to_app,
                     text: "Logout",
@@ -174,8 +186,6 @@ class Sidebar extends StatelessWidget {
                     },
                   ),
                 ),
-
-                // ),
               ],
             ),
           ],

@@ -2,7 +2,7 @@ import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:classroom_app/component/login_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../component/textinput.dart';
 
 class RegisterPage extends StatefulWidget {

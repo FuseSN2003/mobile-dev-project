@@ -1,17 +1,18 @@
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
+import 'package:classroom_app/blocs/classroom/classroom_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import './screens/assignment_page.dart';
+import './screens/classroom_form_page.dart';
+import './screens/classroom_person_page.dart';
+import './screens/classroom_work_page.dart';
 import './screens/login_page.dart';
 import './screens/main_page.dart';
 import './screens/register_page.dart';
 import './screens/thingtodo_page.dart';
-import './screens/classroom_form_page.dart';
-import './screens/classroom_work_page.dart';
-import './screens/classroom_person_page.dart';
-import 'screens/addassignment_page.dart';
 import './theme/colors.dart';
-import 'blocs/classroom/classroom_bloc.dart';
-import './screens/assignment_page.dart';
+import 'screens/addassignment_page.dart';
 import 'screens/student_assignment_page.dart';
 
 void main() {
