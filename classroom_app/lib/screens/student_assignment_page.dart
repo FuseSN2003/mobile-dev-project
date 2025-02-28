@@ -1,28 +1,54 @@
 import 'package:flutter/material.dart';
-
-import '../component/button.dart';
 import '../component/navbar.dart';
 import '../component/sidebar.dart';
+import '../component/button.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
-class AssignmentStudent extends StatelessWidget {
+class AssignmentStudent extends StatefulWidget {
   AssignmentStudent({super.key});
 
-  final String user = "teacher";
+  @override
+  State<AssignmentStudent> createState() => _AssignmentStudentState();
+}
+
+class _AssignmentStudentState extends State<AssignmentStudent> {
+  final String user = "student";
+
   final String studentNamed = "ferm";
+
   final List<String> studentNames = [
     "Rati Maneengam",
     "John Doe",
     "Jane Smith",
     "Bob White",
   ];
+  // List<File> _selectedFiles = [];
   String assignmentName = "งาน “การทดสอบ User 2 ราย “";
+
   int maxScore = 10;
+
   TextEditingController scoreController = TextEditingController();
+
   String dueDateString = "26/2/2568 00:00";
+
   List<String> imageUrls = [
     "https://img.salehere.co.th/p/1200x0/2021/06/18/8mx3mv3gk1mp.jpg",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdE6iZ0yrsi0mwiy3UUNuTLlRwVD6seXm0nQ&s",
   ];
+  List<File> _selectedFiles = [];
+  Future<void> pickFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true, // Allow multiple file selection
+    );
+    if (result != null) {
+      setState(() {
+        _selectedFiles = result.files.map((file) => File(file.path!)).toList();
+      });
+    } else {
+      print("No files selected");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,35 +125,55 @@ class AssignmentStudent extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: 100,
-                      child: TextField(
-                        style: TextStyle(color: Colors.white),
-                        keyboardType:
-                            TextInputType.number, // Set keyboard to number
-                        controller: scoreController,
-                        decoration: InputDecoration(
-                          labelText: 'Enter score : ',
-                          hintText: '/${maxScore}',
-                          hintStyle: TextStyle(color: Colors.white),
-                          border: OutlineInputBorder(),
+                user == "teacher"
+                    ? Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                style: TextStyle(color: Colors.white),
+                                keyboardType:
+                                    TextInputType
+                                        .number, // Set keyboard to number
+                                controller: scoreController,
+                                decoration: InputDecoration(
+                                  labelText: 'Enter score : ',
+                                  hintText: '/${maxScore}',
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                            Text("${maxScore} คะแนน"),
+                          ],
                         ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: CustomButton(
+                            text: "ยืนยัน",
+                            onPressed:
+                                () => Navigator.pushNamed(
+                                  context,
+                                  "/assignment_page",
+                                ),
+                          ),
+                        ),
+                      ],
+                    )
+                    : Container(
+                      child: Column(
+                        children: [
+                          Text("student"),
+                          ElevatedButton(
+                            onPressed: pickFiles,
+                            child: Text("Pick a File"),
+                          ),
+                        ],
                       ),
                     ),
-                    Text("${maxScore} คะแนน"),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: CustomButton(
-                    text: "ยืนยัน",
-                    onPressed:
-                        () => Navigator.pushNamed(context, "/assignment_page"),
-                  ),
-                ),
               ],
             ),
           ),

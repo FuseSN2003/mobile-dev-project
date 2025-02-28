@@ -29,6 +29,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       drawer: Sidebar(),
       appBar: NavBar(),
+      bottomNavigationBar: CreateClassbar(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: Column(
@@ -199,7 +200,6 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
-      bottomNavigationBar: CreateClassbar(),
     );
   }
 }
