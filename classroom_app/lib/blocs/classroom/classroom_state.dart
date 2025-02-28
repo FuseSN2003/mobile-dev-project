@@ -16,3 +16,15 @@ class ClassroomListLoaded extends ClassroomState {
     required this.studyingClassrooms,
   });
 }
+
+class FetchClassroomListFailed extends ClassroomState {
+  final String errorMessage;
+
+  FetchClassroomListFailed({required this.errorMessage});
+}
+
+class JoinClassroomFailed extends ClassroomState {
+  final String errorMessage;
+
+  JoinClassroomFailed({required this.errorMessage});
+}

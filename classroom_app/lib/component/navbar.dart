@@ -31,8 +31,6 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
                       size: 32,
                     ), // Hamburger menu
                     onPressed: () {
-                      debugPrint("Click on burger");
-                      print("Click");
                       Scaffold.of(context).openDrawer();
                       ; // Open Sidebar Drawer
                     },
@@ -43,11 +41,7 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
           title: TextButton(
             onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                "/",
-                (Route<dynamic> route) => false,
-              );
+              Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
             },
             child: Text(
               'Your Classes',

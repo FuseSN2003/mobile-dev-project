@@ -1,4 +1,6 @@
+import 'package:classroom_app/blocs/classroom/classroom_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateClassbar extends StatelessWidget {
   const CreateClassbar({super.key});
@@ -47,7 +49,9 @@ class CreateClassbar extends StatelessWidget {
   }
 
   void _showEnterClassroomDialog(BuildContext context, String? text) {
-    TextEditingController _codeController = TextEditingController();
+    final codeController = TextEditingController();
+    final nameController = TextEditingController();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -76,6 +80,10 @@ class CreateClassbar extends StatelessWidget {
                 SizedBox(height: 20),
                 TextField(
                   style: TextStyle(color: Colors.white),
+                  controller:
+                      text == "สร้างชั้นเรียน"
+                          ? nameController
+                          : codeController,
                   decoration: InputDecoration(
                     labelText:
                         text == "สร้างขั้นเรียน"
@@ -108,7 +116,18 @@ class CreateClassbar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed:
+                          () => {
+                            if (text == "เข้าร่วมชั้นเรียน")
+                              {
+                                context.read<ClassroomBloc>().add(
+                                  JoinClassroom(code: codeController.text),
+                                ),
+                                Navigator.of(context).pop(),
+                              }
+                            else
+                              {Navigator.pushNamed(context, "/classroom_form")},
+                          },
                       child: Text("Submit"),
                     ),
                     TextButton(

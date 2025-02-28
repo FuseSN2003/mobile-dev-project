@@ -6,7 +6,14 @@ import swagger from "@elysiajs/swagger";
 
 const app = new Elysia()
   .use(cors())
-  .use(swagger({ provider: "swagger-ui" }))
+  .use(swagger())
+  .onError(({ set, error }) => {
+    set.status = 500;
+    return {
+      status: "error",
+      message: "Internal server error",
+    };
+  })
   .get("/", () => "Hello Elysia")
   .use(authRoute)
   .use(classroomRoute)

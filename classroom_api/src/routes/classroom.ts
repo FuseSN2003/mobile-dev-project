@@ -74,7 +74,10 @@ export const classroomRoute = new Elysia({
         id: classroomTable.id,
         name: classroomTable.name,
         description: classroomTable.description,
-        createdBy: sql`(SELECT name FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as("createdBy"),
+        createdBy:
+          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
+            "createdBy"
+          ),
       })
       .from(classroomTable)
       .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))
@@ -86,7 +89,10 @@ export const classroomRoute = new Elysia({
         id: classroomTable.id,
         name: classroomTable.name,
         description: classroomTable.description,
-        createdBy: classroomTable.createdBy,
+        createdBy:
+          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
+            "createdBy"
+          ),
       })
       .from(classroomTable)
       .leftJoin(studyTable, eq(studyTable.classroomId, classroomTable.id))
@@ -113,14 +119,13 @@ export const classroomRoute = new Elysia({
       const { code } = body;
 
       const [classroom] = await db
-        .select({ id: classroomTable.id })
+        .select()
         .from(classroomTable)
         .where(eq(classroomTable.code, code));
 
       if (!classroom) {
         set.status = 400;
         return {
-          status: "error",
           message: "Invalid classroom code",
         };
       }
@@ -138,7 +143,6 @@ export const classroomRoute = new Elysia({
         });
 
       return {
-        status: "success",
         message: "Joined classroom successfully",
         classroomId: result.id,
       };

@@ -171,6 +171,15 @@ class Sidebar extends StatelessWidget {
                               : Container(),
                         ],
                       );
+                    } else if (state is FetchClassroomListFailed) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: MyListtile(
+                          icon: Icons.error,
+                          text: "Failed to fetch classroom lists",
+                          onTap: () {},
+                        ),
+                      );
                     } else {
                       return CircularProgressIndicator();
                     }
