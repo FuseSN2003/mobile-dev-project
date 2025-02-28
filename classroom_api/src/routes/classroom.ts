@@ -19,7 +19,6 @@ export const classroomRoute = new Elysia({
       if (!user) {
         set.status = 401;
         return {
-          status: "error",
           message: "Unauthorized",
         };
       }
@@ -32,7 +31,6 @@ export const classroomRoute = new Elysia({
       if (!userData) {
         set.status = 401;
         return {
-          status: "error",
           message: "Unauthorized",
         };
       }
@@ -54,12 +52,16 @@ export const classroomRoute = new Elysia({
       });
 
       return {
-        status: "success",
         message: "Classroom created successfully",
         classroomId: createdClassroom.id,
       };
     },
-    { body: t.Object({ name: t.String(), description: t.String() }) }
+    {
+      body: t.Object({
+        name: t.String({ minLength: 1 }),
+        description: t.String(),
+      }),
+    }
   )
   .get("/", async ({ user }) => {
     if (!user) {

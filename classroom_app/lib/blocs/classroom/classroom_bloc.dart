@@ -13,6 +13,7 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
   ClassroomBloc() : super(ClassroomInitial()) {
     on<FetchClassroomList>(_onFetchClassroomList);
     on<JoinClassroom>(_onJoinClassroom);
+    on<CreateClassroom>(_onCreateClassroom);
   }
 
   _onFetchClassroomList(
@@ -87,7 +88,7 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
       final jsonData = jsonDecode(res.body);
 
       if (res.statusCode == 200) {
-        add(FetchClassroomList());
+        return add(FetchClassroomList());
       } else {
         final currentState = state;
         if (currentState is ClassroomListLoaded) {
@@ -107,6 +108,52 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
       debugPrint("Error on Join Classroom ${e.toString()}");
       return emit(
         JoinClassroomFailed(errorMessage: "Failed to join classroom"),
+      );
+    }
+  }
+
+  _onCreateClassroom(
+    CreateClassroom event,
+    Emitter<ClassroomState> emit,
+  ) async {
+    final name = event.name;
+    final description = event.description;
+
+    try {
+      final token = await getToken();
+
+      final res = await http.post(
+        Uri.parse("http://10.0.2.2:3000/classroom/"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: jsonEncode({'name': name, 'description': description}),
+      );
+
+      final jsonData = jsonDecode(res.body);
+
+      if (res.statusCode == 200) {
+        return add(FetchClassroomList());
+      } else {
+        final currentState = state;
+        if (currentState is ClassroomListLoaded) {
+          debugPrint(jsonData['message']);
+          emit(CreateClassroomFailed(errorMessage: jsonData['message']));
+          return emit(
+            ClassroomListLoaded(
+              teachingClassrooms: currentState.teachingClassrooms,
+              studyingClassrooms: currentState.studyingClassrooms,
+            ),
+          );
+        }
+        debugPrint(jsonData['message']);
+        return emit(CreateClassroomFailed(errorMessage: jsonData['message']));
+      }
+    } catch (e) {
+      debugPrint("Error on Create Classroom ${e.toString()}");
+      return emit(
+        CreateClassroomFailed(errorMessage: "Failed to create classroom"),
       );
     }
   }

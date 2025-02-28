@@ -28,3 +28,9 @@ class JoinClassroomFailed extends ClassroomState {
 
   JoinClassroomFailed({required this.errorMessage});
 }
+
+class CreateClassroomFailed extends ClassroomState {
+  final String errorMessage;
+
+  CreateClassroomFailed({required this.errorMessage});
+}

@@ -38,15 +38,6 @@ class _MainPageState extends State<MainPage> {
               context,
             ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
           }
-
-          if (state is JoinClassroomFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
         },
         child: SingleChildScrollView(
           child: Column(

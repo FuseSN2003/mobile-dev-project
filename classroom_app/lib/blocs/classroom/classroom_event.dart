@@ -16,3 +16,10 @@ class FetchClassroomDetail extends ClassroomEvent {
 
   FetchClassroomDetail({required this.classroomId});
 }
+
+class CreateClassroom extends ClassroomEvent {
+  final String name;
+  final String description;
+
+  CreateClassroom({required this.name, required this.description});
+}
