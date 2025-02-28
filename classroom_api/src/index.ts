@@ -7,12 +7,56 @@ import swagger from "@elysiajs/swagger";
 const app = new Elysia()
   .use(cors())
   .use(swagger())
-  .onError(({ set, error }) => {
-    set.status = 500;
-    return {
-      status: "error",
-      message: "Internal server error",
-    };
+  .onError(({ error, code, set }) => {
+    switch (code) {
+      case "NOT_FOUND": {
+        set.status = 404;
+        return {
+          status: "error",
+          message: "Not found",
+        };
+      }
+
+      case "VALIDATION": {
+        set.status = 400;
+        const pathError = error.validator
+          .Errors(error.value)
+          .First()
+          .path.split("/")[1];
+
+        if (
+          !error.validator.Errors(error.value).First().value &&
+          pathError
+        ) {
+          return {
+            message: `${pathError} is required`,
+          };
+        }
+
+        if (pathError) {
+          return {
+            message: `${pathError} ${error.validator
+              .Errors(error.value)
+              .First()
+              .message.toLowerCase()}`,
+          };
+        }
+
+        return {
+          message: `${error.validator
+            .Errors(error.value)
+            .First()
+            .message.toLowerCase()}`,
+        };
+      }
+      default: {
+        console.error(error);
+        set.status = 500;
+        return {
+          message: "Internal server error",
+        };
+      }
+    }
   })
   .get("/", () => "Hello Elysia")
   .use(authRoute)
