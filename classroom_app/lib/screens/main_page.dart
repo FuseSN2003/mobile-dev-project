@@ -29,6 +29,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       drawer: Sidebar(),
       appBar: NavBar(),
+      bottomNavigationBar: CreateClassbar(),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: Column(
@@ -122,7 +123,6 @@ class _MainPageState extends State<MainPage> {
                                 decoration: BoxDecoration(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
-
                                   border: Border.all(
                                     // width: 2,
                                     // color: Colors.white54,
@@ -194,7 +194,6 @@ class _MainPageState extends State<MainPage> {
                 ],
               ),
             ),
-            CreateClassbar(),
           ],
         ),
       ),
