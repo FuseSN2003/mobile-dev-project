@@ -32,7 +32,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
         _selectedFiles = result.files.map((file) => File(file.path!)).toList();
       });
     } else {
-      print("No files selected");
+      debugPrint("No files selected");
     }
   }
 
@@ -78,7 +78,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("$className", style: TextStyle()),
+              Text(className, style: TextStyle()),
               SizedBox(height: 10),
               Row(
                 children: [
@@ -144,18 +144,19 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                   ),
                   SizedBox(height: 20),
                   _selectedFiles.isNotEmpty
-                      ? Container(
+                      ? SizedBox(
                         height: 150, // Set a fixed height for the file list
                         child: ListView.builder(
                           itemCount: _selectedFiles.length,
                           itemBuilder: (context, index) {
                             String filePath = _selectedFiles[index].path;
-                            bool isImage = false;
-                            // bool isImage =
-                            //     filePath.toLowerCase().endsWith('.png') ||
-                            //     filePath.toLowerCase().endsWith('.jpg') ||
-                            //     filePath.toLowerCase().endsWith('.jpeg') ||
-                            //     filePath.toLowerCase().endsWith('.gif');
+                            // bool isImage = true;
+
+                            bool isImage =
+                                filePath.toLowerCase().endsWith('.png') ||
+                                filePath.toLowerCase().endsWith('.jpg') ||
+                                filePath.toLowerCase().endsWith('.jpeg') ||
+                                filePath.toLowerCase().endsWith('.gif');
 
                             return isImage
                                 ? Padding(
@@ -190,7 +191,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("กำหนดส่ง : ${date}"),
+                  Text("กำหนดส่ง : $date"),
                   ElevatedButton(
                     onPressed: () => _selectDate(context),
                     child: const Text("Pick a Date"),
@@ -202,7 +203,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                 children: [
                   Text("คะแนน :"),
                   SizedBox(width: 20),
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: Expanded(
                       child: TextField(

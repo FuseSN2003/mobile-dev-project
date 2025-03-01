@@ -6,7 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
 class AssignmentStudent extends StatefulWidget {
-  AssignmentStudent({super.key});
+  const AssignmentStudent({super.key});
 
   @override
   State<AssignmentStudent> createState() => _AssignmentStudentState();
@@ -46,7 +46,7 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
         _selectedFiles = result.files.map((file) => File(file.path!)).toList();
       });
     } else {
-      print("No files selected");
+      debugPrint("No files selected");
     }
   }
 
@@ -80,14 +80,14 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("กำหนด : ${dueDateString}"),
-                    Text("ส่ง : ${dueDateString}"),
+                    Text("กำหนด : $dueDateString"),
+                    Text("ส่ง : $dueDateString"),
                   ],
                 ),
                 SizedBox(height: 20),
                 Text("งานนักเรียน"),
                 SizedBox(height: 20),
-                Container(
+                SizedBox(
                   height: 150,
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -99,26 +99,24 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
                     itemCount: imageUrls.length,
                     itemBuilder: (context, index) {
                       return ClipRRect(
-                        child: Container(
-                          child: Image.network(
-                            // width: 150,
-                            // height: 100,
-                            imageUrls[index],
-                            fit: BoxFit.cover, // Ensures image fits nicely
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(child: CircularProgressIndicator());
-                            },
-                            errorBuilder: (context, error, stackTrace) {
-                              return Center(
-                                child: Icon(
-                                  Icons.error,
-                                  color: Colors.red,
-                                  size: 50,
-                                ),
-                              );
-                            },
-                          ),
+                        child: Image.network(
+                          // width: 150,
+                          // height: 100,
+                          imageUrls[index],
+                          fit: BoxFit.cover, // Ensures image fits nicely
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(child: CircularProgressIndicator());
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Icon(
+                                Icons.error,
+                                color: Colors.red,
+                                size: 50,
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
@@ -131,7 +129,7 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Container(
+                            SizedBox(
                               width: 100,
                               child: TextField(
                                 style: TextStyle(color: Colors.white),
@@ -147,7 +145,7 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
                                 ),
                               ),
                             ),
-                            Text("${maxScore} คะแนน"),
+                            Text("$maxScore คะแนน"),
                           ],
                         ),
                         Align(
@@ -163,16 +161,14 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
                         ),
                       ],
                     )
-                    : Container(
-                      child: Column(
-                        children: [
-                          Text("student"),
-                          ElevatedButton(
-                            onPressed: pickFiles,
-                            child: Text("Pick a File"),
-                          ),
-                        ],
-                      ),
+                    : Column(
+                      children: [
+                        Text("student"),
+                        ElevatedButton(
+                          onPressed: pickFiles,
+                          child: Text("Pick a File"),
+                        ),
+                      ],
                     ),
               ],
             ),

@@ -57,7 +57,7 @@ class _ClassroomPersonPageState extends State<ClassroomPersonPage> {
                     const SizedBox(height: 10),
                     StudentBox(
                       label: "อาจารย์",
-                      itemList: state.students.map((e) => e.username).toList(),
+                      itemList: state.teachers.map((e) => e.username).toList(),
                     ),
                     StudentBox(
                       label: "นักเรียน",

@@ -115,7 +115,13 @@ class Sidebar extends StatelessWidget {
                                           icon: Icons.folder,
                                           text: classroom.name,
                                           sec: classroom.description,
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/classroom_form',
+                                              arguments: classroom.id,
+                                            );
+                                          },
                                         );
                                       },
                                     ),
@@ -161,7 +167,13 @@ class Sidebar extends StatelessWidget {
                                           icon: Icons.folder,
                                           text: classroom.name,
                                           sec: classroom.description,
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/classroom_form',
+                                              arguments: classroom.id,
+                                            );
+                                          },
                                         );
                                       },
                                     ),

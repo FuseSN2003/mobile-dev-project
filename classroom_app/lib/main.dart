@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import './screens/assignment_page.dart';
-import './screens/classroom_form_page.dart';
+import 'screens/classroom_forum_page.dart';
 import './screens/classroom_person_page.dart';
 import './screens/classroom_work_page.dart';
 import './screens/login_page.dart';
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/thingtodo': (context) => ThingtodoPage(),
-        '/classroom_form': (context) => ClassroomFormPage(),
+        '/classroom_form': (context) => ClassroomForumPage(),
         '/classroom_work': (context) => ClassroomWorkPage(),
         '/classroom_person': (context) => ClassroomPersonPage(),
         '/addassignment': (context) => AddAssignmentPage(),

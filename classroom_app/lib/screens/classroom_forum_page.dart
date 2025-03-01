@@ -9,14 +9,14 @@ import '../component/sidebar.dart';
 import '../model/post.dart';
 import '../model/work.dart';
 
-class ClassroomFormPage extends StatefulWidget {
-  const ClassroomFormPage({super.key});
+class ClassroomForumPage extends StatefulWidget {
+  const ClassroomForumPage({super.key});
 
   @override
-  State<ClassroomFormPage> createState() => _ClassroomFormPageState();
+  State<ClassroomForumPage> createState() => _ClassroomFormPageState();
 }
 
-class _ClassroomFormPageState extends State<ClassroomFormPage> {
+class _ClassroomFormPageState extends State<ClassroomForumPage> {
   List<Work> works = [
     Work(
       title: "Project Meeting",
@@ -57,16 +57,18 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
   List<dynamic> mergedData = []; // Merge lists
   TextEditingController postNamed = TextEditingController();
   TextEditingController postDesc = TextEditingController();
-
+// Zfc3J5
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<ClassroomDetailBloc>(context).add(
-        FetchClassroomDetail(
-          classroomId: ModalRoute.of(context)!.settings.arguments as String,
-        ),
-      );
+      if (ModalRoute.of(context)!.settings.arguments.toString().isNotEmpty) {
+        BlocProvider.of<ClassroomDetailBloc>(context).add(
+          FetchClassroomDetail(
+            classroomId: ModalRoute.of(context)!.settings.arguments as String,
+          ),
+        );
+      }
     });
 
     // Initialize mergedData inside initState

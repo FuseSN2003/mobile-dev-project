@@ -31,7 +31,6 @@ class ClassroomDetailBloc
       final result = classroomDetailResponseFromJson(res.body);
 
       if (res.statusCode == 200) {
-        debugPrint("ok");
         return emit(
           ClassroomDetailLoaded(
             classroom: result.classroom,
