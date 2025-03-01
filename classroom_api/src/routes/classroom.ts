@@ -1,12 +1,13 @@
 import { db } from "@/libs/db";
 import {
+  assignmentTable,
   classroomTable,
   studyTable,
   teachTable,
   userTable,
 } from "@/libs/db/schema";
 import { middleware } from "@/middleware";
-import { eq, sql } from "drizzle-orm";
+import { aliasedTable, eq, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomRoute = new Elysia({
@@ -154,4 +155,47 @@ export const classroomRoute = new Elysia({
         code: t.String(),
       }),
     }
-  );
+  )
+  .get("/:id", async ({ params }) => {
+    const classroomId = params.id;
+
+    const [classroom] = await db
+      .select({
+        id: classroomTable.id,
+        name: classroomTable.name,
+        description: classroomTable.description,
+        createdBy:
+          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
+            "createdBy"
+          ),
+        code: classroomTable.code,
+      })
+      .from(classroomTable)
+      .where(eq(classroomTable.id, classroomId));
+
+    const students = await db
+      .select({
+        id: userTable.id,
+        username: userTable.username,
+        email: userTable.email,
+      })
+      .from(userTable)
+      .leftJoin(studyTable, eq(studyTable.userId, userTable.id))
+      .where(eq(studyTable.classroomId, classroomId));
+
+    const teachers = await db
+      .select({
+        id: userTable.id,
+        username: userTable.username,
+        email: userTable.email,
+      })
+      .from(userTable)
+      .leftJoin(teachTable, eq(teachTable.userId, userTable.id))
+      .where(eq(teachTable.classroomId, classroomId));
+
+    return {
+      classroom,
+      students,
+      teachers,
+    };
+  });

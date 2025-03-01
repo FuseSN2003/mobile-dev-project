@@ -26,7 +26,11 @@ class Bottombar extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, "/classroom_form");
+                    Navigator.pushReplacementNamed(
+                      context,
+                      "/classroom_form",
+                      arguments: "",
+                    );
                   },
                 ),
                 Text(

@@ -33,11 +33,9 @@ class ClassroomAssignment extends StatelessWidget {
           children: [
             DefaultTextStyle(
               style: TextStyle(color: Colors.white, fontSize: 14),
-              child: Container(child: Column(children: [Text(assignmentName)])),
+              child: Column(children: [Text(assignmentName)]),
             ),
-            Container(
-              child: StudentBox(label: "นักเรียน", itemList: studentNames),
-            ),
+            StudentBox(label: "นักเรียน", itemList: studentNames),
           ],
         ),
       ),

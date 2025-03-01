@@ -147,6 +147,7 @@ class _MainPageState extends State<MainPage> {
                                       Navigator.pushNamed(
                                         context,
                                         "/classroom_form",
+                                        arguments: classroom.id,
                                       );
                                     },
                                     title: Row(

@@ -1,5 +1,6 @@
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:classroom_app/blocs/classroom/classroom_bloc.dart';
+import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,6 +22,7 @@ void main() {
       providers: [
         BlocProvider(create: (context) => AuthBloc()..add(AppStarted())),
         BlocProvider(create: (context) => ClassroomBloc()),
+        BlocProvider(create: (context) => ClassroomDetailBloc()),
       ],
       child: MyApp(),
     ),

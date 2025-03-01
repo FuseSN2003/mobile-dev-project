@@ -1,4 +1,6 @@
+import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../component/bottombar.dart';
 import '../component/navbar.dart';
 import '../component/sidebar.dart';
@@ -21,35 +23,54 @@ class _ClassroomPersonPageState extends State<ClassroomPersonPage> {
   ];
   final List<String> teacherNames = ["Alice Brown"];
   final String className = "ชื่อ : Class room";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Sidebar(),
       appBar: NavBar(backButton: false),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("$className", style: TextStyle(color: Colors.white)),
-                  Text("รหัสคลาสรูม", style: TextStyle(color: Colors.white)),
-                ],
+      body: BlocBuilder<ClassroomDetailBloc, ClassroomDetailState>(
+        builder: (context, state) {
+          if (state is ClassroomDetailLoaded) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "ชื่อ : ${state.classroom.name}",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          state.classroom.code!,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    StudentBox(
+                      label: "อาจารย์",
+                      itemList: state.students.map((e) => e.username).toList(),
+                    ),
+                    StudentBox(
+                      label: "นักเรียน",
+                      itemList: state.students.map((e) => e.username).toList(),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 10),
-              Container(
-                child: StudentBox(label: "อาจารย์", itemList: teacherNames),
-              ),
-
-              Container(
-                child: StudentBox(label: "นักเรียน", itemList: studentNames),
-              ),
-            ],
-          ),
-        ),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
       bottomNavigationBar: Bottombar(),
     );

@@ -1,11 +1,10 @@
-import 'dart:math';
-
+import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
 import '../component/bottombar.dart';
 import '../component/navbar.dart';
-import '../component/bottombar.dart';
-import 'package:intl/intl.dart';
 import '../component/sidebar.dart';
 import '../model/post.dart';
 import '../model/work.dart';
@@ -56,12 +55,19 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
     ),
   ];
   List<dynamic> mergedData = []; // Merge lists
-  // Sort by date
   TextEditingController postNamed = TextEditingController();
   TextEditingController postDesc = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<ClassroomDetailBloc>(context).add(
+        FetchClassroomDetail(
+          classroomId: ModalRoute.of(context)!.settings.arguments as String,
+        ),
+      );
+    });
 
     // Initialize mergedData inside initState
     mergedData = [...works, ...posts];
@@ -76,35 +82,46 @@ class _ClassroomFormPageState extends State<ClassroomFormPage> {
     return Scaffold(
       drawer: Sidebar(),
       appBar: NavBar(backButton: false),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("$className", style: TextStyle(color: Colors.white)),
-              SizedBox(height: 10),
-              _buildTextFiledPost(context),
-              SizedBox(height: 20),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.75,
-                // height: 500,
-                child: ListView.builder(
-                  itemCount: mergedData.length,
-                  itemBuilder: (context, index) {
-                    var item = mergedData[index];
-                    if (item is Work) {
-                      return _buildWork(context, item);
-                    } else if (item is Post) {
-                      return _buildPost(context, item);
-                    }
-                    return SizedBox.shrink(); // Fallback
-                  },
+      body: BlocBuilder<ClassroomDetailBloc, ClassroomDetailState>(
+        builder: (context, state) {
+          if (state is ClassroomDetailLoaded) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "ชื่อ : ${state.classroom.name}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(height: 10),
+                    _buildTextFiledPost(context),
+                    SizedBox(height: 20),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.75,
+                      // height: 500,
+                      child: ListView.builder(
+                        itemCount: mergedData.length,
+                        itemBuilder: (context, index) {
+                          var item = mergedData[index];
+                          if (item is Work) {
+                            return _buildWork(context, item);
+                          } else if (item is Post) {
+                            return _buildPost(context, item);
+                          }
+                          return SizedBox.shrink(); // Fallback
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
       bottomNavigationBar: Bottombar(),
     );

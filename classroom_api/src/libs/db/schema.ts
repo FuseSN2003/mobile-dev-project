@@ -54,7 +54,7 @@ export const studyTable = pgTable(
 );
 
 export const assignmentTable = pgTable("assignment", {
-  id: uuid().primaryKey().unique().defaultRandom(),
+  id: uuid().unique().notNull().defaultRandom(),
   classroomId: uuid("classroom_id")
     .notNull()
     .references(() => classroomTable.id, { onDelete: "cascade" }),
@@ -66,4 +66,4 @@ export const assignmentTable = pgTable("assignment", {
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+}, (t) => [primaryKey({columns: [t.id, t.classroomId]})]);
