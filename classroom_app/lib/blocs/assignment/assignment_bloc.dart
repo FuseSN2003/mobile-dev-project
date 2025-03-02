@@ -30,6 +30,7 @@ class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
         'title': event.title,
         'description': event.description,
         'dueDate': event.dueDate,
+        'maxScore': event.score.toString(),
       });
       for (var file in event.files) {
         String mimeType =

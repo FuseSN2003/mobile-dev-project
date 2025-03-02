@@ -32,9 +32,6 @@ class ClassroomDetailBloc
       final result = classroomDetailResponseFromJson(res.body);
 
       if (res.statusCode == 200) {
-        for (var student in result.assignments) {
-          debugPrint(student.title);
-        }
         return emit(
           ClassroomDetailLoaded(
             classroom: result.classroom,
@@ -44,7 +41,6 @@ class ClassroomDetailBloc
           ),
         );
       } else {
-        debugPrint("test");
         return emit(
           FetchClassroomDetailFailed(
             errorMessage: "Failed to fetch classroom detail",

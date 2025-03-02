@@ -236,13 +236,15 @@ export const classroomRoute = new Elysia({
         };
       }
 
-      const { title, description, dueDate, files } = body;
+      const { title, description, dueDate, files, maxScore } = body;
 
       const [result] = await db.insert(assignmentTable).values({
         classroomId,
         createdBy: user.id,
         title,
         description,
+        dueDate: new Date(dueDate),
+        maxScore: maxScore,
       }).returning({ id: assignmentTable.id });
 
       let filesIdResult = [];
@@ -259,8 +261,6 @@ export const classroomRoute = new Elysia({
         filesIdResult.push(result.id);
       }
 
-      console.log("filesIdResult", filesIdResult);
-
       await db.insert(assignmentAttachmentTable).values(filesIdResult.map((id) => ({
         fileId: id,
         assignmentId: result.id,
@@ -274,8 +274,9 @@ export const classroomRoute = new Elysia({
       body: t.Object({
         title: t.String(),
         description: t.String(),
-        dueDate: t.String(),
         files: t.Files(),
+        dueDate: t.String(),
+        maxScore: t.Numeric({ optional: true }),
       }),
     }
   );

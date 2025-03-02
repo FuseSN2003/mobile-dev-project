@@ -3,6 +3,7 @@ import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart'
 import 'package:classroom_app/component/assignment_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../component/bottombar.dart';
 import '../component/button.dart';
@@ -72,11 +73,25 @@ class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
                         itemCount: state.assignments.length,
                         itemBuilder: (context, index) {
                           final assignment = state.assignments[index];
+                          debugPrint(assignment.maxScore.toString());
+
+                          if (assignment.dueDate == null) {
+                            return AssignmentBox(
+                              classRoomName: state.classroom.name,
+                              taskName: assignment.title,
+                              score: assignment.maxScore,
+                            );
+                          }
+
+                          DateTime dateTime = DateTime.parse(
+                            assignment.dueDate!,
+                          );
+
                           return AssignmentBox(
                             classRoomName: state.classroom.name,
                             taskName: assignment.title,
-                            time: "5/11/2567 00:00 A.m",
-                            score: 100,
+                            time: DateFormat('yyyy-MM-dd').format(dateTime),
+                            score: assignment.maxScore,
                           );
                         },
                       ),

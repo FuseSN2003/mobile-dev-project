@@ -284,7 +284,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                                   classroomId: state.classroom.id,
                                   title: _assignmentNameController.text,
                                   description: _assignmentDescController.text,
-                                  dueDate: date,
+                                  dueDate: selectedDate.toString(),
                                   score: int.parse(_scoreController.text),
                                   files: _selectedFiles,
                                 ),
