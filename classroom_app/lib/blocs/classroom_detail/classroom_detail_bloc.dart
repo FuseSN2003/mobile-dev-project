@@ -1,3 +1,4 @@
+import 'package:classroom_app/models/assignment.dart';
 import 'package:classroom_app/models/classroom.dart';
 import 'package:classroom_app/models/user.dart';
 import 'package:classroom_app/utills/jwt_token.dart';
@@ -31,11 +32,15 @@ class ClassroomDetailBloc
       final result = classroomDetailResponseFromJson(res.body);
 
       if (res.statusCode == 200) {
+        for (var student in result.assignments) {
+          debugPrint(student.title);
+        }
         return emit(
           ClassroomDetailLoaded(
             classroom: result.classroom,
             students: result.students,
             teachers: result.teachers,
+            assignments: result.assignments,
           ),
         );
       } else {

@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 
-class assignTask extends StatefulWidget {
-  const assignTask({
+class AssignmentBox extends StatefulWidget {
+  final String classRoomName;
+  final String taskName;
+  final String? time;
+  final int? score;
+  final VoidCallback? onPress;
+
+  const AssignmentBox({
     super.key,
     required this.classRoomName,
     required this.taskName,
-    required this.time,
-    required this.score,
+    this.time,
+    this.score,
     this.onPress,
   });
 
-  final String classRoomName;
-  final String taskName;
-  final String time;
-  final int score;
-  final VoidCallback? onPress;
-
   @override
-  State<assignTask> createState() => _assignTaskState();
+  State<AssignmentBox> createState() => _AssignmentBoxState();
 }
 
-class _assignTaskState extends State<assignTask> {
+class _AssignmentBoxState extends State<AssignmentBox> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -62,11 +62,12 @@ class _assignTaskState extends State<assignTask> {
                     ],
                   ),
                 ),
-
-                Text(
-                  widget.time,
-                  style: const TextStyle(fontSize: 12, color: Colors.white),
-                ),
+                widget.time != null
+                    ? Text(
+                      widget.time!,
+                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                    )
+                    : const SizedBox(),
               ],
             ),
             const SizedBox(height: 15),
@@ -77,17 +78,19 @@ class _assignTaskState extends State<assignTask> {
               overflow: TextOverflow.ellipsis, // Show "..." if it overflows
             ),
             const SizedBox(height: 12),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Text(
-                '${widget.score} คะแนน',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            widget.score != null
+                ? Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    '${widget.score} คะแนน',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+                : const SizedBox(),
           ],
         ),
       ),

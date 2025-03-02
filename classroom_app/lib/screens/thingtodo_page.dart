@@ -34,7 +34,7 @@ class _ThingtodoPageState extends State<ThingtodoPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  assignTask(
+                  AssignmentBox(
                     classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
                     taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
                     time: "5/11/2567 00:00 A.m",
@@ -45,7 +45,7 @@ class _ThingtodoPageState extends State<ThingtodoPage> {
               Column(
                 children: [
                   // Text("ไม่มีวันครบกำหนด"),
-                  assignTask(
+                  AssignmentBox(
                     classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
                     taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
                     time: "5/11/2567 00:00 A.m",

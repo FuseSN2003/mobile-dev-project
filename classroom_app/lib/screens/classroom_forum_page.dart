@@ -57,7 +57,8 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
   List<dynamic> mergedData = []; // Merge lists
   TextEditingController postNamed = TextEditingController();
   TextEditingController postDesc = TextEditingController();
-// Zfc3J5
+  late String classroomId;
+
   @override
   void initState() {
     super.initState();
