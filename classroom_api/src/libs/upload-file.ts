@@ -1,3 +1,6 @@
+import { db } from "./db";
+import { fileTable } from "./db/schema";
+
 export const fileExtension: { [key: string]: string } = {
   "image/jpeg": "jpg",
   "image/png": "png",
@@ -11,10 +14,10 @@ export const fileType = {
 };
 
 type UploadFileResult =
-  | { status: "success"; url: string }
+  | { status: "success"; id: string }
   | { status: "error"; message: string };
 
-export const uploadFile = async (file: File, allowType: "image" | "pdf") => {
+export const uploadFile = async (file: File, uploadedById: string): Promise<UploadFileResult> => {
   if (file.size === 0 || !file.size) {
     return {
       status: "error",
@@ -22,7 +25,10 @@ export const uploadFile = async (file: File, allowType: "image" | "pdf") => {
     };
   }
 
-  if (!fileType[allowType].includes(file.type)) {
+  if (
+    !fileType["image"].includes(file.type) &&
+    !fileType["pdf"].includes(file.type)
+  ) {
     return {
       status: "error",
       message: "Not supported file type",
@@ -44,14 +50,22 @@ export const uploadFile = async (file: File, allowType: "image" | "pdf") => {
   try {
     await Bun.write(path, file);
 
+    await db.insert(fileTable).values({
+      id,
+      fileName,
+      fileType: file.type,
+      url,
+      uploadedBy: uploadedById,
+    })
+
     return {
       status: "success",
-      url,
+      id,
     };
   } catch (error) {
     return {
       status: "error",
-      message: `Failed to upload ${allowType} file`,
-    }
+      message: `Failed to upload file`,
+    };
   }
 };
