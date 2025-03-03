@@ -9,7 +9,7 @@ import {
 } from "@/libs/db/schema";
 import { uploadFile } from "@/libs/upload-file";
 import { middleware } from "@/middleware";
-import { and, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
@@ -168,7 +168,8 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
               assignmentSubmissionTable,
               eq(assignmentSubmissionTable.assignmentId, assignmentTable.id)
             )
-            .where(eq(assignmentTable.classroomId, classroomId));
+            .where(eq(assignmentTable.classroomId, classroomId))
+            .orderBy(desc(assignmentTable.createdAt));
         } else {
           assignments = await db
             .select({
@@ -205,10 +206,9 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
               eq(studyTable.classroomId, assignmentTable.classroomId)
             )
             .where(eq(assignmentTable.classroomId, classroomId))
-            .groupBy(assignmentTable.id);
+            .groupBy(assignmentTable.id)
+            .orderBy(desc(assignmentTable.createdAt));
         }
-
-        console.log(assignments);
 
         return {
           assignments,
