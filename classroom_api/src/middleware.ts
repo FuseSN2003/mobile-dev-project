@@ -30,11 +30,9 @@ export const middleware = new Elysia()
       .select()
       .from(userTable)
       .where(eq(userTable.id, user.id as string));
-
     if (!userData) {
       return { user: null };
     }
-
     return {
       user: userData,
     };

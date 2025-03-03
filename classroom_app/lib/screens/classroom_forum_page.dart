@@ -85,11 +85,11 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
     return Scaffold(
       drawer: Sidebar(),
       appBar: NavBar(backButton: false),
-      body: BlocBuilder<ClassroomDetailBloc, ClassroomDetailState>(
-        builder: (context, state) {
-          if (state is ClassroomDetailLoaded) {
-            return SingleChildScrollView(
-              child: Padding(
+      body: SingleChildScrollView(
+        child: BlocBuilder<ClassroomDetailBloc, ClassroomDetailState>(
+          builder: (context, state) {
+            if (state is ClassroomDetailLoaded) {
+              return Padding(
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,12 +119,12 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
                     ),
                   ],
                 ),
-              ),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
       bottomNavigationBar: Bottombar(),
     );
