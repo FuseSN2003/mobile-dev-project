@@ -3,6 +3,8 @@ import { Elysia } from "elysia";
 import { authRoute } from "./routes/auth";
 import { classroomRoute } from "./routes/classroom";
 import swagger from "@elysiajs/swagger";
+import { fileRoute } from "./routes/file";
+import { classroomAssignmentRoute } from "./routes/classroom-assignment";
 
 const app = new Elysia()
   .use(cors())
@@ -61,6 +63,8 @@ const app = new Elysia()
   .get("/", () => "Hello Elysia")
   .use(authRoute)
   .use(classroomRoute)
+  .use(fileRoute)
+  .use(classroomAssignmentRoute)
   .listen(3000);
 
 console.log(

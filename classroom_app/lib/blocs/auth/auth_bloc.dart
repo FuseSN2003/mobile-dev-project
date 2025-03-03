@@ -5,6 +5,7 @@ import 'package:classroom_app/models/user.dart';
 import 'package:classroom_app/utills/jwt_token.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 part 'auth_event.dart';
@@ -53,7 +54,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     try {
       final res = await http.post(
-        Uri.parse('http://10.0.2.2:3000/auth/login'),
+        Uri.parse('${dotenv.get("BACKEND_URL")}/auth/login'),
         headers: {'Content-Type': 'application/json; charset=utf-8'},
         body: jsonEncode({'username': username, 'password': password}),
       );
@@ -90,7 +91,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     try {
       final res = await http.post(
-        Uri.parse('http://10.0.2.2:3000/auth/register'),
+        Uri.parse('${dotenv.get("BACKEND_URL")}/auth/register'),
         headers: {'Content-Type': 'application/json; charset=utf-8'},
         body: jsonEncode({
           'username': username,

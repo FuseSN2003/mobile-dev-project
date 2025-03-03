@@ -64,11 +64,19 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (ModalRoute.of(context)!.settings.arguments.toString().isNotEmpty) {
-        BlocProvider.of<ClassroomDetailBloc>(context).add(
-          FetchClassroomDetail(
-            classroomId: ModalRoute.of(context)!.settings.arguments as String,
-          ),
+        final classroomDetailBloc = BlocProvider.of<ClassroomDetailBloc>(
+          context,
         );
+        final state = classroomDetailBloc.state;
+
+        final classroomId =
+            ModalRoute.of(context)!.settings.arguments as String;
+
+        if (state is! ClassroomDetailLoaded) {
+          classroomDetailBloc.add(
+            FetchClassroomDetail(classroomId: classroomId),
+          );
+        }
       }
     });
 

@@ -24,7 +24,7 @@ class Assignment extends StatelessWidget {
   int score = 10;
   String dueDateString = "26/2/2568 00:00";
   List<String> imageUrls = [
-    "https://img.salehere.co.th/p/1200x0/2021/06/18/8mx3mv3gk1mp.jpg",
+    "http://10.0.2.2:3000/file/7222df8c-f951-4e03-85ba-62cedbd074a0.png",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdE6iZ0yrsi0mwiy3UUNuTLlRwVD6seXm0nQ&s",
   ];
   // DateTime dueDate = parseThaiDate(dueDateString);

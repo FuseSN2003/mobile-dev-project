@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:classroom_app/models/assignment.dart';
 import 'package:classroom_app/models/user.dart';
 
 ClassroomResponse classroomResponseFromJson(String str) =>
@@ -80,13 +79,11 @@ class ClassroomDetailResponse {
   final Classroom classroom;
   final List<User> students;
   final List<User> teachers;
-  final List<Assignment> assignments;
 
   ClassroomDetailResponse({
     required this.classroom,
     required this.students,
     required this.teachers,
-    required this.assignments,
   });
 
   factory ClassroomDetailResponse.fromJson(
@@ -95,15 +92,11 @@ class ClassroomDetailResponse {
     classroom: Classroom.fromJson(json["classroom"]),
     students: List<User>.from(json["students"].map((x) => User.fromJson(x))),
     teachers: List<User>.from(json["teachers"].map((x) => User.fromJson(x))),
-    assignments: List<Assignment>.from(
-      json["assignments"].map((x) => Assignment.fromJson(x)),
-    ),
   );
 
   Map<String, dynamic> toJson() => {
     "classroom": classroom.toJson(),
     "students": List<dynamic>.from(students.map((x) => x.toJson())),
     "teachers": List<dynamic>.from(teachers.map((x) => x.toJson())),
-    "assignments": List<dynamic>.from(assignments.map((x) => x.toJson())),
   };
 }

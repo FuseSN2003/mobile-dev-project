@@ -2,6 +2,12 @@ part of 'assignment_bloc.dart';
 
 sealed class AssignmentEvent {}
 
+class FetchAssignment extends AssignmentEvent {
+  final String classroomId;
+
+  FetchAssignment({required this.classroomId});
+}
+
 class AddAssignment extends AssignmentEvent {
   final String classroomId;
   final String title;

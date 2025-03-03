@@ -72,15 +72,19 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
       drawer: Sidebar(),
       body: BlocListener<AssignmentBloc, AssignmentState>(
         listener: (context, state) {
-          if (state is AddAssignmentSuccess) {
-            final detailState = context.read<ClassroomDetailBloc>().state;
-            if (detailState is ClassroomDetailLoaded) {
-              context.read<ClassroomDetailBloc>().add(
-                FetchClassroomDetail(classroomId: detailState.classroom.id),
-              );
-              Navigator.pop(context);
-            }
-          }
+          // if (state is AddAssignmentSuccess) {
+          //   final classroomDetailBloc = context.read<ClassroomDetailBloc>();
+          //   final classroomDetailState = classroomDetailBloc.state;
+
+          //   if (classroomDetailState is ClassroomDetailLoaded) {
+          //     classroomDetailBloc.add(
+          //       FetchClassroomDetail(
+          //         classroomId: classroomDetailState.classroom.id,
+          //       ),
+          //     );
+          //     Navigator.pop(context);
+          //   }
+          // }
         },
         child: BlocBuilder<ClassroomDetailBloc, ClassroomDetailState>(
           builder: (context, state) {

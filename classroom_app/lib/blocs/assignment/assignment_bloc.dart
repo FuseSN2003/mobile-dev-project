@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:classroom_app/models/assignment.dart';
 import 'package:classroom_app/utills/jwt_token.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
@@ -13,6 +15,33 @@ part 'assignment_state.dart';
 class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
   AssignmentBloc() : super(AssignmentInitial()) {
     on<AddAssignment>(_onAddAssignment);
+    on<FetchAssignment>(_onFetchAssignment);
+  }
+
+  _onFetchAssignment(
+    FetchAssignment event,
+    Emitter<AssignmentState> emit,
+  ) async {
+    final classroomId = event.classroomId;
+
+    try {
+      final token = await getToken();
+
+      final res = await http.get(
+        Uri.parse(
+          "${dotenv.get("BACKEND_URL")}/classroom/$classroomId/assignment",
+        ),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      final jsonData = assignmentListResponseFromJSON(res.body);
+
+      if (res.statusCode == 200) {
+        emit(AssignmentLoaded(assignments: jsonData.assignments));
+      }
+    } catch (e) {
+      debugPrint("Error on Fetch Assignment ${e.toString()}");
+    }
   }
 
   _onAddAssignment(AddAssignment event, Emitter<AssignmentState> emit) async {
@@ -23,7 +52,9 @@ class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
 
       final req = http.MultipartRequest(
         "POST",
-        Uri.parse("http://10.0.2.2:3000/classroom/$classroomId/assignment"),
+        Uri.parse(
+          "${dotenv.get("BACKEND_URL")}/classroom/$classroomId/assignment",
+        ),
       );
       req.headers['Authorization'] = 'Bearer $token';
       req.fields.addAll({
@@ -49,6 +80,7 @@ class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
 
       if (res.statusCode == 200) {
         emit(AddAssignmentSuccess());
+        return add(FetchAssignment(classroomId: classroomId));
       }
     } catch (e) {
       debugPrint("Error on Add Assignment ${e.toString()}");

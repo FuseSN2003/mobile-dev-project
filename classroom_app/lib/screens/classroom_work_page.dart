@@ -1,3 +1,4 @@
+import 'package:classroom_app/blocs/assignment/assignment_bloc.dart';
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
 import 'package:classroom_app/component/assignment_box.dart';
@@ -18,7 +19,23 @@ class ClassroomWorkPage extends StatefulWidget {
 }
 
 class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
-  final String className = "ชื่อ : Class room";
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final assignmentBloc = BlocProvider.of<AssignmentBloc>(context);
+      final state = assignmentBloc.state;
+
+      final classroomId = ModalRoute.of(context)!.settings.arguments as String?;
+
+      if (classroomId != null && classroomId.isNotEmpty) {
+        if (state is! AssignmentLoaded) {
+          assignmentBloc.add(FetchAssignment(classroomId: classroomId));
+        }
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +44,7 @@ class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
       body: BlocBuilder<ClassroomDetailBloc, ClassroomDetailState>(
         builder: (context, state) {
           if (state is ClassroomDetailLoaded) {
+            final classroomName = state.classroom.name;
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -67,34 +85,58 @@ class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
                         }
                       },
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.6,
-                      child: ListView.builder(
-                        itemCount: state.assignments.length,
-                        itemBuilder: (context, index) {
-                          final assignment = state.assignments[index];
-                          debugPrint(assignment.maxScore.toString());
+                    BlocBuilder<AssignmentBloc, AssignmentState>(
+                      builder: (context, state) {
+                        if (state is AssignmentLoading) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (state is AssignmentLoaded) {
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.6,
+                            child: ListView.builder(
+                              itemCount: state.assignments.length,
+                              itemBuilder: (context, index) {
+                                final assignment = state.assignments[index];
+                                if (assignment.dueDate == null) {
+                                  return AssignmentBox(
+                                    classRoomName: classroomName,
+                                    taskName: assignment.title,
+                                    score: assignment.maxScore,
+                                    onPress: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        "/assignment",
+                                        arguments: assignment.id,
+                                      );
+                                    },
+                                  );
+                                }
 
-                          if (assignment.dueDate == null) {
-                            return AssignmentBox(
-                              classRoomName: state.classroom.name,
-                              taskName: assignment.title,
-                              score: assignment.maxScore,
-                            );
-                          }
+                                DateTime dateTime = DateTime.parse(
+                                  assignment.dueDate!,
+                                );
 
-                          DateTime dateTime = DateTime.parse(
-                            assignment.dueDate!,
+                                return AssignmentBox(
+                                  classRoomName: classroomName,
+                                  taskName: assignment.title,
+                                  time: DateFormat(
+                                    'yyyy-MM-dd',
+                                  ).format(dateTime),
+                                  score: assignment.maxScore,
+                                  onPress: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      "/assignment",
+                                      arguments: assignment.id,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           );
-
-                          return AssignmentBox(
-                            classRoomName: state.classroom.name,
-                            taskName: assignment.title,
-                            time: DateFormat('yyyy-MM-dd').format(dateTime),
-                            score: assignment.maxScore,
-                          );
-                        },
-                      ),
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      },
                     ),
                   ],
                 ),
