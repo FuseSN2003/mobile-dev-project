@@ -112,7 +112,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("รายละเอียดงาน :"),
+                  Text("รายละเอียดงาdaน :"),
                   SizedBox(height: 15),
                   TextField(
                     style: TextStyle(color: Colors.white, fontSize: 12),

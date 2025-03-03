@@ -95,12 +95,12 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          "ชื่อ Classroom : ${state.classroom.name}",
+                          "Classroom : ${state.classroom.name}",
                           style: TextStyle(),
                         ),
                         SizedBox(height: 10),
                         Text("ชื่องาน :"),
-                        SizedBox(height: 5),
+                        SizedBox(height: 10),
                         TextField(
                           style: TextStyle(color: Colors.white, fontSize: 12),
                           controller: _assignmentNameController,
@@ -130,7 +130,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                                 color: Colors.white,
                                 fontSize: 12,
                               ),
-                              maxLines: 4,
+                              maxLines: 7,
                               controller: _assignmentDescController,
                               decoration: InputDecoration(
                                 hintText: "รายละเอียด",

@@ -18,7 +18,6 @@ class ClassroomWorkPage extends StatefulWidget {
 }
 
 class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
-  final String className = "ชื่อ : Class room";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +36,7 @@ class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "ชื่อ ${state.classroom.name}",
+                      "Classroom : ${state.classroom.name}",
                       style: TextStyle(color: Colors.white),
                     ),
                     BlocBuilder<AuthBloc, AuthState>(
