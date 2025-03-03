@@ -21,19 +21,16 @@ class ClassroomWorkPage extends StatefulWidget {
 class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final assignmentBloc = BlocProvider.of<AssignmentBloc>(context);
-      final state = assignmentBloc.state;
 
-      final classroomId = ModalRoute.of(context)!.settings.arguments as String?;
+      final classroomId = ModalRoute.of(context)!.settings.arguments as String;
 
-      if (classroomId != null && classroomId.isNotEmpty) {
-        if (state is! AssignmentLoaded) {
-          assignmentBloc.add(FetchAssignment(classroomId: classroomId));
-        }
+      if (classroomId.isNotEmpty) {
+        assignmentBloc.add(FetchAssignment(classroomId: classroomId));
       }
     });
-    super.initState();
   }
 
   @override

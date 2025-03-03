@@ -72,10 +72,17 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
         final classroomId =
             ModalRoute.of(context)!.settings.arguments as String;
 
-        if (state is! ClassroomDetailLoaded) {
-          classroomDetailBloc.add(
-            FetchClassroomDetail(classroomId: classroomId),
-          );
+        if (classroomId.isNotEmpty) {
+          if (state is ClassroomDetailLoaded &&
+              state.classroom.id != classroomId) {
+            classroomDetailBloc.add(
+              FetchClassroomDetail(classroomId: classroomId),
+            );
+          } else if (state is! ClassroomDetailLoaded) {
+            classroomDetailBloc.add(
+              FetchClassroomDetail(classroomId: classroomId),
+            );
+          }
         }
       }
     });

@@ -22,6 +22,7 @@ class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
     FetchAssignment event,
     Emitter<AssignmentState> emit,
   ) async {
+    emit(AssignmentLoading());
     final classroomId = event.classroomId;
 
     try {

@@ -174,7 +174,6 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
           assignments = await db
             .select({
               id: assignmentTable.id,
-              classroomId: assignmentTable.classroomId,
               title: assignmentTable.title,
               description: assignmentTable.description,
               dueDate: assignmentTable.dueDate,
