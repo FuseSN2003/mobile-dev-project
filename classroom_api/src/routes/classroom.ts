@@ -39,7 +39,11 @@ export const classroomRoute = new Elysia({
       }
 
       const { name, description } = body;
-
+      if (!name){
+        return {
+          message: "Classroom Name is Required",
+        };
+      }
       const [createdClassroom] = await db
         .insert(classroomTable)
         .values({
@@ -73,7 +77,7 @@ export const classroomRoute = new Elysia({
         message: "Unauthorized",
       };
     }
-
+    
     const teachingClassrooms = await db
       .select({
         id: classroomTable.id,

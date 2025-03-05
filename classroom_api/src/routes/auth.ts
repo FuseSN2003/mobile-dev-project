@@ -86,7 +86,6 @@ export const authRoute = new Elysia({ prefix: "/auth" })
           message: "Invalid username or password",
         };
       }
-
       const isPasswordValid = await Bun.password.verify(
         password,
         user.password
@@ -123,7 +122,7 @@ export const authRoute = new Elysia({ prefix: "/auth" })
     const token = headers["authorization"]?.split(" ")[1];
 
     const jwtPayload = await jwt.verify(token);
-
+    console.log(token);
     if (!jwtPayload) {
       set.status = 401;
       return {

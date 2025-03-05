@@ -16,7 +16,6 @@ const app = new Elysia()
           message: "Not found",
         };
       }
-
       case "VALIDATION": {
         set.status = 400;
         const pathError = error.validator
@@ -58,7 +57,12 @@ const app = new Elysia()
       }
     }
   })
-  .get("/", () => "Hello Elysia")
+  .get("/", async ({ set }) => {
+    set.status = 200;
+    return {
+      message: "Hello Elysia",
+    };
+  })
   .use(authRoute)
   .use(classroomRoute)
   .listen(3000);
