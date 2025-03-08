@@ -168,6 +168,8 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
                           onPressed: pickFiles,
                           child: Text("Pick a File"),
                         ),
+                        SizedBox(height: 20),
+                        ElevatedButton(onPressed: () {}, child: Text("ส่งงาน")),
                       ],
                     ),
               ],
