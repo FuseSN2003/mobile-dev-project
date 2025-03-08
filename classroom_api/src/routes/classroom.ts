@@ -30,7 +30,6 @@ export const classroomRoute = new Elysia({
         .select({ id: userTable.id })
         .from(userTable)
         .where(eq(userTable.id, user.id));
-
       if (!userData) {
         set.status = 401;
         return {
