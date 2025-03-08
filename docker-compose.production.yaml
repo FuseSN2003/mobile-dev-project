@@ -1,0 +1,49 @@
+services:
+  db:
+    container_name: classroom-db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - classroom_app
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - classroom_app
+
+  backend:
+    container_name: classroom-app-api
+    build:
+      context: ./classroom_api
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    env_file:
+      - ./classroom_api/.env
+    volumes:
+      - backend_data:/app/
+    networks:
+      - classroom_app
+
+volumes:
+  db_data:
+  backend_data:
+
+networks:
+  classroom_app:
+    driver: bridge
