@@ -47,9 +47,13 @@ class Sidebar extends StatelessWidget {
                     children: [
                       MyListtile(
                         icon: Icons.home,
-                        text: "ชั้นเรียน",
+                        text: "หน้าหลัก",
                         onTap: () {
-                          Navigator.pop(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            "/",
+                            (route) => false, // Removes all previous routes.
+                          );
                         },
                       ),
                       MyListtile(

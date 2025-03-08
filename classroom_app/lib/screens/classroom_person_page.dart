@@ -45,7 +45,7 @@ class _ClassroomPersonPageState extends State<ClassroomPersonPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "ชื่อ : ${state.classroom.name}",
+                          "Classroom : ${state.classroom.name}",
                           style: TextStyle(color: Colors.white),
                         ),
                         Text(

@@ -48,7 +48,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   _onLoggedIn(LoggedIn event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-
+    // User user = User(id: "1", username: "teset", email: "test@gmail.com");
+    // return emit(Authenticated(token: "test", user: user));
     final username = event.username;
     final password = event.password;
 

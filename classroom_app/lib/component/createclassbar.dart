@@ -12,7 +12,7 @@ class CreateClassbar extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(width: 2, color: Colors.white)),
+        border: Border(top: BorderSide(width: 1, color: Colors.white)),
       ),
       child: Container(
         margin: EdgeInsets.all(20),
@@ -37,7 +37,7 @@ class CreateClassbar extends StatelessWidget {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,
           border: Border.all(width: 2, color: Colors.white54),
@@ -49,7 +49,7 @@ class CreateClassbar extends StatelessWidget {
               : "เข้าร่วมชั้นเรียน",
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
-            fontSize: 16,
+            fontSize: 12,
           ),
         ),
       ),
