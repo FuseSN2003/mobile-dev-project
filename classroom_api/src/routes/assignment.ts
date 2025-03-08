@@ -12,7 +12,7 @@ import Elysia from "elysia";
 
 export const assignmentRoute = new Elysia({ prefix: "/assignment" })
   .use(middleware)
-  .get("/assignment-list", async ({ user, set }) => {
+  .get("/list", async ({ user, set }) => {
     if (!user) {
       set.status = 401;
       return {
@@ -58,7 +58,7 @@ export const assignmentRoute = new Elysia({ prefix: "/assignment" })
         )
       );
 
-    const overdueAssignment = await db
+    const overdueAssignments = await db
       .select({
         id: assignmentTable.id,
         classroomName: sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${studyTable.classroomId})`.as(
@@ -132,7 +132,7 @@ export const assignmentRoute = new Elysia({ prefix: "/assignment" })
 
     return {
       assignedAssignments,
-      overdueAssignment,
+      overdueAssignments,
       submittedAssignments,
     };
   });

@@ -1,16 +1,27 @@
+import 'package:classroom_app/blocs/assignment_list/assignment_list_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import '../component/navbar.dart';
 import '../component/sidebar.dart';
 import '../component/assignment_box.dart';
 
 class ThingtodoPage extends StatefulWidget {
-  ThingtodoPage({super.key});
+  const ThingtodoPage({super.key});
 
   @override
   State<ThingtodoPage> createState() => _ThingtodoPageState();
 }
 
+enum AssignmentStatus { assigned, overdue, submitted }
+
 class _ThingtodoPageState extends State<ThingtodoPage> {
+  @override
+  initState() {
+    context.read<AssignmentListBloc>().add(FetchAssignmentList());
+    super.initState();
+  }
+
   String selectedTap = "มอบหมายแล้ว";
   @override
   Widget build(BuildContext context) {
@@ -31,27 +42,92 @@ class _ThingtodoPageState extends State<ThingtodoPage> {
                   _buildTapButton("เสร็จสิ้น"),
                 ],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AssignmentBox(
-                    classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
-                    taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
-                    time: "5/11/2567 00:00 A.m",
-                    score: '100',
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  // Text("ไม่มีวันครบกำหนด"),
-                  AssignmentBox(
-                    classRoomName: "DESIGN THINKINGdadadadadijooooooooooo",
-                    taskName: "(F) ส่งรายงาน Team Workshop (4 พ.ย. 2567)",
-                    time: "5/11/2567 00:00 A.m",
-                    score: '100',
-                  ),
-                ],
+              BlocBuilder<AssignmentListBloc, AssignmentListState>(
+                builder: (context, state) {
+                  if (state is AssignmentListLoaded) {
+                    if (selectedTap == "มอบหมายแล้ว") {
+                      return Column(
+                        children:
+                            state.assignedAssignments
+                                .map(
+                                  (e) => AssignmentBox(
+                                    classRoomName: e.classroomName,
+                                    taskName: e.title,
+                                    time:
+                                        e.dueDate == null
+                                            ? "ไม่มีกำหนด"
+                                            : DateFormat('yyyy-MM-dd').format(
+                                              DateTime.parse(e.dueDate!),
+                                            ),
+                                    score: e.maxScore.toString(),
+                                    onPress: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/assignment',
+                                        arguments: e.id,
+                                      );
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                      );
+                    } else if (selectedTap == "เลยกำหนด") {
+                      return Column(
+                        children:
+                            state.overdueAssignments
+                                .map(
+                                  (e) => AssignmentBox(
+                                    classRoomName: e.classroomName,
+                                    taskName: e.title,
+                                    time:
+                                        e.dueDate == null
+                                            ? "ไม่มีกำหนด"
+                                            : DateFormat('yyyy-MM-dd').format(
+                                              DateTime.parse(e.dueDate!),
+                                            ),
+                                    score: e.maxScore.toString(),
+                                    onPress: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/assignment',
+                                        arguments: e.id,
+                                      );
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                      );
+                    } else {
+                      return Column(
+                        children:
+                            state.submittedAssignments
+                                .map(
+                                  (e) => AssignmentBox(
+                                    classRoomName: e.classroomName,
+                                    taskName: e.title,
+                                    time:
+                                        e.dueDate == null
+                                            ? "ไม่มีกำหนด"
+                                            : DateFormat('yyyy-MM-dd').format(
+                                              DateTime.parse(e.dueDate!),
+                                            ),
+                                    score: e.maxScore.toString(),
+                                    onPress: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/assignment',
+                                        arguments: e.id,
+                                      );
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                      );
+                    }
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
               ),
             ],
           ),

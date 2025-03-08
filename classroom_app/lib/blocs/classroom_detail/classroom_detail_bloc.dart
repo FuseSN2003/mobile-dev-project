@@ -1,3 +1,4 @@
+import 'package:classroom_app/models/assignment.dart';
 import 'package:classroom_app/models/classroom.dart';
 import 'package:classroom_app/models/user.dart';
 import 'package:classroom_app/utills/jwt_token.dart';
@@ -37,6 +38,7 @@ class ClassroomDetailBloc
             classroom: result.classroom,
             students: result.students,
             teachers: result.teachers,
+            assignments: result.assignments,
           ),
         );
       } else {

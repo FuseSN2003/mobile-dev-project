@@ -1,5 +1,6 @@
 import 'package:classroom_app/blocs/assignment/assignment_bloc.dart';
 import 'package:classroom_app/blocs/assignment_detail/assignment_detail_bloc.dart';
+import 'package:classroom_app/blocs/assignment_list/assignment_list_bloc.dart';
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:classroom_app/blocs/classroom/classroom_bloc.dart';
 import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
@@ -29,6 +30,7 @@ void main() async {
         BlocProvider(create: (context) => ClassroomDetailBloc()),
         BlocProvider(create: (context) => AssignmentBloc()),
         BlocProvider(create: (context) => AssignmentDetailBloc()),
+        BlocProvider(create: (context) => AssignmentListBloc()),
       ],
       child: MyApp(),
     ),

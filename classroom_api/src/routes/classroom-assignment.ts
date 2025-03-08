@@ -12,7 +12,7 @@ import {
 } from "@/libs/db/schema";
 import { uploadFile } from "@/libs/upload-file";
 import { middleware } from "@/middleware";
-import { and, desc, eq, is, sql } from "drizzle-orm";
+import { and, desc, eq, is, or, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
@@ -155,9 +155,10 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
           assignments = await db
             .select({
               id: assignmentTable.id,
-              classroomName: sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${assignmentTable.classroomId})`.as(
-                "classroomName"
-              ),
+              classroomName:
+                sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${assignmentTable.classroomId})`.as(
+                  "classroomName"
+                ),
               title: assignmentTable.title,
               description: assignmentTable.description,
               dueDate: assignmentTable.dueDate,
@@ -175,15 +176,24 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
               assignmentSubmissionTable,
               eq(assignmentSubmissionTable.assignmentId, assignmentTable.id)
             )
-            .where(eq(assignmentTable.classroomId, classroomId))
+            .where(
+              and(
+                eq(assignmentTable.classroomId, classroomId),
+                or(
+                  eq(assignmentSubmissionTable.isSubmitted, false),
+                  sql`${assignmentSubmissionTable.userId} IS NULL`
+                )
+              )
+            )
             .orderBy(desc(assignmentTable.createdAt));
         } else {
           assignments = await db
             .select({
               id: assignmentTable.id,
-              classroomName: sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${assignmentTable.classroomId})`.as(
-                "classroomName"
-              ),
+              classroomName:
+                sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${assignmentTable.classroomId})`.as(
+                  "classroomName"
+                ),
               title: assignmentTable.title,
               description: assignmentTable.description,
               dueDate: assignmentTable.dueDate,
@@ -229,6 +239,10 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
             [assignment] = await db
               .select({
                 id: assignmentTable.id,
+                classroomName:
+                  sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${assignmentTable.classroomId})`.as(
+                    "classroomName"
+                  ),
                 title: assignmentTable.title,
                 description: assignmentTable.description,
                 createdBy:
@@ -276,6 +290,10 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
             [assignment] = await db
               .select({
                 id: assignmentTable.id,
+                classroomName:
+                  sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${assignmentTable.classroomId})`.as(
+                    "classroomName"
+                  ),
                 title: assignmentTable.title,
                 description: assignmentTable.description,
                 createdBy:

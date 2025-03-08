@@ -102,8 +102,6 @@ export const authRoute = new Elysia({ prefix: "/auth" })
         id: user.id,
       });
 
-      console.log(token);
-
       return {
         message: "User logged in successfully",
         user: {
@@ -124,7 +122,7 @@ export const authRoute = new Elysia({ prefix: "/auth" })
     const token = headers["authorization"]?.split(" ")[1];
 
     const jwtPayload = await jwt.verify(token);
-    console.log(token);
+    
     if (!jwtPayload) {
       set.status = 401;
       return {

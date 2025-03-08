@@ -4,6 +4,7 @@ import 'package:classroom_app/models/file.dart';
 
 class Assignment {
   final String id;
+  final String classroomName;
   final String title;
   final String description;
   final String createdBy;
@@ -15,6 +16,7 @@ class Assignment {
 
   Assignment({
     required this.id,
+    required this.classroomName,
     required this.title,
     required this.description,
     required this.createdBy,
@@ -27,6 +29,7 @@ class Assignment {
 
   factory Assignment.fromJson(Map<String, dynamic> json) => Assignment(
     id: json['id'],
+    classroomName: json['classroomName'],
     title: json['title'],
     description: json['description'],
     dueDate: json['dueDate'],
@@ -39,6 +42,7 @@ class Assignment {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "classroomName": classroomName,
     "title": title,
     "description": description,
     "dueDate": dueDate,
@@ -68,6 +72,7 @@ class AssignmentListResponse {
 
 class AssignmentDetail {
   final String id;
+  final String classroomName;
   final String title;
   final String description;
   final String createdBy;
@@ -85,6 +90,7 @@ class AssignmentDetail {
 
   AssignmentDetail({
     required this.id,
+    required this.classroomName,
     required this.title,
     required this.description,
     required this.createdBy,
@@ -102,6 +108,7 @@ class AssignmentDetail {
   factory AssignmentDetail.fromJson(Map<String, dynamic> json) {
     return AssignmentDetail(
       id: json['id'],
+      classroomName: json['classroomName'],
       title: json['title'],
       description: json['description'],
       dueDate: json['dueDate'],
@@ -127,6 +134,7 @@ class AssignmentDetail {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "classroomName": classroomName,
     "title": title,
     "description": description,
     "dueDate": dueDate,

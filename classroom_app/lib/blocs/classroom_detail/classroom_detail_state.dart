@@ -10,11 +10,13 @@ class ClassroomDetailLoaded extends ClassroomDetailState {
   final Classroom classroom;
   final List<User> students;
   final List<User> teachers;
+  final List<Assignment> assignments;
 
   ClassroomDetailLoaded({
     required this.classroom,
     required this.students,
     required this.teachers,
+    required this.assignments,
   });
 }
 

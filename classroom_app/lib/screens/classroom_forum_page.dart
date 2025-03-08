@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../component/assignment_box.dart';
 import '../component/bottombar.dart';
 import '../component/navbar.dart';
 import '../component/sidebar.dart';
-import '../model/post.dart';
 import '../model/work.dart';
-import '../component/assignment_box.dart';
 
 class ClassroomForumPage extends StatefulWidget {
   const ClassroomForumPage({super.key});
@@ -89,16 +88,26 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
                       height: MediaQuery.of(context).size.height * 0.75,
                       // height: 500,
                       child: ListView.builder(
-                        itemCount: works.length,
+                        itemCount: state.assignments.length,
                         itemBuilder: (context, index) {
-                          var item = works[index];
+                          var item = state.assignments[index];
                           return AssignmentBox(
                             classRoomName: item.title,
                             taskName: item.description,
-                            score: item.score.toString(),
-                            time: DateFormat(
-                              'yyyy-MM-dd',
-                            ).format(item.due_date),
+                            score: item.maxScore.toString(),
+                            time:
+                                item.dueDate == null
+                                    ? "ไม่มีกำหนด"
+                                    : DateFormat(
+                                      'yyyy-MM-dd',
+                                    ).format(DateTime.parse(item.dueDate!)),
+                            onPress: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/assignment',
+                                arguments: item.id,
+                              );
+                            },
                           );
                         },
                       ),
