@@ -3,12 +3,13 @@ import { Elysia } from "elysia";
 import { authRoute } from "./routes/auth";
 import { classroomRoute } from "./routes/classroom";
 import swagger from "@elysiajs/swagger";
+import { fileRoute } from "./routes/file";
+import { classroomAssignmentRoute } from "./routes/classroom-assignment";
 
 const app = new Elysia()
   .use(cors())
   .use(swagger())
   .onError(({ error, code, set }) => {
-    console.error(error);
     switch (code) {
       case "NOT_FOUND": {
         set.status = 404;
@@ -65,6 +66,8 @@ const app = new Elysia()
   })
   .use(authRoute)
   .use(classroomRoute)
+  .use(fileRoute)
+  .use(classroomAssignmentRoute)
   .listen(3000);
 
 console.log(

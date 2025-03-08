@@ -167,13 +167,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 60),
-                      Center(
-                        child: Text(
-                          'Wrong User or Password',
-                          style: TextStyle(color: Colors.red, fontSize: 14),
-                        ),
-                      ),
                       SizedBox(height: 40),
 
                       CustomRichText(),

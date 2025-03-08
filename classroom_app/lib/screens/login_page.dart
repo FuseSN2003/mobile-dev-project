@@ -129,13 +129,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 60),
-                      Center(
-                        child: Text(
-                          'Wrong User or Password',
-                          style: TextStyle(color: Colors.red, fontSize: 14),
-                        ),
-                      ),
                       SizedBox(height: 40),
                       Row(
                         children: [

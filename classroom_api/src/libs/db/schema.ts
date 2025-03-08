@@ -1,4 +1,5 @@
 import {
+  boolean,
   char,
   integer,
   pgTable,
@@ -55,23 +56,20 @@ export const studyTable = pgTable(
   (t) => [primaryKey({ columns: [t.userId, t.classroomId] })]
 );
 
-export const assignmentTable = pgTable(
-  "assignment",
-  {
-    id: uuid().primaryKey().unique().notNull().defaultRandom(),
-    classroomId: uuid("classroom_id")
-      .notNull()
-      .references(() => classroomTable.id, { onDelete: "cascade" }),
-    title: text().notNull(),
-    description: text().notNull(),
-    dueDate: timestamp("due_date"),
-    maxScore: integer("max_score"),
-    createdBy: uuid("created_by")
-      .notNull()
-      .references(() => userTable.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-  },
-);
+export const assignmentTable = pgTable("assignment", {
+  id: uuid().primaryKey().unique().notNull().defaultRandom(),
+  classroomId: uuid("classroom_id")
+    .notNull()
+    .references(() => classroomTable.id, { onDelete: "cascade" }),
+  title: text().notNull(),
+  description: text().notNull(),
+  dueDate: timestamp("due_date"),
+  maxScore: integer("max_score"),
+  createdBy: uuid("created_by")
+    .notNull()
+    .references(() => userTable.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
 
 export const fileTable = pgTable("file", {
   id: uuid().unique().notNull().defaultRandom(),
@@ -96,4 +94,37 @@ export const assignmentAttachmentTable = pgTable(
       .references(() => fileTable.id, { onDelete: "cascade" }),
   },
   (t) => [primaryKey({ columns: [t.fileId, t.assignmentId] })]
+);
+
+export const assignmentSubmissionTable = pgTable(
+  "assignment_submission",
+  {
+    assignmentId: uuid("assignment_id")
+      .references(() => assignmentTable.id)
+      .notNull(),
+    userId: uuid("user_id")
+      .references(() => userTable.id)
+      .notNull(),
+    score: integer(),
+
+    isSubmitted: boolean("is_submitted").notNull().default(true),
+    submittedAt: timestamp("submitted_at").notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.assignmentId, t.userId] })]
+);
+
+export const submissionAttachmentTable = pgTable(
+  "submission_attachment",
+  {
+    assignmentId: uuid("assignment_id")
+      .notNull()
+      .references(() => assignmentTable.id, { onDelete: "cascade" }),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => userTable.id, { onDelete: "cascade" }),
+    fileId: uuid("file_id")
+      .notNull()
+      .references(() => fileTable.id, { onDelete: "cascade" }),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.assignmentId, t.fileId] })]
 );

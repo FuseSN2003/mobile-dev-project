@@ -4,7 +4,7 @@ class AssignmentBox extends StatefulWidget {
   final String classRoomName;
   final String taskName;
   final String? time;
-  final int? score;
+  final String? score;
   final VoidCallback? onPress;
 
   const AssignmentBox({

@@ -36,6 +36,13 @@
       "when": 1740940474199,
       "tag": "0004_add_assignment_attachment_table",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1741011471483,
+      "tag": "0005_add_assignment_submissin_and_submission_attachment_table",
+      "breakpoints": true
     }
   ]
 }

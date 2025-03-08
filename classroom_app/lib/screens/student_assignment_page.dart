@@ -139,7 +139,7 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
                                 controller: scoreController,
                                 decoration: InputDecoration(
                                   labelText: 'Enter score : ',
-                                  hintText: '/${maxScore}',
+                                  hintText: '/$maxScore',
                                   hintStyle: TextStyle(color: Colors.white),
                                   border: OutlineInputBorder(),
                                 ),

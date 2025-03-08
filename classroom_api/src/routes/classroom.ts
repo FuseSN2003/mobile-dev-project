@@ -1,15 +1,13 @@
 import { db } from "@/libs/db";
 import {
-  assignmentAttachmentTable,
   assignmentTable,
   classroomTable,
   studyTable,
   teachTable,
-  userTable,
+  userTable
 } from "@/libs/db/schema";
-import { fileExtension, fileType, uploadFile } from "@/libs/upload-file";
 import { middleware } from "@/middleware";
-import { and, eq, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomRoute = new Elysia({
@@ -161,8 +159,8 @@ export const classroomRoute = new Elysia({
       }),
     }
   )
-  .get("/:id", async ({ params }) => {
-    const classroomId = params.id;
+  .get("/:classroomId", async ({ params }) => {
+    const { classroomId } = params;
 
     const [classroom] = await db
       .select({
@@ -209,77 +207,4 @@ export const classroomRoute = new Elysia({
       teachers,
       assignments,
     };
-  })
-  .post(
-    "/:id/assignment",
-    async ({ user, set, body, params }) => {
-      if (!user) {
-        set.status = 401;
-        return {
-          message: "Unauthorized",
-        };
-      }
-
-      const classroomId = params.id;
-
-      const [teachingClassroom] = await db
-        .select()
-        .from(teachTable)
-        .where(
-          and(
-            eq(teachTable.userId, user.id),
-            eq(teachTable.classroomId, classroomId)
-          )
-        );
-
-      if (!teachingClassroom) {
-        set.status = 401;
-        return {
-          message: "Unauthorized",
-        };
-      }
-
-      const { title, description, dueDate, files, maxScore } = body;
-
-      const [result] = await db.insert(assignmentTable).values({
-        classroomId,
-        createdBy: user.id,
-        title,
-        description,
-        dueDate: new Date(dueDate),
-        maxScore: maxScore,
-      }).returning({ id: assignmentTable.id });
-
-      let filesIdResult = [];
-      for (const file of files) {
-        const result = await uploadFile(file, user.id);
-
-        if (result.status === "error") {
-          set.status = 400;
-          return {
-            message: result.message,
-          }
-        }
-
-        filesIdResult.push(result.id);
-      }
-
-      await db.insert(assignmentAttachmentTable).values(filesIdResult.map((id) => ({
-        fileId: id,
-        assignmentId: result.id,
-      })))
-
-      return {
-        message: "Assignment created successfully",
-      };
-    },
-    {
-      body: t.Object({
-        title: t.String(),
-        description: t.String(),
-        files: t.Files(),
-        dueDate: t.String(),
-        maxScore: t.Numeric({ optional: true }),
-      }),
-    }
-  );
+  });

@@ -1,12 +1,13 @@
 import 'package:classroom_app/blocs/assignment/assignment_bloc.dart';
+import 'package:classroom_app/blocs/assignment_detail/assignment_detail_bloc.dart';
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:classroom_app/blocs/classroom/classroom_bloc.dart';
 import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import './screens/assignment_page.dart';
-import 'screens/classroom_forum_page.dart';
 import './screens/classroom_person_page.dart';
 import './screens/classroom_work_page.dart';
 import './screens/login_page.dart';
@@ -15,9 +16,11 @@ import './screens/register_page.dart';
 import './screens/thingtodo_page.dart';
 import './theme/colors.dart';
 import 'screens/addassignment_page.dart';
+import 'screens/classroom_forum_page.dart';
 import 'screens/student_assignment_page.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: '.env');
   runApp(
     MultiBlocProvider(
       providers: [
@@ -25,6 +28,7 @@ void main() {
         BlocProvider(create: (context) => ClassroomBloc()),
         BlocProvider(create: (context) => ClassroomDetailBloc()),
         BlocProvider(create: (context) => AssignmentBloc()),
+        BlocProvider(create: (context) => AssignmentDetailBloc()),
       ],
       child: MyApp(),
     ),
@@ -33,7 +37,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/classroom_work': (context) => ClassroomWorkPage(),
         '/classroom_person': (context) => ClassroomPersonPage(),
         '/addassignment': (context) => AddAssignmentPage(),
-        '/assignment': (context) => Assignment(),
+        '/assignment': (context) => AssignmentPage(),
         '/assignment_student': (context) => AssignmentStudent(),
       },
     );

@@ -1,9 +1,9 @@
-import 'package:classroom_app/models/assignment.dart';
 import 'package:classroom_app/models/classroom.dart';
 import 'package:classroom_app/models/user.dart';
 import 'package:classroom_app/utills/jwt_token.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 part 'classroom_detail_event.dart';
@@ -25,7 +25,7 @@ class ClassroomDetailBloc
       final token = await getToken();
 
       final res = await http.get(
-        Uri.parse('http://10.0.2.2:3000/classroom/$classroomId'),
+        Uri.parse('${dotenv.get("BACKEND_URL")}/classroom/$classroomId'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -37,7 +37,6 @@ class ClassroomDetailBloc
             classroom: result.classroom,
             students: result.students,
             teachers: result.teachers,
-            assignments: result.assignments,
           ),
         );
       } else {

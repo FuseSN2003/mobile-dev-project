@@ -4,6 +4,7 @@ import 'package:classroom_app/models/classroom.dart';
 import 'package:classroom_app/utills/jwt_token.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 part 'classroom_event.dart';
@@ -26,7 +27,7 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
       final token = await getToken();
 
       final res = await http.get(
-        Uri.parse('http://10.0.2.2:3000/classroom/'),
+        Uri.parse('${dotenv.get("BACKEND_URL")}/classroom/'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -77,7 +78,7 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
       final token = await getToken();
 
       final res = await http.post(
-        Uri.parse('http://10.0.2.2:3000/classroom/join'),
+        Uri.parse('${dotenv.get("BACKEND_URL")}/classroom/join'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json; charset=utf-8',
@@ -92,7 +93,6 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
       } else {
         final currentState = state;
         if (currentState is ClassroomListLoaded) {
-          debugPrint(jsonData['message']);
           emit(JoinClassroomFailed(errorMessage: jsonData['message']));
           return emit(
             ClassroomListLoaded(
@@ -101,7 +101,6 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
             ),
           );
         }
-        debugPrint(jsonData['message']);
         return emit(JoinClassroomFailed(errorMessage: jsonData['message']));
       }
     } catch (e) {
@@ -123,7 +122,7 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
       final token = await getToken();
 
       final res = await http.post(
-        Uri.parse("http://10.0.2.2:3000/classroom/"),
+        Uri.parse("${dotenv.get("BACKEND_URL")}/classroom/"),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json; charset=utf-8',
@@ -138,7 +137,6 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
       } else {
         final currentState = state;
         if (currentState is ClassroomListLoaded) {
-          debugPrint(jsonData['message']);
           emit(CreateClassroomFailed(errorMessage: jsonData['message']));
           return emit(
             ClassroomListLoaded(
@@ -147,7 +145,6 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
             ),
           );
         }
-        debugPrint(jsonData['message']);
         return emit(CreateClassroomFailed(errorMessage: jsonData['message']));
       }
     } catch (e) {
