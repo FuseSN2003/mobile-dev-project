@@ -10,7 +10,6 @@ const app = new Elysia()
   .use(cors())
   .use(swagger())
   .onError(({ error, code, set }) => {
-    console.error(error);
     switch (code) {
       case "NOT_FOUND": {
         set.status = 404;

@@ -72,7 +72,9 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
       drawer: Sidebar(),
       body: BlocListener<AssignmentBloc, AssignmentState>(
         listener: (context, state) {
-          if (state is AddAssignmentSuccess) {}
+          if (state is AddAssignmentSuccess) {
+            Navigator.pop(context);
+          }
         },
         child: BlocBuilder<ClassroomDetailBloc, ClassroomDetailState>(
           builder: (context, state) {

@@ -95,9 +95,14 @@ class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
                                 final assignment = state.assignments[index];
                                 if (assignment.dueDate == null) {
                                   return AssignmentBox(
-                                    classRoomName: classroomName,
+                                    classRoomName:
+                                        '$classroomName ${assignment.isSubmitted == true ? '✅' : ''}',
                                     taskName: assignment.title,
-                                    score: assignment.maxScore,
+                                    score:
+                                        assignment.isSubmitted == true &&
+                                                assignment.scoreReceived != null
+                                            ? '${assignment.scoreReceived}/${assignment.maxScore}'
+                                            : null,
                                     onPress: () {
                                       Navigator.pushNamed(
                                         context,
@@ -113,12 +118,17 @@ class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
                                 );
 
                                 return AssignmentBox(
-                                  classRoomName: classroomName,
+                                  classRoomName:
+                                      '$classroomName ${assignment.isSubmitted == true ? '✅' : ''}',
                                   taskName: assignment.title,
                                   time: DateFormat(
                                     'yyyy-MM-dd',
                                   ).format(dateTime),
-                                  score: assignment.maxScore,
+                                  score:
+                                      assignment.isSubmitted == true &&
+                                              assignment.scoreReceived != null
+                                          ? '${assignment.scoreReceived}/${assignment.maxScore}'
+                                          : '${assignment.maxScore}',
                                   onPress: () {
                                     Navigator.pushNamed(
                                       context,
