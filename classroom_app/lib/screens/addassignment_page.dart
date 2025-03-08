@@ -150,7 +150,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                               onPressed: pickFiles,
                               child: Text("Pick a File"),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 20), 
                             _selectedFiles.isNotEmpty
                                 ? SizedBox(
                                   height:
