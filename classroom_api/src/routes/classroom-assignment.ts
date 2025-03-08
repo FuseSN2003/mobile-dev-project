@@ -3,8 +3,10 @@ import {
   assignmentAttachmentTable,
   assignmentSubmissionTable,
   assignmentTable,
+  classroomTable,
   fileTable,
   studyTable,
+  submissionAttachmentTable,
   teachTable,
   userTable,
 } from "@/libs/db/schema";
@@ -153,6 +155,9 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
           assignments = await db
             .select({
               id: assignmentTable.id,
+              classroomName: sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${assignmentTable.classroomId})`.as(
+                "classroomName"
+              ),
               title: assignmentTable.title,
               description: assignmentTable.description,
               dueDate: assignmentTable.dueDate,
@@ -176,6 +181,9 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
           assignments = await db
             .select({
               id: assignmentTable.id,
+              classroomName: sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${assignmentTable.classroomId})`.as(
+                "classroomName"
+              ),
               title: assignmentTable.title,
               description: assignmentTable.description,
               dueDate: assignmentTable.dueDate,
@@ -191,7 +199,6 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
             .groupBy(assignmentTable.id)
             .orderBy(desc(assignmentTable.createdAt));
         }
-        console.log(assignments);
 
         return {
           assignments,
@@ -290,8 +297,13 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
                   FILTER (WHERE ${assignmentSubmissionTable.isSubmitted} = TRUE),
                   '{}'
                 )`.as("submittedStudents"),
-                assigned: sql<number>`COUNT(DISTINCT ${studyTable.userId})`.mapWith(Number).as("assigned"),
-                submitted: sql<number>`COUNT(DISTINCT ${assignmentSubmissionTable.userId}) FILTER (WHERE ${assignmentSubmissionTable.isSubmitted} = TRUE)`.mapWith(Number).as("submitted"),
+                assigned: sql<number>`COUNT(DISTINCT ${studyTable.userId})`
+                  .mapWith(Number)
+                  .as("assigned"),
+                submitted:
+                  sql<number>`COUNT(DISTINCT ${assignmentSubmissionTable.userId}) FILTER (WHERE ${assignmentSubmissionTable.isSubmitted} = TRUE)`
+                    .mapWith(Number)
+                    .as("submitted"),
               })
               .from(assignmentTable)
               .leftJoin(
@@ -319,91 +331,139 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
                   eq(assignmentTable.id, assignmentId),
                   eq(assignmentTable.classroomId, classroomId)
                 )
-              ).groupBy(assignmentTable.id);
+              )
+              .groupBy(assignmentTable.id);
           }
-          console.log(assignment);
-
-          // if (student) {
-          //   assignment = await db
-          //     .select({
-          //       id: assignmentTable.id,
-          //       title: assignmentTable.title,
-          //       description: assignmentTable.description,
-          //       dueDate: assignmentTable.dueDate,
-          //       maxScore: assignmentTable.maxScore,
-          //       attachments: sql<string[]>`ARRAY_AGG(${fileTable.url})`.as(
-          //         "attachments"),
-          //       createdBy:
-          //         sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${assignmentTable.createdBy})`.as(
-          //           "createdBy"
-          //         ),
-          //       createdAt: assignmentTable.createdAt,
-          //       isSubmitted: assignmentSubmissionTable.isSubmitted,
-          //     })
-          //     .from(assignmentTable)
-          //     .leftJoin(
-          //       assignmentSubmissionTable,
-          //       eq(assignmentSubmissionTable.assignmentId, assignmentTable.id)
-          //     )
-          //     .leftJoin(
-          //       assignmentAttachmentTable,
-          //       eq(assignmentAttachmentTable.assignmentId, assignmentTable.id)
-          //     )
-          //     .where(eq(assignmentTable.classroomId, classroomId))
-          //     .orderBy(desc(assignmentTable.createdAt));
-          // } else {
-          //   assignment = await db
-          //     .select({
-          //       id: assignmentTable.id,
-          //       title: assignmentTable.title,
-          //       description: assignmentTable.description,
-          //       dueDate: assignmentTable.dueDate,
-          //       maxScore: assignmentTable.maxScore,
-          //       attachments: sql<string[]>`ARRAY_AGG(${fileTable.url})`.as(
-          //         "attachments"),
-          //       createdBy:
-          //         sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${assignmentTable.createdBy})`.as(
-          //           "createdBy"
-          //         ),
-          //       submittedStudents: sql<string[]>`COALESCE(
-          //         ARRAY_AGG(DISTINCT ${userTable.username})
-          //         FILTER (WHERE ${assignmentSubmissionTable.isSubmitted} = TRUE),
-          //         '{}'
-          //       )`.as("submittedStudents"),
-          //       createdAt: assignmentTable.createdAt,
-          //       assigned: sql`COUNT(DISTINCT ${studyTable.userId})`
-          //         .mapWith(Number)
-          //         .as("assigned"),
-          //       submitted:
-          //         sql<number>`COUNT(DISTINCT ${assignmentSubmissionTable.userId}) FILTER (WHERE ${assignmentSubmissionTable.isSubmitted} = TRUE)`
-          //           .mapWith(Number)
-          //           .as("submitted"),
-          //     })
-          //     .from(assignmentTable)
-          //     .leftJoin(
-          //       assignmentAttachmentTable,
-          //       eq(assignmentAttachmentTable.assignmentId, assignmentTable.id)
-          //     )
-          //     .leftJoin(
-          //       assignmentSubmissionTable,
-          //       eq(assignmentSubmissionTable.assignmentId, assignmentTable.id)
-          //     )
-          //     .leftJoin(
-          //       userTable,
-          //       eq(userTable.id, assignmentSubmissionTable.userId)
-          //     )
-          //     .leftJoin(
-          //       studyTable,
-          //       eq(studyTable.classroomId, assignmentTable.classroomId)
-          //     )
-          //     .where(eq(assignmentTable.classroomId, classroomId))
-          //     .groupBy(assignmentTable.id)
-          //     .orderBy(desc(assignmentTable.createdAt));
-          // }
-          // console.log(assignment);
 
           return {
             assignment,
+          };
+        }
+      )
+      .post(
+        "/:assignmentId/submit",
+        async ({ student, user, params, body, set }) => {
+          if (!user) {
+            return {
+              message: "Unauthorized",
+            };
+          }
+
+          if (!student) {
+            return {
+              message: "Forbidden",
+            };
+          }
+
+          const { assignmentId, classroomId } = params;
+
+          const [assignment] = await db
+            .select()
+            .from(assignmentTable)
+            .where(
+              and(
+                eq(assignmentTable.id, assignmentId),
+                eq(assignmentTable.classroomId, classroomId)
+              )
+            );
+
+          if (!assignment) {
+            return {
+              message: "Assignment not found",
+            };
+          }
+
+          const { files } = body;
+
+          await db.insert(assignmentSubmissionTable).values({
+            assignmentId,
+            userId: user.id,
+          });
+
+          let filesIdResult = [];
+          for (const file of files) {
+            const result = await uploadFile(file, user.id);
+
+            if (result.status === "error") {
+              set.status = 400;
+              return {
+                message: result.message,
+              };
+            }
+
+            filesIdResult.push(result.id);
+          }
+
+          if (filesIdResult.length !== 0) {
+            await db.insert(submissionAttachmentTable).values(
+              filesIdResult.map((id) => ({
+                assignmentId,
+                fileId: id,
+                userId: user.id,
+              }))
+            );
+          }
+
+          return {
+            message: "Assignment submitted",
+          };
+        },
+        {
+          body: t.Object({
+            files: t.Files(),
+          }),
+        }
+      )
+      .delete(
+        "/:assignmentId/cancel-submit",
+        async ({ user, set, student, params }) => {
+          if (!user) {
+            set.status = 401;
+            return {
+              message: "Unauthorized",
+            };
+          }
+
+          if (!student) {
+            set.status = 403;
+            return {
+              message: "Forbidden",
+            };
+          }
+
+          const { assignmentId, classroomId } = params;
+
+          const [assignment] = await db
+            .select()
+            .from(assignmentTable)
+            .where(
+              and(
+                eq(assignmentTable.id, assignmentId),
+                eq(assignmentTable.classroomId, classroomId)
+              )
+            );
+
+          if (!assignment) {
+            set.status = 404;
+            return {
+              message: "Assignment not found",
+            };
+          }
+
+          await db
+            .update(assignmentSubmissionTable)
+            .set({
+              isSubmitted: false,
+            })
+            .where(
+              and(
+                eq(assignmentSubmissionTable.assignmentId, assignmentId),
+                eq(assignmentSubmissionTable.userId, user.id)
+              )
+            );
+
+          return {
+            message: "Assignment submission canceled",
           };
         }
       );

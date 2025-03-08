@@ -103,6 +103,8 @@ export const authRoute = new Elysia({ prefix: "/auth" })
         id: user.id,
       });
 
+      console.log(token);
+
       return {
         message: "User logged in successfully",
         user: {
