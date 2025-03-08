@@ -162,14 +162,22 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
                       ],
                     )
                     : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("student"),
+                        Text("เลือกไฟล์ที่ต้องการส่ง"),
+                        SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: pickFiles,
                           child: Text("Pick a File"),
                         ),
-                        SizedBox(height: 20),
-                        ElevatedButton(onPressed: () {}, child: Text("ส่งงาน")),
+                        SizedBox(height: 30),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: Text("ส่งงาน"),
+                          ),
+                        ),
                       ],
                     ),
               ],
