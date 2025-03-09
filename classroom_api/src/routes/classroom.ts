@@ -85,6 +85,7 @@ export const classroomRoute = new Elysia({
           sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
             "createdBy"
           ),
+        code: classroomTable.code,
       })
       .from(classroomTable)
       .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))
@@ -100,12 +101,15 @@ export const classroomRoute = new Elysia({
           sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
             "createdBy"
           ),
+        code: classroomTable.code,
       })
       .from(classroomTable)
       .leftJoin(studyTable, eq(studyTable.classroomId, classroomTable.id))
       .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))
       .leftJoin(userTable, eq(teachTable.userId, userTable.id))
       .where(eq(studyTable.userId, user.id));
+
+    console.log(teachingClassrooms, studyingClassrooms);
 
     return {
       teachingClassrooms,
