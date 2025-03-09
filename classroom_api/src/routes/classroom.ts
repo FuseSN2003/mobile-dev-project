@@ -1,14 +1,13 @@
 import { db } from "@/libs/db";
 import {
-  assignmentSubmissionTable,
   assignmentTable,
   classroomTable,
   studyTable,
   teachTable,
-  userTable,
+  userTable
 } from "@/libs/db/schema";
 import { middleware } from "@/middleware";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomRoute = new Elysia({
@@ -85,6 +84,7 @@ export const classroomRoute = new Elysia({
           sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
             "createdBy"
           ),
+        code: classroomTable.code,
       })
       .from(classroomTable)
       .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))
@@ -100,6 +100,7 @@ export const classroomRoute = new Elysia({
           sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
             "createdBy"
           ),
+        code: classroomTable.code,
       })
       .from(classroomTable)
       .leftJoin(studyTable, eq(studyTable.classroomId, classroomTable.id))
