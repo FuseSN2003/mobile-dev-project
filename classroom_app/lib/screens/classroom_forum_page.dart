@@ -7,7 +7,6 @@ import '../component/assignment_box.dart';
 import '../component/bottombar.dart';
 import '../component/navbar.dart';
 import '../component/sidebar.dart';
-import '../model/work.dart';
 
 class ClassroomForumPage extends StatefulWidget {
   const ClassroomForumPage({super.key});
@@ -17,24 +16,6 @@ class ClassroomForumPage extends StatefulWidget {
 }
 
 class _ClassroomFormPageState extends State<ClassroomForumPage> {
-  List<Work> works = [
-    Work(
-      title: "Project Meeting",
-      description: "Discuss project milestones",
-      createdAt: DateTime(2024, 2, 20),
-      dueDate: DateTime(2024, 2, 18),
-      score: 10,
-    ),
-    Work(
-      title: "Code Review",
-      description: "Review team PRs",
-      createdAt: DateTime(2024, 2, 18),
-      dueDate: DateTime(2024, 2, 18),
-      score: 20,
-    ),
-  ];
-  late String classroomId;
-
   @override
   void initState() {
     super.initState();
@@ -64,7 +45,6 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
     });
   }
 
-  final String className = "ชื่อ : Class room";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,41 +102,6 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
         ),
       ),
       bottomNavigationBar: Bottombar(),
-    );
-  }
-
-  Widget _buildWork(BuildContext context, Work work) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-      margin: EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary, // Background color
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(color: Colors.black26, blurRadius: 5, offset: Offset(0, 2)),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              work.title,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            Text(work.description, style: TextStyle(color: Colors.white)),
-            Text(
-              "Due: ${work.dueDate.toLocal()}",
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

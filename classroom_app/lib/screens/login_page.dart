@@ -112,7 +112,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              debugPrint("login press");
                               context.read<AuthBloc>().add(
                                 LoggedIn(
                                   username: _usernameController.text.trim(),

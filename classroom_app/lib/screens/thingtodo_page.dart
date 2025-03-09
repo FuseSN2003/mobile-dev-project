@@ -2,9 +2,10 @@ import 'package:classroom_app/blocs/assignment_list/assignment_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
+import '../component/assignment_box.dart';
 import '../component/navbar.dart';
 import '../component/sidebar.dart';
-import '../component/assignment_box.dart';
 
 class ThingtodoPage extends StatefulWidget {
   const ThingtodoPage({super.key});

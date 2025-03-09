@@ -29,6 +29,8 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
   late String studentName = "";
   late String assignmentId = "";
 
+  final _scoreController = TextEditingController();
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -49,21 +51,6 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
     });
     super.initState();
   }
-
-  String assignmentName = "งาน “การทดสอบ User 2 ราย “";
-
-  int maxScore = 10;
-
-  TextEditingController scoreController = TextEditingController();
-
-  String dueDateString = "26/2/2568 00:00";
-
-  List<String> imageUrls = [
-    "https://img.salehere.co.th/p/1200x0/2021/06/18/8mx3mv3gk1mp.jpg",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdE6iZ0yrsi0mwiy3UUNuTLlRwVD6seXm0nQ&s",
-  ];
-
-  final _scoreController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

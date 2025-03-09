@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class StudentBox extends StatelessWidget {
   final String label;
   final List<String> itemList;
-  // final Function(String)? onItemPress; // Optional callback for item actions
 
   final VoidCallback? onPress;
   const StudentBox({

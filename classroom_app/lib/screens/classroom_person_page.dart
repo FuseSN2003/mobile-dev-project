@@ -1,6 +1,7 @@
 import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../component/bottombar.dart';
 import '../component/navbar.dart';
 import '../component/sidebar.dart';
@@ -14,16 +15,6 @@ class ClassroomPersonPage extends StatefulWidget {
 }
 
 class _ClassroomPersonPageState extends State<ClassroomPersonPage> {
-  // Define the student list
-  final List<String> studentNames = [
-    "Rati Maneengam",
-    "John Doe",
-    "Jane Smith",
-    "Bob White",
-  ];
-  final List<String> teacherNames = ["Alice Brown"];
-  final String className = "ชื่อ : Class room";
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
