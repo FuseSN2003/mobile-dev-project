@@ -71,7 +71,6 @@ export const classroomRoute = new Elysia({
   .get("/", async ({ user }) => {
     if (!user) {
       return {
-        status: "error",
         message: "Unauthorized",
       };
     }
@@ -109,8 +108,6 @@ export const classroomRoute = new Elysia({
       .leftJoin(userTable, eq(teachTable.userId, userTable.id))
       .where(eq(studyTable.userId, user.id));
 
-    console.log(teachingClassrooms, studyingClassrooms);
-
     return {
       teachingClassrooms,
       studyingClassrooms,
@@ -122,7 +119,6 @@ export const classroomRoute = new Elysia({
       if (!user) {
         set.status = 401;
         return {
-          status: "error",
           message: "Unauthorized",
         };
       }

@@ -30,7 +30,6 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
         Uri.parse('${dotenv.get("BACKEND_URL")}/classroom/'),
         headers: {'Authorization': 'Bearer $token'},
       );
-      debugPrint(res.body);
       final jsonData = classroomResponseFromJson(res.body);
 
       if (res.statusCode == 200) {

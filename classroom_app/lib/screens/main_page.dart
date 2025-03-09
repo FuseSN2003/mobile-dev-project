@@ -37,6 +37,7 @@ class _MainPageState extends State<MainPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errorMessage),
+                backgroundColor: Colors.red,
                 duration: Duration(seconds: 1),
               ),
             );
