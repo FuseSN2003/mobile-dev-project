@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:classroom_app/blocs/assignment_detail/assignment_detail_bloc.dart';
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
 import 'package:classroom_app/component/pdf_view.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -61,6 +64,20 @@ class _AssignmentPageState extends State<AssignmentPage> {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdE6iZ0yrsi0mwiy3UUNuTLlRwVD6seXm0nQ&s",
   ];
 
+  List<File> _selectedFiles = [];
+  Future<void> pickFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true, // Allow multiple file selection
+    );
+    if (result != null) {
+      setState(() {
+        _selectedFiles = result.files.map((file) => File(file.path!)).toList();
+      });
+    } else {
+      debugPrint("No files selected");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +94,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
             final teacher = classroomDetailState.teachers.where(
               (e) => e.id == (authBloc.state as Authenticated).user.id,
             );
+
             if (teacher.isNotEmpty) {
               isTeacher = true;
             }
@@ -279,6 +297,88 @@ class _AssignmentPageState extends State<AssignmentPage> {
                                       context,
                                       "/assignment_student",
                                     ),
+                              )
+                              : SizedBox(),
+                          !isTeacher &&
+                                  assignmentDetailState
+                                          .assignment
+                                          .isSubmitted !=
+                                      true
+                              ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(height: 50),
+                                  _selectedFiles.isNotEmpty
+                                      ? SizedBox(
+                                        height:
+                                            150, // Set a fixed height for the file list
+                                        child: ListView.builder(
+                                          itemCount: _selectedFiles.length,
+                                          itemBuilder: (context, index) {
+                                            String filePath =
+                                                _selectedFiles[index].path;
+                                            // bool isImage = false;
+                                            bool isImage =
+                                                filePath.toLowerCase().endsWith(
+                                                  '.png',
+                                                ) ||
+                                                filePath.toLowerCase().endsWith(
+                                                  '.jpg',
+                                                ) ||
+                                                filePath.toLowerCase().endsWith(
+                                                  '.jpeg',
+                                                ) ||
+                                                filePath.toLowerCase().endsWith(
+                                                  '.gif',
+                                                );
+
+                                            return isImage
+                                                ? Padding(
+                                                  padding: EdgeInsets.all(5),
+                                                  child: Image.file(
+                                                    _selectedFiles[index],
+                                                    height:
+                                                        100, // Set a fixed image height
+                                                    width: 100,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                )
+                                                : ListTile(
+                                                  leading: Icon(
+                                                    Icons.insert_drive_file,
+                                                    color: Colors.white,
+                                                  ),
+                                                  title: Text(
+                                                    filePath.split('/').last,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                );
+                                          },
+                                        ),
+                                      )
+                                      : Text(
+                                        "เลือกไฟล์ที่ต้องการส่ง",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                  SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: pickFiles,
+                                    child: Text("Pick a File"),
+                                  ),
+                                  SizedBox(height: 30),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: CustomButton(
+                                      text: "ส่งงาน",
+                                      colors: Colors.white,
+                                      backGroundColors:
+                                          Theme.of(context).colorScheme.primary,
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                ],
                               )
                               : SizedBox(),
                         ],
