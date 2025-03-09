@@ -63,12 +63,14 @@ export const assignmentTable = pgTable("assignment", {
     .references(() => classroomTable.id, { onDelete: "cascade" }),
   title: text().notNull(),
   description: text().notNull(),
-  dueDate: timestamp("due_date"),
+  dueDate: timestamp("due_date", { withTimezone: true }),
   maxScore: integer("max_score"),
   createdBy: uuid("created_by")
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
 
 export const fileTable = pgTable("file", {
@@ -77,7 +79,9 @@ export const fileTable = pgTable("file", {
   fileType: text("file_type").notNull(),
   url: text().notNull(),
 
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   uploadedBy: uuid("uploaded_by")
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),

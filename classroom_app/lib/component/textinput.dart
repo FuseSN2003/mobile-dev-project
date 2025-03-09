@@ -7,14 +7,14 @@ class CustomTextField extends StatefulWidget {
   final ValueNotifier<bool>? visibilityNotifier;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.label,
     required this.controller,
     this.visibilityNotifier,
-  }) : super(key: key);
+  });
 
   @override
-  _CustomTextFieldState createState() => _CustomTextFieldState();
+  State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {

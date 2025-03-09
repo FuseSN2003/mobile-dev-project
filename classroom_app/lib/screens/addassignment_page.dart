@@ -73,6 +73,17 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
       body: BlocListener<AssignmentBloc, AssignmentState>(
         listener: (context, state) {
           if (state is AddAssignmentSuccess) {
+            final classroomDetailBloc = BlocProvider.of<ClassroomDetailBloc>(
+              context,
+            );
+            final classroomDetailState = classroomDetailBloc.state;
+            if (classroomDetailState is ClassroomDetailLoaded) {
+              classroomDetailBloc.add(
+                FetchClassroomDetail(
+                  classroomId: classroomDetailState.classroom.id,
+                ),
+              );
+            }
             Navigator.pop(context);
           }
         },
@@ -150,7 +161,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                               onPressed: pickFiles,
                               child: Text("Pick a File"),
                             ),
-                            SizedBox(height: 20), 
+                            SizedBox(height: 20),
                             _selectedFiles.isNotEmpty
                                 ? SizedBox(
                                   height:
@@ -278,7 +289,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                                     classroomId: state.classroom.id,
                                     title: _assignmentNameController.text,
                                     description: _assignmentDescController.text,
-                                    dueDate: selectedDate.toString(),
+                                    dueDate: selectedDate!.toLocal().toString(),
                                     score: int.parse(_scoreController.text),
                                     files: _selectedFiles,
                                   ),

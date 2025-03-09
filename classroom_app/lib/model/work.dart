@@ -1,15 +1,15 @@
 class Work {
   final String title;
   final String description;
-  final DateTime created_at;
-  final DateTime due_date;
+  final DateTime createdAt;
+  final DateTime dueDate;
   final int score;
 
   Work({
     required this.title,
     required this.description,
-    required this.created_at,
-    required this.due_date,
+    required this.createdAt,
+    required this.dueDate,
     required this.score,
   });
 }

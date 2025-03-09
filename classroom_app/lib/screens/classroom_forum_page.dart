@@ -21,15 +21,15 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
     Work(
       title: "Project Meeting",
       description: "Discuss project milestones",
-      created_at: DateTime(2024, 2, 20),
-      due_date: DateTime(2024, 2, 18),
+      createdAt: DateTime(2024, 2, 20),
+      dueDate: DateTime(2024, 2, 18),
       score: 10,
     ),
     Work(
       title: "Code Review",
       description: "Review team PRs",
-      created_at: DateTime(2024, 2, 18),
-      due_date: DateTime(2024, 2, 18),
+      createdAt: DateTime(2024, 2, 18),
+      dueDate: DateTime(2024, 2, 18),
       score: 20,
     ),
   ];
@@ -98,9 +98,9 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
                             time:
                                 item.dueDate == null
                                     ? "ไม่มีกำหนด"
-                                    : DateFormat(
-                                      'yyyy-MM-dd',
-                                    ).format(DateTime.parse(item.dueDate!)),
+                                    : DateFormat('yyyy-MM-dd').format(
+                                      DateTime.parse(item.dueDate!).toLocal(),
+                                    ),
                             onPress: () {
                               Navigator.pushNamed(
                                 context,
@@ -151,7 +151,7 @@ class _ClassroomFormPageState extends State<ClassroomForumPage> {
             ),
             Text(work.description, style: TextStyle(color: Colors.white)),
             Text(
-              "Due: ${work.due_date.toLocal()}",
+              "Due: ${work.dueDate.toLocal()}",
               style: TextStyle(color: Colors.white),
             ),
           ],

@@ -68,7 +68,7 @@ class _AssignmentStudentState extends State<AssignmentStudent> {
                   children: [
                     Text(assignmentName),
                     Text(
-                      "ชื่อนักเรียน :${studentNamed}",
+                      "ชื่อนักเรียน :$studentNamed",
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,

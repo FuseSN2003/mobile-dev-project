@@ -32,7 +32,6 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
                     ), // Hamburger menu
                     onPressed: () {
                       Scaffold.of(context).openDrawer();
-                      ; // Open Sidebar Drawer
                     },
                   )
                   : IconButton(

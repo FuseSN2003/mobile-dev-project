@@ -113,9 +113,10 @@ class _ClassroomWorkPageState extends State<ClassroomWorkPage> {
                                   );
                                 }
 
-                                DateTime dateTime = DateTime.parse(
-                                  assignment.dueDate!,
-                                );
+                                DateTime dateTime =
+                                    DateTime.parse(
+                                      assignment.dueDate!,
+                                    ).toLocal();
 
                                 return AssignmentBox(
                                   classRoomName:

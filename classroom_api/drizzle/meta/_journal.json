@@ -43,6 +43,13 @@
       "when": 1741011471483,
       "tag": "0005_add_assignment_submissin_and_submission_attachment_table",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1741511593588,
+      "tag": "0006_time_stamp_with_timezone",
+      "breakpoints": true
     }
   ]
 }
