@@ -234,6 +234,7 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
           const { classroomId, assignmentId } = params;
 
           let assignment;
+          let submissionAttachments: any = [];
 
           if (student) {
             [assignment] = await db
@@ -286,6 +287,26 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
                 assignmentSubmissionTable.isSubmitted,
                 assignmentSubmissionTable.submittedAt
               );
+
+            if (assignment.isSubmitted) {
+              submissionAttachments = await db
+                .select({
+                  url: fileTable.url,
+                  fileType: fileTable.fileType,
+                  fileName: fileTable.fileName,
+                })
+                .from(submissionAttachmentTable)
+                .leftJoin(
+                  fileTable,
+                  eq(fileTable.id, submissionAttachmentTable.fileId)
+                )
+                .where(
+                  and(
+                    eq(submissionAttachmentTable.assignmentId, assignmentId),
+                    eq(submissionAttachmentTable.userId, user.id)
+                  )
+                );
+            }
           } else {
             [assignment] = await db
               .select({
@@ -355,6 +376,7 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
 
           return {
             assignment,
+            submissionAttachments,
           };
         }
       )
@@ -393,10 +415,22 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
 
           const { files } = body;
 
-          await db.insert(assignmentSubmissionTable).values({
-            assignmentId,
-            userId: user.id,
-          });
+          await db
+            .insert(assignmentSubmissionTable)
+            .values({
+              assignmentId,
+              userId: user.id,
+            })
+            .onConflictDoUpdate({
+              target: [
+                assignmentSubmissionTable.assignmentId,
+                assignmentSubmissionTable.userId,
+              ],
+              set: {
+                isSubmitted: true,
+                submittedAt: new Date(),
+              },
+            });
 
           let filesIdResult = [];
           for (const file of files) {
