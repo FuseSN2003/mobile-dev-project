@@ -514,8 +514,80 @@ export const classroomAssignmentRoute = new Elysia({ prefix: "/classroom" })
               )
             );
 
+          await db
+            .delete(submissionAttachmentTable)
+            .where(
+              and(
+                eq(submissionAttachmentTable.userId, user.id),
+                eq(submissionAttachmentTable.assignmentId, assignmentId)
+              )
+            );
+
           return {
             message: "Assignment submission canceled",
+          };
+        }
+      )
+      .get(
+        "/:assignmentId/submitted/:userId",
+        async ({ user, set, student, params }) => {
+          if (!user) {
+            set.status = 401;
+            return {
+              message: "Unauthorized",
+            };
+          }
+
+          if (!student) {
+            set.status = 403;
+            return {
+              message: "Forbidden",
+            };
+          }
+
+          const { assignmentId, userId } = params;
+
+          const [submission] = await db
+            .select({
+              assignmentId: assignmentSubmissionTable.assignmentId,
+              studentName: userTable.username,
+              maxScore: assignmentTable.maxScore,
+              score: assignmentSubmissionTable.score,
+              isSubmitted: assignmentSubmissionTable.isSubmitted,
+              submittedAt: assignmentSubmissionTable.submittedAt,
+              attachments: sql<string[]>`ARRAY_AGG(JSON_BUILD_OBJECT(
+              'url', ${fileTable.url}, 
+              'fileType', ${fileTable.fileType},
+              'fileName', ${fileTable.fileName}
+            )
+          )
+        `.as("attachments"),
+            })
+            .from(assignmentSubmissionTable)
+            .leftJoin(
+              submissionAttachmentTable,
+              and(
+                eq(submissionAttachmentTable.assignmentId, assignmentId),
+                eq(submissionAttachmentTable.userId, userId)
+              )
+            )
+            .leftJoin(
+              fileTable,
+              eq(fileTable.id, submissionAttachmentTable.fileId)
+            )
+            .where(
+              and(
+                eq(assignmentSubmissionTable.assignmentId, assignmentId),
+                eq(assignmentSubmissionTable.userId, userId)
+              )
+            )
+            .groupBy(
+              assignmentSubmissionTable.assignmentId,
+              assignmentSubmissionTable.userId
+            );
+
+          return {
+            submission,
           };
         }
       );

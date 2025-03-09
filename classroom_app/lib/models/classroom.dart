@@ -19,7 +19,7 @@ class Classroom {
   final String id;
   final String name;
   final String description;
-  final String? code;
+  final String code;
   final String createdBy;
 
   Classroom({
@@ -27,7 +27,7 @@ class Classroom {
     required this.name,
     required this.description,
     required this.createdBy,
-    this.code,
+    required this.code,
   });
 
   factory Classroom.fromJson(Map<String, dynamic> json) => Classroom(

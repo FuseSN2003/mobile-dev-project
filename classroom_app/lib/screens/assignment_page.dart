@@ -5,6 +5,7 @@ import 'package:classroom_app/blocs/assignment_detail/assignment_detail_bloc.dar
 import 'package:classroom_app/blocs/auth/auth_bloc.dart';
 import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
 import 'package:classroom_app/component/pdf_view.dart';
+import 'package:classroom_app/screens/student_assignment_page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -316,18 +317,69 @@ class _AssignmentPageState extends State<AssignmentPage> {
                                             .assignment
                                             .submittedStudents !=
                                         null
-                                ? StudentBox(
-                                  label:
-                                      "นักเรียนที่ส่งงาน ${assignmentDetailState.assignment.submittedStudents!.length} / ${assignmentDetailState.assignment.assigned} คน",
-                                  itemList:
-                                      assignmentDetailState
-                                          .assignment
-                                          .submittedStudents!,
-                                  onPress:
-                                      () => Navigator.pushNamed(
-                                        context,
-                                        "/assignment_student",
+                                ? Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          "นักเรียนที่ส่งงาน",
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                       ),
+                                      const SizedBox(height: 20),
+                                      GridView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2, // 2 columns
+                                              crossAxisSpacing: 10,
+                                              mainAxisSpacing: 20,
+                                              childAspectRatio:
+                                                  3.5, // Adjust for UI balance
+                                            ),
+                                        itemCount:
+                                            assignmentDetailState
+                                                .assignment
+                                                .submittedStudents!
+                                                .length,
+                                        itemBuilder: (context, index) {
+                                          return StudentCard(
+                                            name:
+                                                assignmentDetailState
+                                                    .assignment
+                                                    .submittedStudents![index],
+                                            onPress: () {
+                                              Navigator.pushNamed(
+                                                context,
+                                                '/assignment_student',
+                                                arguments: AssignmentStudentArgs(
+                                                  studentName:
+                                                      assignmentDetailState
+                                                          .assignment
+                                                          .submittedStudents![index],
+                                                  assignmentId:
+                                                      assignmentDetailState
+                                                          .assignment
+                                                          .id,
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 )
                                 : SizedBox(),
                             !isTeacher &&

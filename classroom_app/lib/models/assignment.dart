@@ -175,3 +175,71 @@ class AssignmentDetailResponse {
                 : null,
       );
 }
+
+class StudentAssignment {
+  String id;
+  String title;
+  String studentName;
+  String submittedAt;
+  String? dueDate;
+  int? maxScore;
+  int? scoreReceived;
+  List<Attachment>? attachments;
+
+  StudentAssignment({
+    required this.id,
+    required this.title,
+    required this.studentName,
+    required this.submittedAt,
+    this.dueDate,
+    this.maxScore,
+    this.scoreReceived,
+    this.attachments,
+  });
+
+  factory StudentAssignment.fromJson(Map<String, dynamic> json) {
+    return StudentAssignment(
+      id: json['id'],
+      title: json['title'],
+      studentName: json['studentName'],
+      dueDate: json['dueDate'],
+      maxScore: json['maxScore'],
+      scoreReceived: json['scoreReceived'],
+      submittedAt: json['submittedAt'],
+      attachments:
+          json['attachments'] != null
+              ? List<Attachment>.from(
+                json['attachments'].map((x) => Attachment.fromJson(x)),
+              )
+              : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "title": title,
+    "studentName": studentName,
+    "dueDate": dueDate,
+    "maxScore": maxScore,
+    "scoreReceived": scoreReceived,
+    "submittedAt": submittedAt,
+    "attachments": attachments,
+  };
+}
+
+StudentAssignmentListResponse studentAssignmentListResponseFromJSON(
+  String str,
+) => StudentAssignmentListResponse.fromJson(json.decode(str));
+
+class StudentAssignmentListResponse {
+  final StudentAssignment studentAssignment;
+
+  StudentAssignmentListResponse({required this.studentAssignment});
+
+  factory StudentAssignmentListResponse.fromJson(Map<String, dynamic> json) =>
+      StudentAssignmentListResponse(
+        studentAssignment: StudentAssignment.fromJson(
+          json["studentAssignment"],
+        ),
+      );
+}
