@@ -64,11 +64,11 @@ class Sidebar extends StatelessWidget {
                           Navigator.pushNamed(context, '/thingtodo');
                         },
                       ),
-                      MyListtile(
-                        icon: Icons.settings,
-                        text: "การตั้งค่า",
-                        onTap: () {},
-                      ),
+                      // MyListtile(
+                      //   icon: Icons.settings,
+                      //   text: "การตั้งค่า",
+                      //   onTap: () {},
+                      // ),
                     ],
                   ),
                 ),

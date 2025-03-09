@@ -13,3 +13,7 @@ class AssignmentLoaded extends AssignmentState {
 }
 
 class AddAssignmentSuccess extends AssignmentState {}
+
+class SubmitAssignmentSuccess extends AssignmentState {}
+
+class CancelAssignmentSuccess extends AssignmentState {}

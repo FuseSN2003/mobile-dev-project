@@ -155,11 +155,23 @@ AssignmentDetailResponse assignmentDetailResponseFromJSON(String str) =>
 
 class AssignmentDetailResponse {
   final AssignmentDetail assignment;
+  final List<Attachment>? submissionAttachments;
 
-  AssignmentDetailResponse({required this.assignment});
+  AssignmentDetailResponse({
+    required this.assignment,
+    this.submissionAttachments,
+  });
 
   factory AssignmentDetailResponse.fromJson(Map<String, dynamic> json) =>
       AssignmentDetailResponse(
         assignment: AssignmentDetail.fromJson(json['assignment']),
+        submissionAttachments:
+            json['submissionAttachments'] != null
+                ? List<Attachment>.from(
+                  json['submissionAttachments'].map(
+                    (x) => Attachment.fromJson(x),
+                  ),
+                )
+                : null,
       );
 }

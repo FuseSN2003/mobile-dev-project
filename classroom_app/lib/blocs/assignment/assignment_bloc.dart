@@ -14,8 +14,10 @@ part 'assignment_state.dart';
 
 class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
   AssignmentBloc() : super(AssignmentInitial()) {
-    on<AddAssignment>(_onAddAssignment);
     on<FetchAssignment>(_onFetchAssignment);
+    on<AddAssignment>(_onAddAssignment);
+    on<SubmitAssignment>(_onSubmitAssignment);
+    on<CancelAssignment>(_onCancelAssignment);
   }
 
   _onFetchAssignment(
@@ -85,6 +87,71 @@ class AssignmentBloc extends Bloc<AssignmentEvent, AssignmentState> {
       }
     } catch (e) {
       debugPrint("Error on Add Assignment ${e.toString()}");
+    }
+  }
+
+  _onSubmitAssignment(
+    SubmitAssignment event,
+    Emitter<AssignmentState> emit,
+  ) async {
+    final classroomId = event.classroomId;
+    final assignmentId = event.assignmentId;
+
+    try {
+      final token = await getToken();
+
+      final req = http.MultipartRequest(
+        "POST",
+        Uri.parse(
+          "${dotenv.get("BACKEND_URL")}/classroom/$classroomId/assignment/$assignmentId/submit",
+        ),
+      );
+      req.headers['Authorization'] = 'Bearer $token';
+      for (var file in event.files) {
+        String mimeType =
+            lookupMimeType(file.path) ?? 'application/octet-stream';
+
+        req.files.add(
+          await http.MultipartFile.fromPath(
+            'files',
+            file.path,
+            contentType: MediaType.parse(mimeType),
+          ),
+        );
+      }
+
+      final res = await req.send();
+
+      if (res.statusCode == 200) {
+        emit(SubmitAssignmentSuccess());
+      }
+    } catch (e) {
+      debugPrint("Error on Submit Assignment ${e.toString()}");
+    }
+  }
+
+  _onCancelAssignment(
+    CancelAssignment event,
+    Emitter<AssignmentState> emit,
+  ) async {
+    final classroomId = event.classroomId;
+    final assignmentId = event.assignmentId;
+
+    try {
+      final token = await getToken();
+
+      final res = await http.delete(
+        Uri.parse(
+          "${dotenv.get("BACKEND_URL")}/classroom/$classroomId/assignment/$assignmentId/cancel-submit",
+        ),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (res.statusCode == 200) {
+        return emit(CancelAssignmentSuccess());
+      }
+    } catch (e) {
+      debugPrint("Error on Cancel Assignment ${e.toString()}");
     }
   }
 }

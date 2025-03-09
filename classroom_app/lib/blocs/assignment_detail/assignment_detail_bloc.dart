@@ -1,4 +1,5 @@
 import 'package:classroom_app/models/assignment.dart';
+import 'package:classroom_app/models/file.dart';
 import 'package:classroom_app/utills/jwt_token.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,8 @@ class AssignmentDetailBloc
     emit(AssignmentDetailLoading());
     final assignmentId = event.assignmentId;
     final classroomId = event.classroomId;
+    debugPrint("Assignment ID: $assignmentId");
+    debugPrint("Classroom ID: $classroomId");
 
     try {
       final token = await getToken();
@@ -35,7 +38,12 @@ class AssignmentDetailBloc
       final jsonData = assignmentDetailResponseFromJSON(res.body);
 
       if (res.statusCode == 200) {
-        emit(AssignmentDetailLoaded(assignment: jsonData.assignment));
+        emit(
+          AssignmentDetailLoaded(
+            assignment: jsonData.assignment,
+            submissionAttachments: jsonData.submissionAttachments,
+          ),
+        );
       }
     } catch (e) {
       debugPrint("Error on Fetch Assignment Detail ${e.toString()}");

@@ -9,6 +9,10 @@ class AssignmentDetailLoading extends AssignmentDetailState {}
 
 class AssignmentDetailLoaded extends AssignmentDetailState {
   final AssignmentDetail assignment;
+  final List<Attachment>? submissionAttachments;
 
-  AssignmentDetailLoaded({required this.assignment});
+  AssignmentDetailLoaded({
+    required this.assignment,
+    this.submissionAttachments,
+  });
 }
