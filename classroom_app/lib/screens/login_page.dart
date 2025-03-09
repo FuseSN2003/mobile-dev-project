@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
               SnackBar(
                 content: Text(state.message),
                 backgroundColor: Colors.red,
+                duration: Duration(seconds: 1),
               ),
             );
           } else if (state is Authenticated) {

@@ -34,6 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
               SnackBar(
                 content: Text(state.message),
                 backgroundColor: Colors.red,
+                duration: Duration(seconds: 1),
               ),
             );
           }
@@ -137,6 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     "Please agree with the Terms & Conditions",
                                   ),
                                   backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 1),
                                 ),
                               );
                               return;

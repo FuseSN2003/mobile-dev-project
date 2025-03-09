@@ -34,9 +34,12 @@ class _MainPageState extends State<MainPage> {
       body: BlocListener<ClassroomBloc, ClassroomState>(
         listener: (context, state) {
           if (state is FetchClassroomListFailed) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+                duration: Duration(seconds: 1),
+              ),
+            );
           }
         },
         child: SingleChildScrollView(
