@@ -175,20 +175,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
                                           "ส่งวันที่ ${DateTime.parse(assignmentDetailState.assignment.submittedAt!).toLocal()}",
                                         )
                                         : SizedBox(),
-                                    CustomButton(
-                                      text: "แก้ไขงาน",
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          "/addassignment",
-                                        );
-                                      },
-                                      colors: Colors.white,
-                                      backGroundColors:
-                                          Theme.of(context).colorScheme.primary,
-                                      paddingWidth: 8,
-                                      paddingHeight: 10,
-                                    ),
                                   ],
                                 ),
                                 Text("รายละเอียดงาน"),

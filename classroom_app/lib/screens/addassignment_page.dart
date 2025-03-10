@@ -44,15 +44,14 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate ?? DateTime.now(), // Default to today
-      firstDate: DateTime(2000), // Minimum date
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
             primaryColor: Colors.blue,
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-            textTheme: TextTheme(),
           ),
           child: child!,
         );
@@ -99,12 +98,8 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                     style: TextStyle(color: Colors.white),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          "Classroom : ${state.classroom.name}",
-                          style: TextStyle(),
-                        ),
+                        Text("Classroom : ${state.classroom.name}"),
                         SizedBox(height: 10),
                         Text("ชื่องาน :"),
                         SizedBox(height: 10),
@@ -127,107 +122,82 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("รายละเอียดงาน :"),
-                            SizedBox(height: 15),
-                            TextField(
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                              maxLines: 7,
-                              controller: _assignmentDescController,
-                              decoration: InputDecoration(
-                                hintText: "รายละเอียด",
-                                hintStyle: GoogleFonts.inder(
-                                  color: Colors.white54,
-                                  fontSize: 12,
-                                ),
-                                filled: true,
-                                fillColor: Colors.grey[800],
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
+                        Text("รายละเอียดงาน :"),
+                        SizedBox(height: 10),
+                        TextField(
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          maxLines: 7,
+                          controller: _assignmentDescController,
+                          decoration: InputDecoration(
+                            hintText: "รายละเอียด",
+                            hintStyle: GoogleFonts.inder(
+                              color: Colors.white54,
+                              fontSize: 12,
                             ),
-                          ],
+                            filled: true,
+                            fillColor: Colors.grey[800],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
                         ),
                         SizedBox(height: 10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: pickFiles,
-                              child: Text("Pick a File"),
-                            ),
-                            SizedBox(height: 20),
-                            _selectedFiles.isNotEmpty
-                                ? SizedBox(
-                                  height:
-                                      150, // Set a fixed height for the file list
-                                  child: ListView.builder(
-                                    itemCount: _selectedFiles.length,
-                                    itemBuilder: (context, index) {
-                                      String filePath =
-                                          _selectedFiles[index].path;
-                                      // bool isImage = false;
-                                      bool isImage =
-                                          filePath.toLowerCase().endsWith(
-                                            '.png',
-                                          ) ||
-                                          filePath.toLowerCase().endsWith(
-                                            '.jpg',
-                                          ) ||
-                                          filePath.toLowerCase().endsWith(
-                                            '.jpeg',
-                                          ) ||
-                                          filePath.toLowerCase().endsWith(
-                                            '.gif',
-                                          );
-
-                                      return isImage
-                                          ? Padding(
-                                            padding: EdgeInsets.all(5),
-                                            child: Image.file(
-                                              _selectedFiles[index],
-                                              height:
-                                                  100, // Set a fixed image height
-                                              width: 100,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          )
-                                          : ListTile(
-                                            leading: Icon(
-                                              Icons.insert_drive_file,
-                                              color: Colors.white,
-                                            ),
-                                            title: Text(
-                                              filePath.split('/').last,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          );
-                                    },
-                                  ),
-                                )
-                                : Text(
-                                  "No files selected",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                          ],
+                        ElevatedButton(
+                          onPressed: pickFiles,
+                          child: Text("Pick a File"),
                         ),
+                        SizedBox(height: 10),
+                        _selectedFiles.isNotEmpty
+                            ? SizedBox(
+                              height: 150,
+                              child: ListView.builder(
+                                itemCount: _selectedFiles.length,
+                                itemBuilder: (context, index) {
+                                  String filePath = _selectedFiles[index].path;
+                                  bool isImage =
+                                      filePath.toLowerCase().endsWith('.png') ||
+                                      filePath.toLowerCase().endsWith('.jpg') ||
+                                      filePath.toLowerCase().endsWith(
+                                        '.jpeg',
+                                      ) ||
+                                      filePath.toLowerCase().endsWith('.gif');
+
+                                  return isImage
+                                      ? Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Image.file(
+                                          _selectedFiles[index],
+                                          height: 100,
+                                          width: 100,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                      : ListTile(
+                                        leading: Icon(
+                                          Icons.insert_drive_file,
+                                          color: Colors.white,
+                                        ),
+                                        title: Text(
+                                          filePath.split('/').last,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      );
+                                },
+                              ),
+                            )
+                            : Text(
+                              "No files selected",
+                              style: TextStyle(color: Colors.white),
+                            ),
                         SizedBox(height: 20),
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text("กำหนดส่ง : $date"),
+                            SizedBox(width: 10),
                             ElevatedButton(
                               onPressed: () => _selectDate(context),
-                              child: const Text("Pick a Date"),
+                              child: Text("Pick a Date"),
                             ),
                           ],
                         ),
@@ -236,43 +206,40 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                           children: [
                             Text("คะแนน :"),
                             SizedBox(width: 20),
-                            SizedBox(
-                              width: 100,
-                              child: Expanded(
-                                child: TextField(
-                                  style: TextStyle(
-                                    color: Colors.white,
+                            Expanded(
+                              child: TextField(
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                                maxLines: 1,
+                                controller: _scoreController,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  hintText: "คะแนน",
+                                  hintStyle: GoogleFonts.inder(
+                                    color: Colors.white54,
                                     fontSize: 12,
                                   ),
-                                  maxLines: 1,
-                                  controller: _scoreController,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    hintText: "คะแนน",
-                                    hintStyle: GoogleFonts.inder(
-                                      color: Colors.white54,
-                                      fontSize: 12,
+                                  filled: true,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
+                                      width: 2,
                                     ),
-                                    filled: true,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.secondary,
-                                        width: 2,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.secondary,
-                                        width: 2,
-                                      ), // Border color when focused
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
+                                      width: 2,
                                     ),
                                   ),
                                 ),
@@ -280,6 +247,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -292,10 +260,11 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                                     title: _assignmentNameController.text,
                                     description: _assignmentDescController.text,
                                     dueDate:
-                                        selectedDate != null
-                                            ? selectedDate!.toLocal().toString()
-                                            : "",
-                                    score: int.parse(_scoreController.text),
+                                        selectedDate?.toLocal().toString() ??
+                                        "",
+                                    score:
+                                        int.tryParse(_scoreController.text) ??
+                                        0,
                                     files: _selectedFiles,
                                   ),
                                 );
@@ -303,9 +272,7 @@ class _AddAssignmentPageState extends State<AddAssignmentPage> {
                             ),
                             CustomButton(
                               text: "ยกเลิก",
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                              onPressed: () => Navigator.pop(context),
                               colors: Colors.white,
                             ),
                           ],
