@@ -1,14 +1,13 @@
-import { db } from "@/libs/db";
+import { db } from "@/lib/db";
 import {
-  assignmentSubmissionTable,
   assignmentTable,
   classroomTable,
   studyTable,
   teachTable,
-  userTable,
-} from "@/libs/db/schema";
+  userTable
+} from "@/lib/db/schema";
 import { middleware } from "@/middleware";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomRoute = new Elysia({

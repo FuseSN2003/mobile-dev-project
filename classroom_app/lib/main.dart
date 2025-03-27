@@ -1,40 +1,39 @@
-import 'package:classroom_app/blocs/assignment/assignment_bloc.dart';
-import 'package:classroom_app/blocs/assignment_detail/assignment_detail_bloc.dart';
-import 'package:classroom_app/blocs/assignment_list/assignment_list_bloc.dart';
-import 'package:classroom_app/blocs/auth/auth_bloc.dart';
-import 'package:classroom_app/blocs/classroom/classroom_bloc.dart';
-import 'package:classroom_app/blocs/classroom_detail/classroom_detail_bloc.dart';
-import 'package:classroom_app/blocs/student_assignment/student_assignment_bloc.dart';
+import 'package:classroom_app/blocs/auth_bloc/auth_bloc.dart';
+import 'package:classroom_app/core/constant.dart';
+import 'package:classroom_app/screens/home_screen.dart';
+import 'package:classroom_app/screens/login_screen.dart';
+import 'package:classroom_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import './screens/assignment_page.dart';
-import './screens/classroom_person_page.dart';
-import './screens/classroom_work_page.dart';
-import './screens/login_page.dart';
-import './screens/main_page.dart';
-import './screens/register_page.dart';
-import './screens/thingtodo_page.dart';
 import './theme/colors.dart';
-import 'screens/addassignment_page.dart';
-import 'screens/classroom_forum_page.dart';
-import 'screens/student_assignment_page.dart';
 
-void main() async {
-  await dotenv.load(fileName: '.env');
+class NavigationService {
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
+  static void navigateToLogin() {
+    navigatorKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => LoginScreen()),
+      (route) => false,
+    );
+  }
+
+  static void navigateToHome() {
+    navigatorKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => HomeScreen()),
+      (route) => false,
+    );
+  }
+}
+
+void main() {
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthBloc()..add(AppStarted())),
-        BlocProvider(create: (context) => ClassroomBloc()),
-        BlocProvider(create: (context) => ClassroomDetailBloc()),
-        BlocProvider(create: (context) => AssignmentBloc()),
-        BlocProvider(create: (context) => AssignmentDetailBloc()),
-        BlocProvider(create: (context) => AssignmentListBloc()),
-        BlocProvider(create: (context) => StudentAssignmentBloc()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -43,57 +42,21 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Classroom App',
-      theme: darkMode,
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/': (context) => WithAuth(child: MainPage()),
-        '/login': (context) => LoginPage(),
-        '/register': (context) => RegisterPage(),
-        '/thingtodo': (context) => ThingtodoPage(),
-        '/classroom_form': (context) => ClassroomForumPage(),
-        '/classroom_work': (context) => ClassroomWorkPage(),
-        '/classroom_person': (context) => ClassroomPersonPage(),
-        '/addassignment': (context) => AddAssignmentPage(),
-        '/assignment': (context) => AssignmentPage(),
-        '/assignment_student': (context) => AssignmentStudent(),
-      },
-    );
-  }
-}
-
-class WithAuth extends StatelessWidget {
-  final Widget child;
-  const WithAuth({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is UnAuthenticated) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/login',
-              (route) => false,
-            );
-          });
+        if (state is AuthUnauthenticated) {
+          NavigationService.navigateToLogin();
+        } else if (state is AuthAuthenticated) {
+          NavigationService.navigateToHome();
         }
       },
-      builder: (context, state) {
-        if (state is AuthChecking) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        } else if (state is UnAuthenticated) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        } else {
-          return child;
-        }
-      },
+      child: MaterialApp(
+        title: AppConstant.appName,
+        theme: darkMode,
+        debugShowCheckedModeBanner: false,
+        navigatorKey: NavigationService.navigatorKey,
+        home: const SplashScreen(),
+      ),
     );
   }
 }

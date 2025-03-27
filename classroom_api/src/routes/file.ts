@@ -1,5 +1,5 @@
-import { db } from "@/libs/db";
-import { fileTable } from "@/libs/db/schema";
+import { db } from "@/lib/db";
+import { fileTable } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import Elysia from "elysia";
 

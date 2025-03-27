@@ -10,51 +10,58 @@ import { assignmentRoute } from "./routes/assignment";
 const app = new Elysia()
   .use(cors())
   .use(swagger())
-  .onError(({ error, code, set }) => {
+  .onError(({ code, error, set }) => {
     switch (code) {
+      case "VALIDATION": {
+        set.status = 400;
+
+        const validatorError = error.validator.Errors(error.value).First();
+
+        const path = validatorError.path.split("/")[1];
+        const pathValue = validatorError.value;
+
+        if (pathValue === undefined || pathValue.trim() === "") {
+          return {
+            status: "error",
+            message: `${path} is required`,
+          };
+        }
+
+        if (validatorError.schema.error) {
+          return {
+            status: "error",
+            message: validatorError.schema.error,
+          };
+        }
+
+        if (validatorError.schema.enum) {
+          return {
+            status: "error",
+            message: `${path} must be one of ${validatorError.schema.enum.join(
+              ", "
+            )}`,
+          };
+        }
+
+        return {
+          status: "error",
+          message: `${path} ${validatorError.message.toLowerCase()}`,
+        };
+      }
       case "NOT_FOUND": {
         set.status = 404;
         return {
-          message: "Not found",
-        };
-      }
-      case "VALIDATION": {
-        set.status = 400;
-        const pathError = error.validator
-          .Errors(error.value)
-          .First()
-          .path.split("/")[1];
-
-        if (
-          !error.validator.Errors(error.value).First().value &&
-          pathError
-        ) {
-          return {
-            message: `${pathError} is required`,
-          };
-        }
-
-        if (pathError) {
-          return {
-            message: `${pathError} ${error.validator
-              .Errors(error.value)
-              .First()
-              .message.toLowerCase()}`,
-          };
-        }
-
-        return {
-          message: `${error.validator
-            .Errors(error.value)
-            .First()
-            .message.toLowerCase()}`,
+          status: "error",
+          message: "NOT FOUND",
         };
       }
       default: {
         console.error(error);
+
         set.status = 500;
         return {
-          message: "Internal server error",
+          status: "error",
+          message: "Internal Server Error",
         };
       }
     }

@@ -1,4 +1,4 @@
-import { db } from "@/libs/db";
+import { db } from "@/lib/db";
 import {
   assignmentAttachmentTable,
   assignmentSubmissionTable,
@@ -9,8 +9,8 @@ import {
   submissionAttachmentTable,
   teachTable,
   userTable,
-} from "@/libs/db/schema";
-import { uploadFile } from "@/libs/upload-file";
+} from "@/lib/db/schema";
+import { uploadFile } from "@/lib/upload-file";
 import { middleware } from "@/middleware";
 import { and, desc, eq, is, or, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
