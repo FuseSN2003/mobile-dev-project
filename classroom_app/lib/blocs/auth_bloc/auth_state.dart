@@ -25,6 +25,12 @@ class AuthUnauthenticated extends AuthState {
 
 class LoginLoading extends AuthState {}
 
+class LoginSuccess extends AuthState {
+  final String message;
+
+  LoginSuccess({required this.message});
+}
+
 class LoginFailed extends AuthState {
   final String message;
 

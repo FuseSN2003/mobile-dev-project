@@ -111,9 +111,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SnackBar(
                 content: Text(
                   state.message,
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
-                backgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 duration: Duration(seconds: 1),
               ),
             );
@@ -170,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hintText: 'Enter your username',
                             labelText: 'Username',
                             filled: true,
-                            fillColor: Colors.grey[800],
+                            fillColor: Theme.of(context).colorScheme.secondary,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -207,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hintText: 'Enter your email',
                             labelText: 'Email',
                             filled: true,
-                            fillColor: Colors.grey[800],
+                            fillColor: Theme.of(context).colorScheme.secondary,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -248,7 +251,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hintText: 'Enter your password',
                             labelText: 'Password',
                             filled: true,
-                            fillColor: Colors.grey[800],
+                            fillColor: Theme.of(context).colorScheme.secondary,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -299,7 +302,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hintText: 'Enter confirm-password',
                             labelText: 'Confirm-password',
                             filled: true,
-                            fillColor: Colors.grey[800],
+                            fillColor: Theme.of(context).colorScheme.secondary,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,

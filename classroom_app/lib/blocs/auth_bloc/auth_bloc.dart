@@ -61,6 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final user = User.fromJson(jsonData['user']);
         final String token = jsonData['token'];
         await saveToken(token);
+        emit(LoginSuccess(message: jsonData['message']));
         return emit(AuthAuthenticated(token: token, user: user));
       } else {
         return emit(LoginFailed(message: jsonData['message']));

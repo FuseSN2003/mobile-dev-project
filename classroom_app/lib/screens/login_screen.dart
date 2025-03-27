@@ -65,7 +65,21 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthAuthenticated) {
+          if (state is LoginSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  state.message,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                duration: Duration(seconds: 1),
+              ),
+            );
+          } else if (state is AuthAuthenticated) {
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (BuildContext context) => const HomeScreen(),
@@ -124,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             hintText: 'Username',
                             labelText: 'Username',
                             filled: true,
-                            fillColor: Colors.grey[800],
+                            fillColor: Theme.of(context).colorScheme.secondary,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -162,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             hintText: 'Password',
                             labelText: 'Password',
                             filled: true,
-                            fillColor: Colors.grey[800],
+                            fillColor: Theme.of(context).colorScheme.secondary,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
