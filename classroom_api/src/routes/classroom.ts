@@ -71,6 +71,10 @@ export const classroomRoute = new Elysia({
           sql<string>`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
             "createdBy"
           ),
+        studentCount:
+          sql<number>`(SELECT COUNT(*) FROM ${studyTable} WHERE ${studyTable.classroomId} = ${classroomTable.id})`
+            .mapWith(Number)
+            .as("studentCount"),
       })
       .from(classroomTable)
       .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))

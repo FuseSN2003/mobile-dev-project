@@ -92,7 +92,10 @@ class CustomDrawer extends StatelessWidget {
                                       alignment: Alignment.centerLeft,
                                       child: Text("ชั้นเรียนที่สอน"),
                                     ),
-                                    ListView.builder(
+                                    ListView.separated(
+                                      separatorBuilder:
+                                          (context, index) =>
+                                              const SizedBox(height: 12),
                                       physics:
                                           const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
@@ -105,7 +108,7 @@ class CustomDrawer extends StatelessWidget {
                                           context: context,
                                           title: classroom.name,
                                           subtitle: classroom.description,
-                                          icon: Icons.class_,
+                                          icon: Icons.class_rounded,
                                           onTap: () {},
                                         );
                                       },
@@ -132,11 +135,14 @@ class CustomDrawer extends StatelessWidget {
                                   children: [
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child: Text("ชั้นเรียนที่เรียน"),
+                                      child: Text("ชั้นเรียนที่เข้าร่วม"),
                                     ),
-                                    ListView.builder(
+                                    ListView.separated(
                                       physics:
                                           const NeverScrollableScrollPhysics(),
+                                      separatorBuilder:
+                                          (context, index) =>
+                                              const SizedBox(height: 12),
                                       shrinkWrap: true,
                                       padding: EdgeInsets.zero,
                                       itemCount: studyingClassrooms.length,
@@ -147,7 +153,7 @@ class CustomDrawer extends StatelessWidget {
                                           context: context,
                                           title: classroom.name,
                                           subtitle: classroom.description,
-                                          icon: Icons.class_,
+                                          icon: Icons.class_rounded,
                                           onTap: () {},
                                         );
                                       },

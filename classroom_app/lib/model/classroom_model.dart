@@ -3,12 +3,14 @@ class Classroom {
   final String name;
   final String description;
   final String createdBy;
+  final int? studentCount;
 
   Classroom({
     required this.id,
     required this.name,
     required this.description,
     required this.createdBy,
+    this.studentCount,
   });
 
   factory Classroom.fromJson(Map<String, dynamic> json) => Classroom(
@@ -16,6 +18,7 @@ class Classroom {
     name: json["name"],
     description: json["description"],
     createdBy: json["createdBy"],
+    studentCount: json["studentCount"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -23,5 +26,6 @@ class Classroom {
     "name": name,
     "description": description,
     "createdBy": createdBy,
+    "studentCount": studentCount,
   };
 }

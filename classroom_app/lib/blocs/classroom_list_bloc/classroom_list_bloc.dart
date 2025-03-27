@@ -46,6 +46,7 @@ class ClassroomListBloc extends Bloc<ClassroomListEvent, ClassroomListState> {
       }
     } catch (e) {
       debugPrint(e.toString());
+      return emit(FetchClassroomListFailed(message: "Something went wrong"));
     }
   }
 }
