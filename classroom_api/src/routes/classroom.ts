@@ -4,14 +4,14 @@ import {
   classroomTable,
   studyTable,
   teachTable,
-  userTable
+  userTable,
 } from "@/lib/db/schema";
 import { middleware } from "@/middleware";
 import { desc, eq, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomRoute = new Elysia({
-  prefix: "/classroom",
+  prefix: "/c",
 })
   .use(middleware)
   .post(
@@ -20,27 +20,13 @@ export const classroomRoute = new Elysia({
       if (!user) {
         set.status = 401;
         return {
-          message: "Unauthorized",
-        };
-      }
-
-      const [userData] = await db
-        .select({ id: userTable.id })
-        .from(userTable)
-        .where(eq(userTable.id, user.id));
-      if (!userData) {
-        set.status = 401;
-        return {
+          status: "error",
           message: "Unauthorized",
         };
       }
 
       const { name, description } = body;
-      if (!name) {
-        return {
-          message: "Classroom Name is Required",
-        };
-      }
+
       const [createdClassroom] = await db
         .insert(classroomTable)
         .values({
@@ -56,6 +42,7 @@ export const classroomRoute = new Elysia({
       });
 
       return {
+        status: "success",
         message: "Classroom created successfully",
         classroomId: createdClassroom.id,
       };
@@ -70,6 +57,7 @@ export const classroomRoute = new Elysia({
   .get("/", async ({ user }) => {
     if (!user) {
       return {
+        status: "error",
         message: "Unauthorized",
       };
     }
@@ -80,10 +68,9 @@ export const classroomRoute = new Elysia({
         name: classroomTable.name,
         description: classroomTable.description,
         createdBy:
-          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
+          sql<string>`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
             "createdBy"
           ),
-        code: classroomTable.code,
       })
       .from(classroomTable)
       .leftJoin(teachTable, eq(teachTable.classroomId, classroomTable.id))
@@ -96,10 +83,9 @@ export const classroomRoute = new Elysia({
         name: classroomTable.name,
         description: classroomTable.description,
         createdBy:
-          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
+          sql<string>`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
             "createdBy"
           ),
-        code: classroomTable.code,
       })
       .from(classroomTable)
       .leftJoin(studyTable, eq(studyTable.classroomId, classroomTable.id))
@@ -108,6 +94,7 @@ export const classroomRoute = new Elysia({
       .where(eq(studyTable.userId, user.id));
 
     return {
+      status: "success",
       teachingClassrooms,
       studyingClassrooms,
     };

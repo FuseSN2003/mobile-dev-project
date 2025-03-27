@@ -103,7 +103,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          elevation: 0,
+          title: Text(
+            AppConstant.appName,
+            style: GoogleFonts.kaushanScript(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          centerTitle: true,
+        ),
+      ),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is RegisterSuccess) {
@@ -139,17 +155,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Center(
-                    child: Text(
-                      AppConstant.appName,
-                      style: GoogleFonts.kaushanScript(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 64),
                   Text(
                     'Register',
                     textAlign: TextAlign.center,
@@ -162,6 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Form(
                     key: _formKey,
                     child: Column(
+                      spacing: 20,
                       children: [
                         TextFormField(
                           controller: _usernameController,
@@ -199,7 +205,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ? 'Please enter your username'
                                       : null,
                         ),
-                        SizedBox(height: 24),
                         TextFormField(
                           controller: _emailController,
                           decoration: InputDecoration(
@@ -239,7 +244,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 24),
                         TextFormField(
                           controller: _passwordController,
                           obscureText: !_isPasswordVisible,
@@ -290,7 +294,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ? 'Please enter your password'
                                       : null,
                         ),
-                        SizedBox(height: 24),
                         TextFormField(
                           controller: _confirmPasswordController,
                           obscureText: !_isConfirmPasswordVisible,
@@ -345,7 +348,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 12),
                         Row(
                           children: [
                             Checkbox(
@@ -368,7 +370,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 32),
                         BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
                             return ElevatedButton(
@@ -409,46 +410,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             );
                           },
                         ),
+                        Center(
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Enjoy your ',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'classes',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ), // Change color for "classes"
+                                ),
+                                TextSpan(
+                                  text: ' and make every ',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'lesson',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ), // Change color for "lesson"
+                                ),
+                                TextSpan(
+                                  text: ' count!',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
-                    ),
-                  ),
-                  SizedBox(height: 32),
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Enjoy your ',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'classes',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                            ), // Change color for "classes"
-                          ),
-                          TextSpan(
-                            text: ' and make every ',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'lesson',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                            ), // Change color for "lesson"
-                          ),
-                          TextSpan(
-                            text: ' count!',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ],

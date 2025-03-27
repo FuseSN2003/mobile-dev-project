@@ -1,4 +1,5 @@
 import 'package:classroom_app/blocs/auth_bloc/auth_bloc.dart';
+import 'package:classroom_app/blocs/classroom_list_bloc/classroom_list_bloc.dart';
 import 'package:classroom_app/core/constant.dart';
 import 'package:classroom_app/screens/home_screen.dart';
 import 'package:classroom_app/screens/login_screen.dart';
@@ -32,6 +33,7 @@ void main() {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthBloc()..add(AppStarted())),
+        BlocProvider(create: (context) => ClassroomListBloc()),
       ],
       child: const MyApp(),
     ),

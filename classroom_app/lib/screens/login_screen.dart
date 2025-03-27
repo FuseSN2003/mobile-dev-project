@@ -63,6 +63,17 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          AppConstant.appName,
+          style: GoogleFonts.kaushanScript(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
@@ -98,17 +109,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Center(
-                    child: Text(
-                      AppConstant.appName,
-                      style: GoogleFonts.kaushanScript(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 64),
                   Text(
                     'Welcome',
                     textAlign: TextAlign.center,
@@ -127,6 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Form(
                     key: _formKey,
                     child: Column(
+                      spacing: 20,
                       children: [
                         TextFormField(
                           controller: _usernameController,
@@ -164,7 +165,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ? 'Please enter your username'
                                       : null,
                         ),
-                        SizedBox(height: 24),
                         TextFormField(
                           controller: _passwordController,
                           obscureText: !_isPasswordVisible,
@@ -215,7 +215,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ? 'Please enter your password'
                                       : null,
                         ),
-                        SizedBox(height: 32),
                         BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
                             return ElevatedButton(
@@ -258,7 +257,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                           },
                         ),
-                        const SizedBox(height: 32),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -285,7 +283,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 32),
                         Center(
                           child: RichText(
                             text: TextSpan(

@@ -161,8 +161,6 @@ export const authRoute = new Elysia({ prefix: "/auth" })
       .from(userTable)
       .where(eq(userTable.id, userId));
 
-    console.log(user);
-
     if (!user) {
       set.status = 401;
       return {

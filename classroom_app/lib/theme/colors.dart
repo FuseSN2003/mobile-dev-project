@@ -10,4 +10,5 @@ ThemeData darkMode = ThemeData(
     error: Colors.red,
     onSecondary: Color(0xFF151414),
   ),
+  useMaterial3: true,
 );
