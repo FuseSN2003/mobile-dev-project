@@ -109,6 +109,7 @@ export const classroomRoute = new Elysia({
       if (!user) {
         set.status = 401;
         return {
+          status: "error",
           message: "Unauthorized",
         };
       }
@@ -121,8 +122,9 @@ export const classroomRoute = new Elysia({
         .where(eq(classroomTable.code, code));
 
       if (!classroom) {
-        set.status = 400;
+        set.status = 404;
         return {
+          status: "error",
           message: "Invalid classroom code",
         };
       }
@@ -140,6 +142,7 @@ export const classroomRoute = new Elysia({
         });
 
       return {
+        status: "success",
         message: "Joined classroom successfully",
         classroomId: result.id,
       };

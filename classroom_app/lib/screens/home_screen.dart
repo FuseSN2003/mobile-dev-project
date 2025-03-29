@@ -1,3 +1,4 @@
+import 'package:classroom_app/blocs/classroom_bloc/classroom_bloc.dart';
 import 'package:classroom_app/blocs/classroom_list_bloc/classroom_list_bloc.dart';
 import 'package:classroom_app/widgets/appbar.dart';
 import 'package:classroom_app/widgets/classroom_card.dart';
@@ -26,8 +27,40 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: CustomDrawer(),
       body: DefaultTabController(
         length: 2,
-        child: BlocListener<ClassroomListBloc, ClassroomListState>(
-          listener: (context, state) {},
+        child: BlocListener<ClassroomBloc, ClassroomState>(
+          listener: (context, state) {
+            if (state is CreateClassroomSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
+              );
+              context.read<ClassroomListBloc>().add(FetchClassroomList());
+            } else if (state is CreateClassroomFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
+            } else if (state is JoinClassroomSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
+              );
+              context.read<ClassroomListBloc>().add(FetchClassroomList());
+            } else if (state is JoinClassroomFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
+            }
+          },
           child: SafeArea(
             child: Column(
               children: [
@@ -125,83 +158,114 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text("สร้างชั้นเรียน"),
-          content: Form(
-            key: formKey,
-            child: Column(
-              spacing: 12,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: 'ชื่อชั้นเรียน',
-                    filled: true,
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 2,
+        return BlocListener<ClassroomBloc, ClassroomState>(
+          listener: (context, state) {
+            if (state is CreateClassroomSuccess) {
+              Navigator.of(context).pop();
+            }
+          },
+          child: AlertDialog(
+            title: Text("สร้างชั้นเรียน"),
+            content: Form(
+              key: formKey,
+              child: Column(
+                spacing: 12,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      labelText: 'ชื่อชั้นเรียน',
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
                       ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.error,
-                        width: 2,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.error,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    validator:
+                        (value) =>
+                            value == null || value.isEmpty
+                                ? 'กรุณากรอกชื่อชั้นเรียน'
+                                : null,
+                  ),
+                  TextFormField(
+                    controller: descriptionController,
+                    decoration: InputDecoration(
+                      labelText: 'คำอธิบายชั้นเรียน',
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.error,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
-                  validator:
-                      (value) =>
-                          value == null || value.isEmpty
-                              ? 'กรุณากรอกชื่อชั้นเรียน'
-                              : null,
-                ),
-                TextFormField(
-                  controller: descriptionController,
-                  decoration: InputDecoration(
-                    labelText: 'คำอธิบายชั้นเรียน',
-                    filled: true,
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.error,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("ยกเลิก"),
+              ),
+              BlocBuilder<ClassroomBloc, ClassroomState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed:
+                        state is! CreateClassroomLoading
+                            ? () {
+                              if (formKey.currentState!.validate()) {
+                                context.read<ClassroomBloc>().add(
+                                  CreateClassroom(
+                                    name: nameController.text,
+                                    description: descriptionController.text,
+                                  ),
+                                );
+                              }
+                            }
+                            : null,
+                    child:
+                        state is CreateClassroomLoading
+                            ? CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            )
+                            : Text("สร้างชั้นเรียน"),
+                  );
+                },
+              ),
+            ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("ยกเลิก"),
-            ),
-            ElevatedButton(onPressed: () {}, child: Text("สร้าง")),
-          ],
         );
       },
     );
@@ -214,57 +278,85 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text("เข้าร่วมชั้นเรียน"),
-          content: Form(
-            key: formKey,
-            child: Column(
-              spacing: 12,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: codeController,
-                  decoration: InputDecoration(
-                    labelText: 'รหัสชั้นเรียน',
-                    filled: true,
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 2,
+        return BlocListener<ClassroomBloc, ClassroomState>(
+          listener: (context, state) {
+            if (state is JoinClassroomSuccess) {
+              Navigator.of(context).pop();
+            }
+          },
+          child: AlertDialog(
+            title: Text("เข้าร่วมชั้นเรียน"),
+            content: Form(
+              key: formKey,
+              child: Column(
+                spacing: 12,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: codeController,
+                    decoration: InputDecoration(
+                      labelText: 'รหัสชั้นเรียน',
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
                       ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.error,
-                        width: 2,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.error,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
+                    validator:
+                        (value) =>
+                            value == null || value.isEmpty
+                                ? 'กรุณากรอกรหัสชั้นเรียน'
+                                : null,
                   ),
-                  validator:
-                      (value) =>
-                          value == null || value.isEmpty
-                              ? 'กรุณากรอกรหัสชั้นเรียน'
-                              : null,
-                ),
-              ],
+                ],
+              ),
             ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("ยกเลิก"),
+              ),
+              BlocBuilder<ClassroomBloc, ClassroomState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed:
+                        state is! JoinClassroomLoading
+                            ? () {
+                              if (formKey.currentState!.validate()) {
+                                context.read<ClassroomBloc>().add(
+                                  JoinClassroom(code: codeController.text),
+                                );
+                              }
+                            }
+                            : null,
+                    child:
+                        state is JoinClassroomLoading
+                            ? CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            )
+                            : Text("เข้าร่วมชั้นเรียน"),
+                  );
+                },
+              ),
+            ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("ยกเลิก"),
-            ),
-            ElevatedButton(onPressed: () {}, child: Text("เข้าร่วม")),
-          ],
         );
       },
     );

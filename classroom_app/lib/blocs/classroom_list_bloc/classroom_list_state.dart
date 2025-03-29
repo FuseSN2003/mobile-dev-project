@@ -1,6 +1,10 @@
 part of 'classroom_list_bloc.dart';
 
-class ClassroomListState {}
+@immutable
+sealed class ClassroomListState extends Equatable {
+  @override
+  List<Object> get props => [];
+}
 
 class ClassroomListInitial extends ClassroomListState {}
 
