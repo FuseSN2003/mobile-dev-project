@@ -3,6 +3,7 @@ class Classroom {
   final String name;
   final String description;
   final String createdBy;
+  final String? code;
   final int? studentCount;
 
   Classroom({
@@ -10,6 +11,7 @@ class Classroom {
     required this.name,
     required this.description,
     required this.createdBy,
+    this.code,
     this.studentCount,
   });
 
@@ -18,6 +20,7 @@ class Classroom {
     name: json["name"],
     description: json["description"],
     createdBy: json["createdBy"],
+    code: json["code"],
     studentCount: json["studentCount"],
   );
 
@@ -26,6 +29,7 @@ class Classroom {
     "name": name,
     "description": description,
     "createdBy": createdBy,
+    "code": code,
     "studentCount": studentCount,
   };
 }

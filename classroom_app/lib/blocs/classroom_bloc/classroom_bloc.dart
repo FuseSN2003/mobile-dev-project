@@ -36,18 +36,18 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
       final jsonData = jsonDecode(response.body);
 
       if (jsonData['status'] == 'success') {
-        return emit(
+        emit(
           CreateClassroomSuccess(
             classroomId: jsonData['classroomId'],
             message: jsonData['message'],
           ),
         );
       } else {
-        return emit(CreateClassroomFailed(message: jsonData['message']));
+        emit(CreateClassroomFailed(message: jsonData['message']));
       }
     } catch (e) {
       debugPrint(e.toString());
-      return emit(CreateClassroomFailed(message: "Something went wrong"));
+      emit(CreateClassroomFailed(message: "Something went wrong"));
     }
   }
 
@@ -67,18 +67,18 @@ class ClassroomBloc extends Bloc<ClassroomEvent, ClassroomState> {
       final jsonData = jsonDecode(response.body);
 
       if (jsonData['status'] == 'success') {
-        return emit(
+        emit(
           JoinClassroomSuccess(
             classroomId: jsonData['classroomId'],
             message: jsonData['message'],
           ),
         );
       } else {
-        return emit(JoinClassroomFailed(message: jsonData['message']));
+        emit(JoinClassroomFailed(message: jsonData['message']));
       }
     } catch (e) {
       debugPrint(e.toString());
-      return emit(JoinClassroomFailed(message: "Something went wrong"));
+      emit(JoinClassroomFailed(message: "Something went wrong"));
     }
   }
 }

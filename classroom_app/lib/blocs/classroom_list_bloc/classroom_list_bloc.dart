@@ -21,7 +21,7 @@ class ClassroomListBloc extends Bloc<ClassroomListEvent, ClassroomListState> {
     Emitter<ClassroomListState> emit,
   ) async {
     emit(ClassroomListLoading());
-    
+
     final token = await getToken();
 
     try {
@@ -40,18 +40,18 @@ class ClassroomListBloc extends Bloc<ClassroomListEvent, ClassroomListState> {
           jsonData['studyingClassrooms'].map((x) => Classroom.fromJson(x)),
         );
 
-        return emit(
+        emit(
           ClassroomListLoaded(
             teachingClassrooms: teachingClassrooms,
             studyingClassrooms: studyingClassrooms,
           ),
         );
       } else {
-        return emit(FetchClassroomListFailed(message: jsonData['message']));
+        emit(FetchClassroomListFailed(message: jsonData['message']));
       }
     } catch (e) {
       debugPrint(e.toString());
-      return emit(FetchClassroomListFailed(message: "Something went wrong"));
+      emit(FetchClassroomListFailed(message: "Something went wrong"));
     }
   }
 }

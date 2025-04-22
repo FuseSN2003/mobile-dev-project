@@ -34,13 +34,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (jsonData['status'] == 'success') {
         final user = User.fromJson(jsonData['user']);
         final String currentToken = jsonData['token'];
-        return emit(AuthAuthenticated(token: currentToken, user: user));
+        emit(AuthAuthenticated(token: currentToken, user: user));
       } else {
-        return emit(AuthUnauthenticated());
+        emit(AuthUnauthenticated());
       }
     } catch (e) {
       debugPrint(e.toString());
-      return emit(AuthUnauthenticated(message: "Something went wrong"));
+      emit(AuthUnauthenticated(message: "Something went wrong"));
     }
   }
 
@@ -61,14 +61,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final user = User.fromJson(jsonData['user']);
         final String token = jsonData['token'];
         await saveToken(token);
+
         emit(LoginSuccess(message: jsonData['message']));
-        return emit(AuthAuthenticated(token: token, user: user));
+        emit(AuthAuthenticated(token: token, user: user));
       } else {
-        return emit(LoginFailed(message: jsonData['message']));
+        emit(LoginFailed(message: jsonData['message']));
       }
     } catch (e) {
       debugPrint(e.toString());
-      return emit(LoginFailed(message: "Something went wrong"));
+      emit(LoginFailed(message: "Something went wrong"));
     }
   }
 
@@ -97,18 +98,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final user = User.fromJson(jsonData['user']);
         final String token = jsonData['token'];
         await saveToken(token);
-        return emit(AuthAuthenticated(token: token, user: user));
+
+        emit(AuthAuthenticated(token: token, user: user));
       } else {
-        return emit(RegisterFailed(message: jsonData['message']));
+        emit(RegisterFailed(message: jsonData['message']));
       }
     } catch (e) {
       debugPrint(e.toString());
-      return emit(RegisterFailed(message: "Something went wrong"));
+      emit(RegisterFailed(message: "Something went wrong"));
     }
   }
 
   _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) async {
     await removeToken();
-    return emit(AuthUnauthenticated());
+    emit(AuthUnauthenticated());
   }
 }

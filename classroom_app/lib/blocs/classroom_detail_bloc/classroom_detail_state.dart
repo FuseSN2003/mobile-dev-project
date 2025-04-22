@@ -5,32 +5,16 @@ sealed class ClassroomDetailState {}
 
 class ClassroomDetailInitial extends ClassroomDetailState {}
 
-class FetchingPosts extends ClassroomDetailState {}
+class ClassroomDetailLoading extends ClassroomDetailState {}
 
-class PostsLoaded extends ClassroomDetailState {}
+class ClassroomDetailLoaded extends ClassroomDetailState {
+  final Classroom classroom;
 
-class FetchPostsFailed extends ClassroomDetailState {
-  final String errorMessage;
-
-  FetchPostsFailed({required this.errorMessage});
+  ClassroomDetailLoaded({required this.classroom});
 }
 
-class FetchingAssignments extends ClassroomDetailState {}
+class FetchClassroomDetailFailed extends ClassroomDetailState {
+  final String message;
 
-class AssignmentsLoaded extends ClassroomDetailState {}
-
-class FetchAssignmentsFailed extends ClassroomDetailState {
-  final String errorMessage;
-
-  FetchAssignmentsFailed({required this.errorMessage});
-}
-
-class FetchingMembers extends ClassroomDetailState {}
-
-class MembersLoaded extends ClassroomDetailState {}
-
-class FetchMembersFailed extends ClassroomDetailState {
-  final String errorMessage;
-
-  FetchMembersFailed({required this.errorMessage});
+  FetchClassroomDetailFailed({required this.message});
 }

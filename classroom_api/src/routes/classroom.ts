@@ -1,13 +1,12 @@
 import { db } from "@/lib/db";
 import {
-  assignmentTable,
   classroomTable,
   studyTable,
   teachTable,
   userTable,
 } from "@/lib/db/schema";
 import { middleware } from "@/middleware";
-import { desc, eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
 export const classroomRoute = new Elysia({
@@ -68,9 +67,9 @@ export const classroomRoute = new Elysia({
         name: classroomTable.name,
         description: classroomTable.description,
         createdBy:
-          sql<string>`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
-            "createdBy"
-          ),
+          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`
+            .mapWith(String)
+            .as("createdBy"),
         studentCount:
           sql<number>`(SELECT COUNT(*) FROM ${studyTable} WHERE ${studyTable.classroomId} = ${classroomTable.id})`
             .mapWith(Number)
@@ -87,9 +86,9 @@ export const classroomRoute = new Elysia({
         name: classroomTable.name,
         description: classroomTable.description,
         createdBy:
-          sql<string>`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
-            "createdBy"
-          ),
+          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`
+            .mapWith(String)
+            .as("createdBy"),
       })
       .from(classroomTable)
       .leftJoin(studyTable, eq(studyTable.classroomId, classroomTable.id))
@@ -157,6 +156,7 @@ export const classroomRoute = new Elysia({
     if (!user) {
       set.status = 401;
       return {
+        status: "error",
         message: "Unauthorized",
       };
     }
@@ -169,13 +169,49 @@ export const classroomRoute = new Elysia({
         name: classroomTable.name,
         description: classroomTable.description,
         createdBy:
-          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`.as(
-            "createdBy"
-          ),
+          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${classroomTable.createdBy})`
+            .mapWith(String)
+            .as("createdBy"),
         code: classroomTable.code,
       })
       .from(classroomTable)
       .where(eq(classroomTable.id, classroomId));
+
+    if (!classroom) {
+      set.status = 404;
+      return {
+        status: "error",
+        message: "Classroom not found",
+      };
+    }
+
+    return {
+      status: "success",
+      classroom,
+    };
+  }).get("/:classroomId/member", async ({ params, set, user }) => {
+    if (!user) {
+      set.status = 401;
+      return {
+        status: "error",
+        message: "Unauthorized",
+      };
+    }
+
+    const { classroomId } = params;
+
+    const [classroom] = await db
+      .select({ id: classroomTable.id })
+      .from(classroomTable)
+      .where(eq(classroomTable.id, classroomId));
+
+    if (!classroom) {
+      set.status = 404;
+      return {
+        status: "error",
+        message: "Classroom not found",
+      };
+    }
 
     const students = await db
       .select({
@@ -183,9 +219,9 @@ export const classroomRoute = new Elysia({
         username: userTable.username,
         email: userTable.email,
       })
-      .from(userTable)
-      .leftJoin(studyTable, eq(studyTable.userId, userTable.id))
-      .where(eq(studyTable.classroomId, classroomId));
+      .from(studyTable)
+      .where(eq(studyTable.classroomId, classroomId))
+      .leftJoin(userTable, eq(studyTable.userId, userTable.id));
 
     const teachers = await db
       .select({
@@ -193,35 +229,13 @@ export const classroomRoute = new Elysia({
         username: userTable.username,
         email: userTable.email,
       })
-      .from(userTable)
-      .leftJoin(teachTable, eq(teachTable.userId, userTable.id))
-      .where(eq(teachTable.classroomId, classroomId));
-
-    const assignments = await db
-      .select({
-        id: assignmentTable.id,
-        classroomName:
-          sql`(SELECT ${classroomTable.name} FROM ${classroomTable} WHERE ${classroomTable.id} = ${studyTable.classroomId})`.as(
-            "classroomName"
-          ),
-        title: assignmentTable.title,
-        description: assignmentTable.description,
-        dueDate: assignmentTable.dueDate,
-        maxScore: assignmentTable.maxScore,
-        createdBy:
-          sql`(SELECT ${userTable.username} FROM ${userTable} WHERE ${userTable.id} = ${assignmentTable.createdBy})`.as(
-            "createdBy"
-          ),
-        createdAt: assignmentTable.createdAt,
-      })
-      .from(assignmentTable)
-      .where(eq(assignmentTable.classroomId, classroomId))
-      .orderBy(desc(assignmentTable.createdAt));
+      .from(teachTable)
+      .where(eq(teachTable.classroomId, classroomId))
+      .leftJoin(userTable, eq(teachTable.userId, userTable.id));
 
     return {
-      classroom,
+      status: "success",
       students,
       teachers,
-      assignments,
     };
   });
