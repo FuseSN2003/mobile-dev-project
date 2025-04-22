@@ -1,3 +1,4 @@
+import 'package:classroom_app/screens/classroom_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class ClassroomCard extends StatelessWidget {
@@ -23,7 +24,13 @@ class ClassroomCard extends StatelessWidget {
       color: Theme.of(context).colorScheme.secondary,
       child: InkWell(
         onTap: () {
-          // navigate to classroom details by classroomId
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => ClassroomDetailScreen(classroomId: classroomId),
+            ),
+          );
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
